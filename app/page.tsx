@@ -84,16 +84,15 @@ export default function Home() {
   const handleOpen = () => {
     if (opening) return;
     setOpening(true);
-    setTimeout(() => setShowContent(true), 1100);
-    setTimeout(() => setGone(true), 2400);
-    // Auto-play music at 2:27 when invitation opens
-    setTimeout(() => {
-      if (audioRef.current && CONFIG.bgMusic) {
-        audioRef.current.currentTime = CONFIG.bgMusicStart;
-        audioRef.current.play().catch(() => {});
-        setPlaying(true);
-      }
-    }, 1400);
+    // Start music immediately on tap
+    if (audioRef.current && CONFIG.bgMusic) {
+      audioRef.current.currentTime = CONFIG.bgMusicStart;
+      audioRef.current.play().catch(() => {});
+      setPlaying(true);
+    }
+    // Let music play for 4 seconds on video page before transitioning
+    setTimeout(() => setShowContent(true), 4000);
+    setTimeout(() => setGone(true), 5200);
   };
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
