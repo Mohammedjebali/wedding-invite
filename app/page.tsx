@@ -456,23 +456,16 @@ export default function Home() {
             </section>
 
             {/* ── CLOSING ── */}
-            <section className="section" style={{ paddingBottom:"80px" }}>
+            <section className="section" style={{ paddingBottom:"60px", textAlign:"center" }}>
               <div className="gold-divider reveal">◆ ◆ ◆</div>
-              <div className="reveal reveal-d1" style={{ marginTop:"30px" }}>
-                <div className="closing-names">
-                  {CONFIG.groom_ar}<br/>
-                  <span style={{ fontSize:"0.5em", color:"#c9a84c", fontWeight:400, fontFamily:"Cormorant Garamond,serif", display:"block", margin:"6px 0" }}>◆</span>
-                  {CONFIG.bride_ar}
-                </div>
-                <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"18px", opacity:0.8 }}>
-                  وذلك بمشيئة الله
-                </div>
+              <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#7a5020", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+                نسأل الله أن يجمعهما على خير<br/>
+                ويبارك لهما في حياتهما المشتركة
               </div>
-              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"30px" }}>◆ ◆ ◆</div>
+              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"24px" }}>◆ ◆ ◆</div>
             </section>
 
-            {/* bottom bouquet */}
-            <img src="/bouquet-sm.png" className="bouquet-bottom" alt="" style={{ transform:"scaleY(-1)" }} />
+
 
             <footer>
               {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
