@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rakkas&family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
@@ -190,8 +190,8 @@ html, body {
 }
 
 .bismillah {
-  font-family: 'Aref Ruqaa', serif;
-  font-size: clamp(1.6rem, 6.5vw, 2.4rem);
+  font-family: 'Rakkas', serif;
+  font-size: clamp(1.6rem, 7vw, 2.6rem);
   color: #7a4e10; direction: rtl; letter-spacing: 0.04em;
   opacity: 0.88; line-height: 1.8;
   margin-bottom: 20px;
@@ -215,10 +215,10 @@ html, body {
 }
 
 .couple-names {
-  font-family: 'Aref Ruqaa', serif;
-  font-size: clamp(2.6rem, 11vw, 4.8rem);
-  font-weight: 700; color: #5a2e08;
-  direction: rtl; line-height: 1.35;
+  font-family: 'Rakkas', serif;
+  font-size: clamp(2.8rem, 12vw, 5.2rem);
+  font-weight: 400; color: #5a2e08;
+  direction: rtl; line-height: 1.4;
   animation: nameGlow 4s ease-in-out infinite;
 }
 @keyframes nameGlow {
@@ -263,9 +263,9 @@ html, body {
 /* ── SECTIONS ── */
 .section { padding: 52px 16px; text-align: center; }
 .section-heading {
-  font-family:'Aref Ruqaa',serif;
-  font-size:clamp(1.5rem,6.5vw,2rem); color:#4a2a08;
-  direction:rtl; font-weight:700; margin-bottom:4px;
+  font-family:'Rakkas',serif;
+  font-size:clamp(1.6rem,7vw,2.2rem); color:#4a2a08;
+  direction:rtl; font-weight:400; margin-bottom:4px;
 }
 .section-sub {
   font-family:'Cormorant Garamond',serif; font-style:italic;
@@ -368,7 +368,7 @@ html, body {
 .rsvp-btn:hover { background-position:right center; transform:translateY(-1px); }
 
 .closing-names {
-  font-family:'Aref Ruqaa',serif; font-size:clamp(2rem,8vw,3rem);
+  font-family:'Rakkas',serif; font-size:clamp(2.2rem,9vw,3.5rem);
   color:#5a2e08; direction:rtl; font-weight:700; line-height:1.9;
 }
 
