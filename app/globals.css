@@ -190,8 +190,8 @@ html, body {
 }
 
 .bismillah {
-  font-family: 'Scheherazade New', serif;
-  font-size: clamp(1.4rem, 5.5vw, 1.9rem);
+  font-family: 'Aref Ruqaa', serif;
+  font-size: clamp(1.6rem, 6.5vw, 2.4rem);
   color: #7a4e10; direction: rtl; letter-spacing: 0.04em;
   opacity: 0.88; line-height: 1.8;
   margin-bottom: 20px;
@@ -209,14 +209,14 @@ html, body {
 
 .invite-greeting {
   font-family: 'Aref Ruqaa', serif;
-  font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+  font-size: clamp(1.05rem, 4.2vw, 1.3rem);
   color: #5a3a18; direction: rtl; line-height: 2.3;
   margin-bottom: 24px;
 }
 
 .couple-names {
-  font-family: 'Scheherazade New', serif;
-  font-size: clamp(2rem, 9vw, 3.6rem);
+  font-family: 'Aref Ruqaa', serif;
+  font-size: clamp(2.6rem, 11vw, 4.8rem);
   font-weight: 700; color: #5a2e08;
   direction: rtl; line-height: 1.35;
   animation: nameGlow 4s ease-in-out infinite;
@@ -234,7 +234,7 @@ html, body {
 
 .tagline {
   font-family: 'Aref Ruqaa', serif;
-  font-size: clamp(0.9rem, 3.5vw, 1.05rem);
+  font-size: clamp(1rem, 4vw, 1.2rem);
   color: #7a5020; direction: rtl; margin-top: 16px; opacity: 0.8; line-height: 2;
 }
 
@@ -263,8 +263,8 @@ html, body {
 /* ── SECTIONS ── */
 .section { padding: 52px 16px; text-align: center; }
 .section-heading {
-  font-family:'Scheherazade New',serif;
-  font-size:clamp(1.4rem,6vw,1.9rem); color:#4a2a08;
+  font-family:'Aref Ruqaa',serif;
+  font-size:clamp(1.5rem,6.5vw,2rem); color:#4a2a08;
   direction:rtl; font-weight:700; margin-bottom:4px;
 }
 .section-sub {
@@ -368,7 +368,7 @@ html, body {
 .rsvp-btn:hover { background-position:right center; transform:translateY(-1px); }
 
 .closing-names {
-  font-family:'Scheherazade New',serif; font-size:clamp(1.5rem,6.5vw,2.1rem);
+  font-family:'Aref Ruqaa',serif; font-size:clamp(2rem,8vw,3rem);
   color:#5a2e08; direction:rtl; font-weight:700; line-height:1.9;
 }
 
