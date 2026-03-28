@@ -6,7 +6,6 @@ const CONFIG = {
   bride_ar: "نور الهدى جلال",
   groom_fr: "Mohamed Amine Ben Salem",
   bride_fr: "Nour El Hoda Jlel",
-  initials: "م.أ & ن.ه",
   date: "2026-08-08",
   dateDisplay_ar: "يوم السبت ٨ أوت ٢٠٢٦",
   dateDisplay_fr: "Samedi 8 Août 2026",
@@ -48,8 +47,6 @@ function useScrollReveal(active: boolean) {
   }, [active]);
 }
 
-const PETALS = ["✦","◆","◇","✧","✦","◆"];
-
 export default function Home() {
   const [opening, setOpening] = useState(false);
   const [gone, setGone] = useState(false);
@@ -82,13 +79,10 @@ export default function Home() {
         {[...Array(8)].map((_, i) => (
           <div key={i} className="env-particle" style={{ left:`${8+i*12}%`, bottom:"0", animationDelay:`${i*0.8}s`, animationDuration:`${6+i}s` }} />
         ))}
-
         <div className={`env-3d${opening ? " open" : ""}`}>
           <div className="env-letter">
             <div className="env-letter-line" style={{ width:"55%" }} />
-            <div className="env-letter-names" style={{ direction:"rtl", fontSize:"min(0.85rem, 2.8vw)" }}>
-              {CONFIG.groom_ar} & {CONFIG.bride_ar}
-            </div>
+            <div className="env-letter-names">{CONFIG.groom_ar} & {CONFIG.bride_ar}</div>
             <div className="env-letter-line" style={{ width:"35%" }} />
             <div className="env-letter-date">{CONFIG.dateDisplay_ar}</div>
             <div className="env-letter-line" style={{ width:"55%" }} />
@@ -102,7 +96,7 @@ export default function Home() {
             <div className="env-flap-front"><div className="env-flap-triangle" /></div>
           </div>
           <div className="wax-seal">
-            <span className="wax-seal-text" style={{ fontFamily:"sans-serif", fontSize:"min(0.75rem,2.5vw)", letterSpacing:"0.05em" }}>✦</span>
+            <span className="wax-seal-text" style={{ fontSize:"min(1.2rem,3.5vw)" }}>✦</span>
           </div>
           <div className="env-hint"><div className="env-hint-text">المسّ لفتح الدعوة</div></div>
         </div>
@@ -111,190 +105,175 @@ export default function Home() {
       {/* ══ INVITATION ══ */}
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
-      {showContent && (
-        <div className="inv-frame">
-          <div className="inv-frame-corner tl" /><div className="inv-frame-corner tr" />
-          <div className="inv-frame-corner bl" /><div className="inv-frame-corner br" />
-        </div>
-      )}
-
-      {/* geometric petals (no emojis) */}
-      {showContent && PETALS.map((p, i) => (
-        <div key={i} className="petal" style={{
-          left:`${6+i*16}%`, top:"-30px",
-          fontSize:`${10+i%5}px`, color:`rgba(201,168,76,${0.12+i%4*0.04})`,
-          animationDelay:`${i*0.9}s`, animationDuration:`${8+i*1.2}s`,
-          fontFamily:"sans-serif",
-        }}>{p}</div>
-      ))}
-
       <div className={`invitation${showContent ? " visible" : ""}`}>
+        <div className="page-bg">
+          <div className="page-content">
 
-        {/* ── HERO ── */}
-        <section className="hero">
-          <div className="bismillah-band" />
+            {/* ── HERO ── */}
+            <section className="hero">
 
-          <div className="reveal" style={{ fontSize:"22px", color:"#c9a84c", letterSpacing:"0.07em", opacity:0.75, direction:"rtl", textShadow:"0 0 36px rgba(201,168,76,0.25)", marginBottom:"20px" }}>
-            بسم الله الرحمن الرحيم
-          </div>
-
-          <span className="gold-rule reveal reveal-d1" style={{ marginBottom:"28px", display:"block" }} />
-
-          <div className="reveal reveal-d1" style={{ direction:"rtl", fontSize:"13px", color:"#8a7040", fontStyle:"italic", lineHeight:1.9, marginBottom:"8px", opacity:0.8 }}>
-            بعد اهدائكم عاطر التحية وأزكى السلام
-          </div>
-          <div className="reveal reveal-d1" style={{ direction:"rtl", fontSize:"13px", color:"#7a6030", lineHeight:1.9, marginBottom:"28px" }}>
-            يسرّنا دعوتكم لحضور حفل زفاف
-          </div>
-
-          <div className="couple-wrap reveal reveal-d2">
-            <div className="couple-frame" />
-            <div className="couple-names">
-              <span className="name-shimmer">{CONFIG.groom_ar}</span>
-              <span className="sep">── ✦ ──</span>
-              <span className="name-shimmer">{CONFIG.bride_ar}</span>
-            </div>
-          </div>
-
-          <div className="reveal reveal-d3" style={{ direction:"rtl", fontSize:"1rem", fontStyle:"italic", color:"#9a8050", marginTop:"16px" }}>
-            وذلك بمشيئة الله تعالى
-          </div>
-
-          <span className="gold-rule reveal reveal-d3" style={{ marginTop:"28px", display:"block" }} />
-
-          <div className="wedding-date-block reveal reveal-d4">
-            <div className="wedding-date-label">تاريخ حفل الزفاف</div>
-            <div className="wedding-date-main">{CONFIG.dateDisplay_ar}</div>
-            <div className="wedding-date-sub">{CONFIG.dateDisplay_fr}</div>
-          </div>
-
-          <div className="countdown reveal reveal-d4">
-            {[
-              { n: countdown.days, l: "يوم" },
-              { n: countdown.hours, l: "ساعة" },
-              { n: countdown.minutes, l: "دقيقة" },
-              { n: countdown.seconds, l: "ثانية" },
-            ].map(({ n, l }) => (
-              <div key={l} className="count-block">
-                <span className="count-num">{pad(n)}</span>
-                <span className="count-label">{l}</span>
+              <div className="bismillah reveal">
+                بسم الله الرحمن الرحيم
               </div>
-            ))}
-          </div>
 
-          <div className="scroll-hint">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-            <span>تمرير للأسفل</span>
-          </div>
-        </section>
+              <div className="gold-divider reveal reveal-d1">✦ ✦ ✦</div>
 
-        {/* ── FAMILIES ── */}
-        <section className="section section-alt">
-          <div className="section-heading reveal">العائلتان الكريمتان</div>
-          <div className="section-sub reveal reveal-d1">Les familles</div>
-
-          <div className="families-grid reveal reveal-d2">
-            <div className="family-cell">
-              <div className="family-role">عائلة العريس</div>
-              <div className="family-name">{CONFIG.groomDad}<br />{CONFIG.groomMom}</div>
-            </div>
-            <div className="family-cell">
-              <div className="family-role">عائلة العروس</div>
-              <div className="family-name">{CONFIG.brideDad}<br />{CONFIG.brideMom}</div>
-            </div>
-          </div>
-
-          <div className="ornament reveal reveal-d3" style={{ marginTop:"28px" }}>◆ ◆ ◆</div>
-        </section>
-
-        {/* ── CEREMONY ── */}
-        <section className="section">
-          <div className="section-heading reveal">تفاصيل الحفل</div>
-          <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
-
-          <div className="venue-card reveal reveal-d2">
-            <div className="venue-card-top">
-              <div style={{ fontSize:"9px", letterSpacing:"0.26em", textTransform:"uppercase", color:"#c9a84c", fontFamily:"sans-serif", opacity:0.55, marginBottom:"20px" }}>
-                موعد الحفل · Heure de la cérémonie
+              <div className="invite-greeting reveal reveal-d1">
+                بعد اهدائكم عاطر التحية وأزكى السلام<br/>
+                يسرّنا دعوتكم لحضور حفل زفاف
               </div>
-              <div className="venue-time">21<span style={{ fontSize:"2rem", opacity:0.6 }}>h</span>00</div>
-              <div className="venue-time-sub">{CONFIG.time_ar}</div>
-            </div>
-            <div className="venue-card-bottom">
-              <div className="venue-name">{CONFIG.venue_name}</div>
-              <div className="venue-location">{CONFIG.venue_region}</div>
-              <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                عرض على الخريطة · Voir sur la carte
-              </a>
-            </div>
-          </div>
 
-          <div className="date-strip reveal reveal-d3">
-            <div className="date-cell">
-              <div className="date-cell-num">08</div>
-              <div className="date-cell-label">Août</div>
-            </div>
-            <div className="date-cell">
-              <div className="date-cell-num">السبت</div>
-              <div className="date-cell-label">Samedi</div>
-            </div>
-            <div className="date-cell">
-              <div className="date-cell-num">2026</div>
-              <div className="date-cell-label">السنة</div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── RSVP ── */}
-        <section className="section section-alt">
-          <div className="section-heading reveal">تأكيد الحضور</div>
-          <div className="section-sub reveal reveal-d1">Confirmez votre présence avant le 1er Août</div>
-
-          {rsvpSent ? (
-            <div className="reveal" style={{ textAlign:"center", padding:"40px 0" }}>
-              <div style={{ width:"60px", height:"60px", borderRadius:"50%", border:"1px solid rgba(201,168,76,0.35)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", fontSize:"22px", color:"#c9a84c" }}>✦</div>
-              <div style={{ color:"#c9a84c", fontSize:"1.5rem", fontFamily:"Cormorant Garamond,serif", marginBottom:"10px", direction:"rtl" }}>شكراً جزيلاً</div>
-              <div style={{ color:"#7a6030", fontSize:"13px", fontFamily:"sans-serif", lineHeight:2, direction:"rtl" }}>
-                تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
+              <div className="couple-wrap reveal reveal-d2">
+                <div className="couple-names">
+                  {CONFIG.groom_ar}
+                  <span className="name-and">— ✦ —</span>
+                  {CONFIG.bride_ar}
+                </div>
               </div>
-            </div>
-          ) : (
-            <form className="rsvp-form reveal reveal-d1" onSubmit={handleRsvp}>
-              <input className="rsvp-input" type="text" placeholder="الاسم الكامل" required value={rsvp.name} onChange={e => setRsvp({...rsvp, name:e.target.value})} />
-              <input className="rsvp-input" type="tel" placeholder="رقم الهاتف" value={rsvp.phone} onChange={e => setRsvp({...rsvp, phone:e.target.value})} />
-              <select className="rsvp-select" value={rsvp.attending} onChange={e => setRsvp({...rsvp, attending:e.target.value})}>
-                <option value="oui">سأحضر بكل سرور</option>
-                <option value="non">لن أتمكن من الحضور</option>
-              </select>
-              {rsvp.attending === "oui" && (
-                <select className="rsvp-select" value={rsvp.guests} onChange={e => setRsvp({...rsvp, guests:e.target.value})}>
-                  {["1","2","3","4","5"].map(n => <option key={n} value={n}>{n} {parseInt(n)>1?"أشخاص":"شخص"}</option>)}
-                </select>
+
+              <div className="tagline reveal reveal-d3">
+                وذلك بمشيئة الله تعالى
+              </div>
+
+              <div className="gold-divider reveal reveal-d3" style={{ marginTop:"24px" }}>✦ ✦ ✦</div>
+
+              <div className="date-display reveal reveal-d4">
+                <div className="date-ar">{CONFIG.dateDisplay_ar}</div>
+                <div className="date-fr">{CONFIG.dateDisplay_fr}</div>
+              </div>
+
+              <div className="countdown reveal reveal-d4">
+                {[
+                  { n: countdown.days, l: "يوم" },
+                  { n: countdown.hours, l: "ساعة" },
+                  { n: countdown.minutes, l: "دقيقة" },
+                  { n: countdown.seconds, l: "ثانية" },
+                ].map(({ n, l }) => (
+                  <div key={l} className="count-block">
+                    <span className="count-num">{pad(n)}</span>
+                    <span className="count-label">{l}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="scroll-hint">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="18 14 12 20 6 14"/></svg>
+              </div>
+            </section>
+
+            {/* ── FAMILIES ── */}
+            <section className="section">
+              <div className="section-heading reveal">العائلتان الكريمتان</div>
+              <div className="section-sub reveal reveal-d1">Les familles</div>
+
+              <div className="families-wrap">
+                <div className="family-row reveal reveal-d2">
+                  <div className="family-role">عائلة العريس</div>
+                  <div className="family-names">
+                    {CONFIG.groomDad}<br/>{CONFIG.groomMom}
+                  </div>
+                </div>
+                <div className="family-row reveal reveal-d3">
+                  <div className="family-role">عائلة العروس</div>
+                  <div className="family-names">
+                    {CONFIG.brideDad}<br/>{CONFIG.brideMom}
+                  </div>
+                </div>
+              </div>
+
+              <div className="gold-divider reveal reveal-d4" style={{ marginTop:"32px" }}>✦ ✦ ✦</div>
+            </section>
+
+            {/* ── VENUE ── */}
+            <section className="section">
+              <div className="section-heading reveal">تفاصيل الحفل</div>
+              <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
+
+              <div className="inv-card reveal reveal-d2">
+                <div style={{ fontSize:"9px", letterSpacing:"0.24em", textTransform:"uppercase", color:"#b8922a", fontFamily:"sans-serif", marginBottom:"18px", opacity:0.7 }}>
+                  موعد الحفل · Heure de la cérémonie
+                </div>
+                <div className="venue-time">21<span style={{ fontSize:"2rem", opacity:0.55 }}>h</span>00</div>
+                <div className="venue-time-ar">{CONFIG.time_ar}</div>
+                <div className="venue-divider" />
+                <div className="venue-name">{CONFIG.venue_name}</div>
+                <div className="venue-region">{CONFIG.venue_region}</div>
+                <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  عرض الخريطة · Itinéraire
+                </a>
+              </div>
+
+              <div className="date-strip reveal reveal-d3">
+                <div className="date-cell">
+                  <div className="date-cell-num">08</div>
+                  <div className="date-cell-label">Août</div>
+                </div>
+                <div className="date-cell">
+                  <div className="date-cell-num" style={{ fontFamily:"Amiri,serif", fontSize:"1.4rem", paddingTop:"6px" }}>السبت</div>
+                  <div className="date-cell-label">Samedi</div>
+                </div>
+                <div className="date-cell">
+                  <div className="date-cell-num">2026</div>
+                  <div className="date-cell-label">السنة</div>
+                </div>
+              </div>
+            </section>
+
+            {/* ── RSVP ── */}
+            <section className="section">
+              <div className="section-heading reveal">تأكيد الحضور</div>
+              <div className="section-sub reveal reveal-d1">Confirmer votre présence</div>
+
+              {rsvpSent ? (
+                <div className="inv-card reveal" style={{ textAlign:"center", padding:"40px 22px" }}>
+                  <div style={{ fontSize:"36px", color:"#b8922a", marginBottom:"16px" }}>✦</div>
+                  <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.6rem", color:"#5a3810", marginBottom:"10px" }}>شكراً جزيلاً</div>
+                  <div style={{ fontFamily:"Amiri,serif", fontSize:"1rem", color:"#8a6030", direction:"rtl", lineHeight:2 }}>
+                    تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
+                  </div>
+                </div>
+              ) : (
+                <div className="inv-card reveal reveal-d1">
+                  <form className="rsvp-form" onSubmit={handleRsvp}>
+                    <input className="rsvp-input" type="text" placeholder="الاسم الكامل" required value={rsvp.name} onChange={e => setRsvp({...rsvp,name:e.target.value})} />
+                    <input className="rsvp-input" type="tel" placeholder="رقم الهاتف" value={rsvp.phone} onChange={e => setRsvp({...rsvp,phone:e.target.value})} />
+                    <select className="rsvp-select" value={rsvp.attending} onChange={e => setRsvp({...rsvp,attending:e.target.value})}>
+                      <option value="oui">سأحضر بكل سرور</option>
+                      <option value="non">لن أتمكن من الحضور</option>
+                    </select>
+                    {rsvp.attending === "oui" && (
+                      <select className="rsvp-select" value={rsvp.guests} onChange={e => setRsvp({...rsvp,guests:e.target.value})}>
+                        {["1","2","3","4","5"].map(n => <option key={n} value={n}>{n} {parseInt(n)>1?"أشخاص":"شخص"}</option>)}
+                      </select>
+                    )}
+                    <button type="submit" className="rsvp-btn">تأكيد الحضور</button>
+                  </form>
+                </div>
               )}
-              <button type="submit" className="rsvp-btn">تأكيد الحضور</button>
-            </form>
-          )}
-        </section>
+            </section>
 
-        {/* ── CLOSING ── */}
-        <section className="section" style={{ textAlign:"center" }}>
-          <span className="gold-rule reveal" style={{ display:"block", marginBottom:"32px" }} />
-          <div className="reveal reveal-d1" style={{ direction:"rtl", fontFamily:"Cormorant Garamond,serif", fontSize:"1.5rem", color:"#c9a84c", fontWeight:300, lineHeight:2, marginBottom:"24px" }}>
-            {CONFIG.groom_ar}<br />
-            <span style={{ fontSize:"0.8rem", color:"#5a4420", letterSpacing:"0.15em", fontStyle:"italic" }}>◆ ◆ ◆</span><br />
-            {CONFIG.bride_ar}
-          </div>
-          <div className="reveal reveal-d2" style={{ direction:"rtl", fontSize:"12px", color:"#4a3a14", fontStyle:"italic", marginBottom:"16px" }}>
-            وذلك بمشيئة الله
-          </div>
-          <span className="gold-rule reveal reveal-d3" style={{ display:"block" }} />
-        </section>
+            {/* ── CLOSING ── */}
+            <section className="section" style={{ paddingBottom:"80px" }}>
+              <div className="gold-divider reveal">✦ ✦ ✦</div>
+              <div className="reveal reveal-d1" style={{ marginTop:"28px" }}>
+                <div className="closing-names">
+                  {CONFIG.groom_ar}<br/>
+                  <span style={{ fontSize:"0.6em", color:"#b8922a", fontWeight:400, fontFamily:"Amiri,serif" }}>✦</span><br/>
+                  {CONFIG.bride_ar}
+                </div>
+                <div className="closing-masha">وذلك بمشيئة الله</div>
+              </div>
+              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"28px" }}>✦ ✦ ✦</div>
+            </section>
 
-        <footer style={{ textAlign:"center", padding:"40px 24px", borderTop:"1px solid rgba(201,168,76,0.06)", fontFamily:"sans-serif", fontSize:"10px", letterSpacing:"0.14em", color:"#2a1f08" }}>
-          {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
-          <span style={{ opacity:0.3, marginTop:"5px", display:"block" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
-        </footer>
+            <footer>
+              {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
+              <span style={{ opacity:0.5, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
+            </footer>
+
+          </div>
+        </div>
       </div>
 
       {CONFIG.bgMusic && (
