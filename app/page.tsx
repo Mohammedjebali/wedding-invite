@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 
-// ── Letter-by-letter reveal component ─────────────────────────
+// ── Word-by-word reveal (Arabic-safe — keeps letters connected) ─
 function TypeReveal({ text, delay = 0, className = "", style = {} }: {
   text: string; delay?: number; className?: string; style?: React.CSSProperties;
 }) {
+  const words = text.split(" ");
   const [visible, setVisible] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
@@ -17,28 +18,27 @@ function TypeReveal({ text, delay = 0, className = "", style = {} }: {
   }, []);
   useEffect(() => {
     if (!started) return;
-    const chars = [...text]; // spread handles Arabic correctly
     let i = 0;
     const timer = setTimeout(() => {
       const id = setInterval(() => {
         i++;
         setVisible(i);
-        if (i >= chars.length) clearInterval(id);
-      }, 60);
+        if (i >= words.length) clearInterval(id);
+      }, 200);
       return () => clearInterval(id);
     }, delay);
     return () => clearTimeout(timer);
   }, [started, text, delay]);
-  const chars = [...text];
   return (
     <span ref={ref} className={className} style={{ direction:"rtl", display:"block", ...style }}>
-      {chars.map((ch, i) => (
+      {words.map((word, i) => (
         <span key={i} style={{
           opacity: i < visible ? 1 : 0,
-          transition: "opacity 0.2s ease",
+          transform: i < visible ? "translateY(0)" : "translateY(10px)",
+          transition: "opacity 0.4s ease, transform 0.4s ease",
           display: "inline-block",
-          whiteSpace: ch === " " ? "pre" : "normal",
-        }}>{ch}</span>
+          marginLeft: "0.25em",
+        }}>{word}</span>
       ))}
     </span>
   );
@@ -482,19 +482,7 @@ export default function Home() {
         </div>
       </div>
 
-      {CONFIG.bgMusic && showContent && (
-        <button className="music-btn" onClick={() => {
-          if (!audioRef.current) return;
-          if (playing) { audioRef.current.pause(); setPlaying(false); }
-          else {
-            if (audioRef.current.currentTime < CONFIG.bgMusicStart) {
-              audioRef.current.currentTime = CONFIG.bgMusicStart;
-            }
-            audioRef.current.play().catch(()=>{});
-            setPlaying(true);
-          }
-        }}>{playing ? "⏸" : "♪"}</button>
-      )}
+      {/* music plays automatically, no button */}
     </>
   );
 }
