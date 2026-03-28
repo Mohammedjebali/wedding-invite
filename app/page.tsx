@@ -47,18 +47,32 @@ function useScrollReveal(active: boolean) {
   }, [active]);
 }
 
-// Rose petal SVG paths for variation
 const PETAL_SVG = [
   "M10,2 C10,2 18,8 18,14 C18,20 14,24 10,24 C6,24 2,20 2,14 C2,8 10,2 10,2Z",
   "M12,1 C12,1 22,9 20,16 C18,23 12,26 8,22 C4,18 2,10 7,5 C9,3 12,1 12,1Z",
   "M10,3 C14,0 20,6 19,12 C18,18 12,22 7,20 C2,18 1,11 4,7 C6,4 10,3 10,3Z",
 ];
 
+const PETALS = [
+  {id:0,left:"8%", size:16,delay:0,   dur:7, color:"rgba(220,140,140,0.6)", path:0},
+  {id:1,left:"18%",size:12,delay:0.9, dur:8, color:"rgba(235,170,160,0.5)", path:1},
+  {id:2,left:"28%",size:20,delay:1.8, dur:9, color:"rgba(215,130,130,0.55)",path:2},
+  {id:3,left:"38%",size:14,delay:0.4, dur:7, color:"rgba(240,185,165,0.45)",path:0},
+  {id:4,left:"48%",size:18,delay:2.3, dur:8, color:"rgba(220,150,150,0.55)",path:1},
+  {id:5,left:"58%",size:11,delay:1.1, dur:9, color:"rgba(200,120,120,0.5)", path:2},
+  {id:6,left:"68%",size:17,delay:3.0, dur:8, color:"rgba(235,165,155,0.5)", path:0},
+  {id:7,left:"78%",size:13,delay:0.6, dur:7, color:"rgba(210,135,135,0.55)",path:1},
+  {id:8,left:"88%",size:19,delay:2.0, dur:9, color:"rgba(225,155,145,0.5)", path:2},
+  {id:9,left:"22%",size:15,delay:3.8, dur:8, color:"rgba(215,138,138,0.55)",path:0},
+  {id:10,left:"52%",size:22,delay:4.2,dur:10,color:"rgba(200,125,125,0.5)", path:1},
+  {id:11,left:"72%",size:12,delay:5.0,dur:7, color:"rgba(230,158,148,0.45)",path:2},
+];
+
 export default function Home() {
   const [opening, setOpening] = useState(false);
   const [gone, setGone] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [rsvp, setRsvp] = useState({ name: "", phone: "", attending: "oui", guests: "1" });
+  const [rsvp, setRsvp] = useState({ name:"", phone:"", attending:"oui", guests:"1" });
   const [rsvpSent, setRsvpSent] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -74,24 +88,6 @@ export default function Home() {
   };
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
-
-  // Deterministic petals — 14 petals with preset positions
-  const petals = [
-    { id:0, left:"5%",  size:18, delay:0,   dur:7,  color:"rgba(220,140,140,0.65)", path:0 },
-    { id:1, left:"15%", size:14, delay:0.8, dur:8,  color:"rgba(230,160,160,0.55)", path:1 },
-    { id:2, left:"25%", size:20, delay:1.6, dur:9,  color:"rgba(215,130,130,0.6)",  path:2 },
-    { id:3, left:"35%", size:12, delay:0.3, dur:7,  color:"rgba(240,180,160,0.5)",  path:0 },
-    { id:4, left:"45%", size:16, delay:2.1, dur:8,  color:"rgba(220,150,150,0.6)",  path:1 },
-    { id:5, left:"55%", size:22, delay:1.0, dur:10, color:"rgba(200,120,120,0.55)", path:2 },
-    { id:6, left:"65%", size:13, delay:2.8, dur:7,  color:"rgba(235,165,155,0.5)",  path:0 },
-    { id:7, left:"75%", size:18, delay:0.5, dur:9,  color:"rgba(210,135,135,0.6)",  path:1 },
-    { id:8, left:"85%", size:15, delay:1.8, dur:8,  color:"rgba(225,155,145,0.55)", path:2 },
-    { id:9, left:"92%", size:11, delay:3.2, dur:7,  color:"rgba(240,175,165,0.5)",  path:0 },
-    { id:10,left:"10%", size:16, delay:4.0, dur:9,  color:"rgba(215,138,138,0.6)",  path:1 },
-    { id:11,left:"50%", size:19, delay:3.6, dur:10, color:"rgba(200,125,125,0.55)", path:2 },
-    { id:12,left:"70%", size:13, delay:4.5, dur:8,  color:"rgba(230,158,148,0.5)",  path:0 },
-    { id:13,left:"30%", size:21, delay:5.0, dur:9,  color:"rgba(212,132,132,0.6)",  path:1 },
-  ];
 
   return (
     <>
@@ -128,30 +124,23 @@ export default function Home() {
       {/* ══ INVITATION ══ */}
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
-      {/* Falling rose petals */}
       {showContent && (
-        <div className="petal-container">
-          {petals.map(p => (
-            <svg key={p.id} className="petal" viewBox="0 0 24 28"
-              style={{
-                left: p.left, width: p.size, height: p.size,
-                fill: p.color,
-                animationDelay: `${p.delay}s`,
-                animationDuration: `${p.dur}s`,
-              }}
-            >
-              <path d={PETAL_SVG[p.path]} />
-            </svg>
-          ))}
-        </div>
-      )}
+        <>
+          {/* Floral side borders */}
+          <div className="floral-left" />
+          <div className="floral-right" />
 
-      {/* Corner frame */}
-      {showContent && (
-        <div className="inv-frame">
-          <div className="inv-frame-corner tl" /><div className="inv-frame-corner tr" />
-          <div className="inv-frame-corner bl" /><div className="inv-frame-corner br" />
-        </div>
+          {/* Falling petals */}
+          <div className="petal-container">
+            {PETALS.map(p => (
+              <svg key={p.id} className="petal" viewBox="0 0 24 28"
+                style={{ left:p.left, width:p.size, height:p.size, fill:p.color, animationDelay:`${p.delay}s`, animationDuration:`${p.dur}s` }}
+              >
+                <path d={PETAL_SVG[p.path]} />
+              </svg>
+            ))}
+          </div>
+        </>
       )}
 
       <div className={`invitation${showContent ? " visible" : ""}`}>
@@ -160,51 +149,46 @@ export default function Home() {
 
             {/* ── HERO ── */}
             <section className="hero">
-              <div className="glass-panel">
-                <div className="bismillah reveal">
-                  بسم الله الرحمن الرحيم
-                </div>
+              <div className="gold-line-top reveal" />
 
-                <div className="gold-divider reveal reveal-d1">◆ ◆ ◆</div>
+              <div className="bismillah reveal reveal-d1">
+                بسم الله الرحمن الرحيم
+              </div>
 
-                <div className="invite-greeting reveal reveal-d1">
-                  بعد اهدائكم عاطر التحية وأزكى السلام<br/>
-                  يسرّنا دعوتكم لحضور حفل زفاف
-                </div>
+              <div className="gold-divider reveal reveal-d1">◆ ◆ ◆</div>
 
-                <div className="reveal reveal-d2" style={{ margin:"20px 0 16px" }}>
-                  <div className="couple-names">
-                    {CONFIG.groom_ar}
-                    <span className="name-sep">— ✦ —</span>
-                    {CONFIG.bride_ar}
-                  </div>
-                </div>
+              <div className="invite-greeting reveal reveal-d2">
+                بعد اهدائكم عاطر التحية وأزكى السلام<br/>
+                يسرّنا دعوتكم لحضور حفل زفاف
+              </div>
 
-                <div className="tagline reveal reveal-d3">
-                  وذلك بمشيئة الله تعالى
-                </div>
-
-                <div className="gold-divider reveal reveal-d3" style={{ marginTop:"20px" }}>◆ ◆ ◆</div>
-
-                <div className="date-block reveal reveal-d4">
-                  <div className="date-ar">{CONFIG.dateDisplay_ar}</div>
-                  <div className="date-fr">{CONFIG.dateDisplay_fr}</div>
+              <div className="reveal reveal-d2" style={{ margin:"20px 0 14px" }}>
+                <div className="couple-names">
+                  {CONFIG.groom_ar}
+                  <span className="name-sep">— ✦ —</span>
+                  {CONFIG.bride_ar}
                 </div>
               </div>
 
-              <div className="countdown reveal reveal-d4" style={{ marginTop:"20px", width:"100%", maxWidth:"380px" }}>
-                {[
-                  { n: countdown.days, l: "يوم" },
-                  { n: countdown.hours, l: "ساعة" },
-                  { n: countdown.minutes, l: "دقيقة" },
-                  { n: countdown.seconds, l: "ثانية" },
-                ].map(({ n, l }) => (
+              <div className="tagline reveal reveal-d3">وذلك بمشيئة الله تعالى</div>
+
+              <div className="gold-divider reveal reveal-d3" style={{ marginTop:"18px" }}>◆ ◆ ◆</div>
+
+              <div className="date-block reveal reveal-d4">
+                <div className="date-ar">{CONFIG.dateDisplay_ar}</div>
+                <div className="date-fr">{CONFIG.dateDisplay_fr}</div>
+              </div>
+
+              <div className="countdown reveal reveal-d4">
+                {[{n:countdown.days,l:"يوم"},{n:countdown.hours,l:"ساعة"},{n:countdown.minutes,l:"دقيقة"},{n:countdown.seconds,l:"ثانية"}].map(({n,l}) => (
                   <div key={l} className="count-block">
                     <span className="count-num">{pad(n)}</span>
                     <span className="count-label">{l}</span>
                   </div>
                 ))}
               </div>
+
+              <div className="gold-line-bottom reveal reveal-d4" />
 
               <div className="scroll-hint">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -233,14 +217,14 @@ export default function Home() {
               <div className="section-heading reveal">تفاصيل الحفل</div>
               <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
               <div className="venue-card reveal reveal-d2">
-                <div className="venue-top" style={{ textAlign:"center" }}>
-                  <div style={{ fontSize:"9px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#b8922a", fontFamily:"sans-serif", marginBottom:"16px", opacity:0.7 }}>
+                <div className="venue-top">
+                  <div style={{ fontSize:"9px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#b8922a", fontFamily:"sans-serif", marginBottom:"16px", opacity:0.65 }}>
                     موعد الحفل · Heure de la cérémonie
                   </div>
                   <div className="venue-time">21<span style={{ fontSize:"2.2rem", opacity:0.5 }}>h</span>00</div>
                   <div className="venue-time-ar">{CONFIG.time_ar}</div>
                 </div>
-                <div className="venue-bottom" style={{ textAlign:"center" }}>
+                <div className="venue-bottom">
                   <div className="venue-name">{CONFIG.venue_name}</div>
                   <div className="venue-region">{CONFIG.venue_region}</div>
                   <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
@@ -255,7 +239,7 @@ export default function Home() {
                   <div className="date-cell-label">Août</div>
                 </div>
                 <div className="date-cell">
-                  <div className="date-cell-num" style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1.3rem", paddingTop:"8px" }}>السبت</div>
+                  <div className="date-cell-num" style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1.3rem", paddingTop:"6px" }}>السبت</div>
                   <div className="date-cell-label">Samedi</div>
                 </div>
                 <div className="date-cell">
@@ -270,10 +254,10 @@ export default function Home() {
               <div className="section-heading reveal">تأكيد الحضور</div>
               <div className="section-sub reveal reveal-d1">Confirmer votre présence avant le 1er Août</div>
               {rsvpSent ? (
-                <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 22px" }}>
-                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.4)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontFamily:"Aref Ruqaa,serif", fontSize:"20px" }}>✦</div>
+                <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 20px" }}>
+                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.38)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontSize:"20px" }}>✦</div>
                   <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.7rem", color:"#4a2a08", marginBottom:"10px" }}>شكراً جزيلاً</div>
-                  <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2 }}>
+                  <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2.2 }}>
                     تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
                   </div>
                 </div>
@@ -298,15 +282,15 @@ export default function Home() {
             </section>
 
             {/* ── CLOSING ── */}
-            <section className="section" style={{ paddingBottom:"70px" }}>
+            <section className="section" style={{ paddingBottom:"80px" }}>
               <div className="gold-divider reveal">◆ ◆ ◆</div>
               <div className="reveal reveal-d1" style={{ marginTop:"30px" }}>
                 <div className="closing-names">
                   {CONFIG.groom_ar}<br/>
-                  <span style={{ fontSize:"0.55em", color:"#b8922a", fontWeight:400, fontFamily:"Aref Ruqaa,serif", display:"block", margin:"4px 0" }}>◆</span>
+                  <span style={{ fontSize:"0.5em", color:"#c9a84c", fontWeight:400, fontFamily:"Cormorant Garamond,serif", display:"block", margin:"6px 0" }}>◆</span>
                   {CONFIG.bride_ar}
                 </div>
-                <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"16px", fontStyle:"italic", opacity:0.8 }}>
+                <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"18px", opacity:0.8 }}>
                   وذلك بمشيئة الله
                 </div>
               </div>
@@ -315,7 +299,7 @@ export default function Home() {
 
             <footer>
               {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
-              <span style={{ opacity:0.5, marginTop:"4px", display:"block" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
+              <span style={{ opacity:0.45, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
             </footer>
           </div>
         </div>
