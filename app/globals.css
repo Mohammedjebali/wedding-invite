@@ -122,13 +122,15 @@ html, body {
 }
 .page-bg::before {
   content: '';
-  position: fixed; inset: 0; z-index: 0;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
   background-color: #fdf6f0;
   background-image: url('/bg-floral.jpg');
-  background-size: contain;
+  background-size: 100% 100%;
   background-position: center top;
   background-repeat: no-repeat;
-  opacity: 0.9;
+  opacity: 0.88;
   pointer-events: none;
 }
 .page-content {
