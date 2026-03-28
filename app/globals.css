@@ -123,8 +123,12 @@ html, body {
 .page-bg::before {
   content: '';
   position: fixed; inset: 0; z-index: 0;
-  background: url('/bg-floral.jpg') center center / cover no-repeat;
-  opacity: 0.85;
+  background-color: #fdf6f0;
+  background-image: url('/bg-floral.jpg');
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.9;
   pointer-events: none;
 }
 .page-content {
