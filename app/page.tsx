@@ -17,7 +17,8 @@ const CONFIG = {
   groomMom: "السيّدة سماح بن سالم",
   brideDad: "السيّد نور الدين جلال",
   brideMom: "السيّدة فاطيمة جلال",
-  bgMusic: "",
+  bgMusic: "/music.mp3",
+  bgMusicStart: 147, // 2:27
 };
 
 function useCountdown(d: string) {
@@ -85,6 +86,14 @@ export default function Home() {
     setOpening(true);
     setTimeout(() => setShowContent(true), 1100);
     setTimeout(() => setGone(true), 2400);
+    // Auto-play music at 2:27 when invitation opens
+    setTimeout(() => {
+      if (audioRef.current && CONFIG.bgMusic) {
+        audioRef.current.currentTime = CONFIG.bgMusicStart;
+        audioRef.current.play().catch(() => {});
+        setPlaying(true);
+      }
+    }, 1400);
   };
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
@@ -371,11 +380,17 @@ export default function Home() {
         </div>
       </div>
 
-      {CONFIG.bgMusic && (
+      {CONFIG.bgMusic && showContent && (
         <button className="music-btn" onClick={() => {
           if (!audioRef.current) return;
           if (playing) { audioRef.current.pause(); setPlaying(false); }
-          else { audioRef.current.play().catch(()=>{}); setPlaying(true); }
+          else {
+            if (audioRef.current.currentTime < CONFIG.bgMusicStart) {
+              audioRef.current.currentTime = CONFIG.bgMusicStart;
+            }
+            audioRef.current.play().catch(()=>{});
+            setPlaying(true);
+          }
         }}>{playing ? "⏸" : "♪"}</button>
       )}
     </>
