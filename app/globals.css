@@ -122,10 +122,8 @@ html, body {
 .page-bg::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
-  background: url('/bg-floral.jpg') center top / 100% 100% no-repeat;
-  filter: blur(3px) brightness(1.05) saturate(1.1);
-  transform: scale(1.04); /* prevents blur edge white lines */
-  opacity: 0.75;
+  background: url('/bg-floral-blur.jpg') center top / 100% 100% no-repeat;
+  opacity: 0.78;
   pointer-events: none;
 }
 /* cream overlay so text stays readable */
