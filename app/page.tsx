@@ -251,7 +251,7 @@ export default function Home() {
             {/* ── GUESTS ILLUSTRATION ── */}
             <div style={{ textAlign:"center", padding:"8px 0 0", overflow:"hidden" }}>
               <img
-                src="/guests-nobg.png"
+                src="/guests2-nobg.png"
                 alt=""
                 style={{ width:"100%", maxWidth:"480px", height:"auto", display:"block", margin:"0 auto" }}
               />
