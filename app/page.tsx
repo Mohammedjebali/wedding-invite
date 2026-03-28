@@ -248,6 +248,15 @@ export default function Home() {
               </div>
             </section>
 
+            {/* ── GUESTS ILLUSTRATION ── */}
+            <div style={{ textAlign:"center", padding:"8px 0 0", overflow:"hidden" }}>
+              <img
+                src="/guests-nobg.png"
+                alt=""
+                style={{ width:"100%", maxWidth:"480px", height:"auto", display:"block", margin:"0 auto" }}
+              />
+            </div>
+
             {/* ── RSVP ── */}
             <section className="section">
               <div className="section-heading reveal">تأكيد الحضور</div>
