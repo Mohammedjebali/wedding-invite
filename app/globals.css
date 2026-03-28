@@ -115,22 +115,6 @@ html, body {
 }
 .invitation.visible { opacity:1; transform:translateY(0); pointer-events:all; }
 
-/* ── FLORAL SIDE BORDERS (fixed, no GPU compositing) ── */
-.floral-left {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: clamp(60px, 15vw, 110px);
-  background: url('/flowers.png') top left / 100% auto repeat-y;
-  pointer-events: none; z-index: 20;
-  opacity: 0.92;
-}
-.floral-right {
-  position: fixed; top: 0; right: 0; bottom: 0;
-  width: clamp(60px, 15vw, 110px);
-  background: url('/flowers-right.png') top right / 100% auto repeat-y;
-  pointer-events: none; z-index: 20;
-  opacity: 0.92;
-}
-
 /* ── PAGE BACKGROUND ── */
 .page-bg {
   position: relative; min-height: 100vh;
@@ -139,10 +123,38 @@ html, body {
 
 .page-content {
   position: relative; z-index: 2;
-  /* inset so content never goes under flowers */
-  padding-left: clamp(70px, 17vw, 120px);
-  padding-right: clamp(70px, 17vw, 120px);
+  padding-left: 24px;
+  padding-right: 24px;
 }
+
+/* Bouquet decorations — top and bottom, not background (no repeat, no zoom) */
+.bouquet-top {
+  display: block;
+  width: min(320px, 80vw);
+  height: auto;
+  margin: 0 auto -40px;
+  position: relative; z-index: 3;
+  opacity: 0.92;
+  pointer-events: none;
+  animation: floatBouquet 5s ease-in-out infinite;
+}
+.bouquet-bottom {
+  display: block;
+  width: min(280px, 70vw);
+  height: auto;
+  margin: -30px auto 0;
+  position: relative; z-index: 3;
+  opacity: 0.85;
+  pointer-events: none;
+  transform: scaleY(-1);
+  animation: floatBouquet 5.5s ease-in-out infinite 0.5s;
+}
+@keyframes floatBouquet {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.bouquet-bottom { transform: scaleY(-1); }
+.bouquet-bottom:hover { transform: scaleY(-1); }
 
 /* ── FALLING PETALS ── */
 .petal-container { position: fixed; inset: 0; pointer-events: none; z-index: 19; overflow: hidden; }

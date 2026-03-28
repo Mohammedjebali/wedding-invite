@@ -126,10 +126,6 @@ export default function Home() {
 
       {showContent && (
         <>
-          {/* Floral side borders */}
-          <div className="floral-left" />
-          <div className="floral-right" />
-
           {/* Falling petals */}
           <div className="petal-container">
             {PETALS.map(p => (
@@ -146,6 +142,9 @@ export default function Home() {
       <div className={`invitation${showContent ? " visible" : ""}`}>
         <div className="page-bg">
           <div className="page-content">
+
+            {/* top bouquet */}
+            <img src="/bouquet-sm.png" className="bouquet-top" alt="" />
 
             {/* ── HERO ── */}
             <section className="hero">
@@ -296,6 +295,9 @@ export default function Home() {
               </div>
               <div className="gold-divider reveal reveal-d2" style={{ marginTop:"30px" }}>◆ ◆ ◆</div>
             </section>
+
+            {/* bottom bouquet */}
+            <img src="/bouquet-sm.png" className="bouquet-bottom" alt="" style={{ transform:"scaleY(-1)" }} />
 
             <footer>
               {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
