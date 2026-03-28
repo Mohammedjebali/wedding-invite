@@ -91,34 +91,89 @@ export default function Home() {
 
   return (
     <>
-      {/* ══ ENVELOPE ══ */}
+      {/* ══ VIDEO INTRO ══ */}
       <div className={`env-screen${gone ? " gone" : ""}`}
-        style={{ cursor: opening ? "default" : "pointer" }}
+        style={{ cursor: opening ? "default" : "pointer", padding: 0 }}
         onClick={!opening ? handleOpen : undefined}
       >
-        <div className="env-glow" />
-        {[...Array(8)].map((_,i) => (
-          <div key={i} className="env-particle" style={{ left:`${8+i*12}%`, bottom:"0", animationDelay:`${i*0.8}s`, animationDuration:`${6+i}s` }} />
-        ))}
-        <div className={`env-3d${opening ? " open" : ""}`}>
-          <div className="env-letter">
-            <div className="env-letter-line" style={{ width:"55%" }} />
-            <div className="env-letter-names">{CONFIG.groom_ar} & {CONFIG.bride_ar}</div>
-            <div className="env-letter-line" style={{ width:"35%" }} />
-            <div className="env-letter-date">{CONFIG.dateDisplay_ar}</div>
-            <div className="env-letter-line" style={{ width:"55%" }} />
+        {/* fullscreen video */}
+        <video
+          autoPlay muted loop playsInline
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            pointerEvents: "none",
+          }}
+        >
+          <source src="/intro.mp4" type="video/mp4" />
+        </video>
+
+        {/* dark overlay so button is readable */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 100%)",
+          pointerEvents: "none",
+        }} />
+
+        {/* center tap button */}
+        {!opening && (
+          <div style={{
+            position: "relative", zIndex: 10,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", gap: "24px",
+          }}>
+            <div style={{
+              fontFamily: "'Rakkas', serif",
+              fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
+              color: "#f5efe0",
+              direction: "rtl",
+              textShadow: "0 2px 20px rgba(0,0,0,0.6)",
+              textAlign: "center",
+              lineHeight: 1.6,
+            }}>
+              {CONFIG.groom_ar}<br/>
+              <span style={{ fontSize: "0.5em", color: "#e8c57a", letterSpacing: "0.15em", fontFamily: "Cormorant Garamond, serif", fontStyle: "italic" }}>— ✦ —</span><br/>
+              {CONFIG.bride_ar}
+            </div>
+
+            <button
+              onClick={handleOpen}
+              style={{
+                background: "linear-gradient(135deg, rgba(201,168,76,0.95), rgba(160,120,20,0.95))",
+                color: "#fff8f0",
+                border: "none",
+                padding: "16px 44px",
+                borderRadius: "40px",
+                fontFamily: "'Rakkas', serif",
+                fontSize: "18px",
+                cursor: "pointer",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+                animation: "openBtnPulse 2.5s ease-in-out infinite",
+                letterSpacing: "0.04em",
+              }}
+            >
+              افتح الدعوة
+            </button>
+
+            <div style={{
+              fontFamily: "sans-serif",
+              fontSize: "11px",
+              letterSpacing: "0.18em",
+              color: "rgba(255,248,224,0.5)",
+              textTransform: "uppercase",
+            }}>
+              {CONFIG.dateDisplay_fr}
+            </div>
           </div>
-          <div className="env-body">
-            <div className="env-body-bg" /><div className="env-bottom-folds" /><div className="env-inner-border" />
+        )}
+
+        {/* loading spinner when opening */}
+        {opening && (
+          <div style={{ position: "relative", zIndex: 10, color: "rgba(255,248,224,0.6)", fontFamily: "'Rakkas',serif", fontSize: "20px" }}>
+            ...
           </div>
-          <div className="env-flap-wrap">
-            <div className="env-flap-front"><div className="env-flap-triangle" /></div>
-          </div>
-          <div className="wax-seal">
-            <span className="wax-seal-text" style={{ fontSize:"min(1.2rem,3.5vw)" }}>✦</span>
-          </div>
-          <div className="env-hint"><div className="env-hint-text">المسّ لفتح الدعوة</div></div>
-        </div>
+        )}
       </div>
 
       {/* ══ INVITATION ══ */}
