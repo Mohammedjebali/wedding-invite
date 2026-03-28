@@ -1,27 +1,25 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-// ══ REAL INVITATION DATA ══════════════════════════════════════
 const CONFIG = {
   groom_ar: "محمد أمين بن سالم",
   bride_ar: "نور الهدى جلال",
-  groom_fr: "Mohamed Amine",
-  bride_fr: "Nour El Hoda",
-  initials: "م & ن",
+  groom_fr: "Mohamed Amine Ben Salem",
+  bride_fr: "Nour El Hoda Jlel",
+  initials: "م.أ & ن.ه",
   date: "2026-08-08",
-  dateDisplay_ar: "يوم السبت 8 أوت 2026",
+  dateDisplay_ar: "يوم السبت ٨ أوت ٢٠٢٦",
   dateDisplay_fr: "Samedi 8 Août 2026",
   time_ar: "على الساعة التاسعة ليلاً",
-  time_fr: "21h00",
-  venue: "BOUARGOUB, NABEUL",
+  venue_name: "BOUARGOUB",
+  venue_region: "Gouvernorat de Nabeul",
   mapsUrl: "https://maps.google.com/?q=Bouargoub+Nabeul+Tunisia",
   groomDad: "السيّد فوزي بن سالم",
-  groomMom: "والسيّدة سماح بن سالم",
+  groomMom: "السيّدة سماح بن سالم",
   brideDad: "السيّد نور الدين جلال",
-  brideMom: "والسيّدة فاطيمة جلال",
+  brideMom: "السيّدة فاطيمة جلال",
   bgMusic: "",
 };
-// ════════════════════════════════════════════════════════════
 
 function useCountdown(d: string) {
   const [t, setT] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -41,8 +39,7 @@ function useScrollReveal(active: boolean) {
     if (!active) return;
     const run = () => {
       document.querySelectorAll(".reveal:not(.visible)").forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 60) el.classList.add("visible");
+        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("visible");
       });
     };
     run();
@@ -50,6 +47,8 @@ function useScrollReveal(active: boolean) {
     return () => window.removeEventListener("scroll", run);
   }, [active]);
 }
+
+const PETALS = ["✦","◆","◇","✧","✦","◆"];
 
 export default function Home() {
   const [opening, setOpening] = useState(false);
@@ -67,7 +66,7 @@ export default function Home() {
     if (opening) return;
     setOpening(true);
     setTimeout(() => setShowContent(true), 1100);
-    setTimeout(() => setGone(true), 2200);
+    setTimeout(() => setGone(true), 2400);
   };
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
@@ -81,13 +80,15 @@ export default function Home() {
       >
         <div className="env-glow" />
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="env-particle" style={{ left:`${10+i*12}%`, bottom:"0", animationDelay:`${i*0.7}s`, animationDuration:`${5+i}s` }} />
+          <div key={i} className="env-particle" style={{ left:`${8+i*12}%`, bottom:"0", animationDelay:`${i*0.8}s`, animationDuration:`${6+i}s` }} />
         ))}
 
         <div className={`env-3d${opening ? " open" : ""}`}>
           <div className="env-letter">
             <div className="env-letter-line" style={{ width:"55%" }} />
-            <div className="env-letter-names">{CONFIG.groom_ar} & {CONFIG.bride_ar}</div>
+            <div className="env-letter-names" style={{ direction:"rtl", fontSize:"min(0.85rem, 2.8vw)" }}>
+              {CONFIG.groom_ar} & {CONFIG.bride_ar}
+            </div>
             <div className="env-letter-line" style={{ width:"35%" }} />
             <div className="env-letter-date">{CONFIG.dateDisplay_ar}</div>
             <div className="env-letter-line" style={{ width:"55%" }} />
@@ -100,8 +101,10 @@ export default function Home() {
           <div className="env-flap-wrap">
             <div className="env-flap-front"><div className="env-flap-triangle" /></div>
           </div>
-          <div className="wax-seal"><span className="wax-seal-text">♡</span></div>
-          <div className="env-hint"><div className="env-hint-text">✦ المسّ لفتح الدعوة ✦</div></div>
+          <div className="wax-seal">
+            <span className="wax-seal-text" style={{ fontFamily:"sans-serif", fontSize:"min(0.75rem,2.5vw)", letterSpacing:"0.05em" }}>✦</span>
+          </div>
+          <div className="env-hint"><div className="env-hint-text">المسّ لفتح الدعوة</div></div>
         </div>
       </div>
 
@@ -115,58 +118,63 @@ export default function Home() {
         </div>
       )}
 
-      {/* falling rose petals */}
-      {showContent && ["🌸","🌹","✿","🌷","❀","🌺"].map((p, i) => (
-        <div key={i} className="petal" style={{ left:`${5+i*16}%`, top:"-20px", fontSize:`${12+i%6}px`, opacity:0.2+(i%4)*0.05, animationDelay:`${i*0.6}s`, animationDuration:`${7+i}s` }}>{p}</div>
+      {/* geometric petals (no emojis) */}
+      {showContent && PETALS.map((p, i) => (
+        <div key={i} className="petal" style={{
+          left:`${6+i*16}%`, top:"-30px",
+          fontSize:`${10+i%5}px`, color:`rgba(201,168,76,${0.12+i%4*0.04})`,
+          animationDelay:`${i*0.9}s`, animationDuration:`${8+i*1.2}s`,
+          fontFamily:"sans-serif",
+        }}>{p}</div>
       ))}
 
       <div className={`invitation${showContent ? " visible" : ""}`}>
 
         {/* ── HERO ── */}
         <section className="hero">
-          {/* bismillah */}
-          <div className="reveal" style={{ fontSize:"24px", color:"#c9a84c", marginBottom:"24px", letterSpacing:"0.05em", textShadow:"0 0 40px rgba(201,168,76,0.4)", direction:"rtl" }}>
+          <div className="bismillah-band" />
+
+          <div className="reveal" style={{ fontSize:"22px", color:"#c9a84c", letterSpacing:"0.07em", opacity:0.75, direction:"rtl", textShadow:"0 0 36px rgba(201,168,76,0.25)", marginBottom:"20px" }}>
             بسم الله الرحمن الرحيم
           </div>
 
-          {/* families greeting */}
-          <div className="reveal reveal-delay-1" style={{ direction:"rtl", textAlign:"center", fontSize:"13px", color:"#9a8050", lineHeight:2, marginBottom:"28px", maxWidth:"300px", fontFamily:"Georgia, serif" }}>
-            بعد اهدائكم عاطر التحية وأزكى السلام<br/>تتشرف عائلتنا
+          <span className="gold-rule reveal reveal-d1" style={{ marginBottom:"28px", display:"block" }} />
+
+          <div className="reveal reveal-d1" style={{ direction:"rtl", fontSize:"13px", color:"#8a7040", fontStyle:"italic", lineHeight:1.9, marginBottom:"8px", opacity:0.8 }}>
+            بعد اهدائكم عاطر التحية وأزكى السلام
+          </div>
+          <div className="reveal reveal-d1" style={{ direction:"rtl", fontSize:"13px", color:"#7a6030", lineHeight:1.9, marginBottom:"28px" }}>
+            يسرّنا دعوتكم لحضور حفل زفاف
           </div>
 
-          {/* couple names — big beautiful */}
-          <div className="couple-wrap reveal reveal-delay-2">
+          <div className="couple-wrap reveal reveal-d2">
             <div className="couple-frame" />
-            <div className="couple-names" style={{ direction:"rtl" }}>
-              <span>{CONFIG.groom_ar}</span>
-              <em>❤ &amp; ❤</em>
-              <span>{CONFIG.bride_ar}</span>
+            <div className="couple-names">
+              <span className="name-shimmer">{CONFIG.groom_ar}</span>
+              <span className="sep">── ✦ ──</span>
+              <span className="name-shimmer">{CONFIG.bride_ar}</span>
             </div>
           </div>
 
-          <div className="ornament reveal reveal-delay-3">✦ ✦ ✦</div>
-
-          {/* وذلك بمشيئة الله */}
-          <div className="reveal reveal-delay-3" style={{ direction:"rtl", fontSize:"14px", color:"#8a7040", fontFamily:"Georgia, serif", marginTop:"4px", opacity:0.8 }}>
-            وذلك بمشيئة الله
+          <div className="reveal reveal-d3" style={{ direction:"rtl", fontSize:"1rem", fontStyle:"italic", color:"#9a8050", marginTop:"16px" }}>
+            وذلك بمشيئة الله تعالى
           </div>
 
-          {/* date */}
-          <div className="reveal reveal-delay-4" style={{ marginTop:"28px", textAlign:"center" }}>
-            <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#c9a84c", opacity:0.6, fontFamily:"sans-serif", marginBottom:"6px" }}>
-              Cérémonie de mariage
-            </div>
-            <div style={{ fontSize:"22px", color:"#f0e8d8", fontFamily:"Georgia, serif", direction:"rtl" }}>
-              {CONFIG.dateDisplay_ar}
-            </div>
-            <div style={{ fontSize:"12px", color:"#c9a84c", letterSpacing:"0.12em", fontFamily:"sans-serif", marginTop:"4px", opacity:0.7 }}>
-              {CONFIG.dateDisplay_fr}
-            </div>
+          <span className="gold-rule reveal reveal-d3" style={{ marginTop:"28px", display:"block" }} />
+
+          <div className="wedding-date-block reveal reveal-d4">
+            <div className="wedding-date-label">تاريخ حفل الزفاف</div>
+            <div className="wedding-date-main">{CONFIG.dateDisplay_ar}</div>
+            <div className="wedding-date-sub">{CONFIG.dateDisplay_fr}</div>
           </div>
 
-          {/* countdown */}
-          <div className="countdown reveal reveal-delay-4">
-            {[{n:countdown.days,l:"يوم"},{n:countdown.hours,l:"ساعة"},{n:countdown.minutes,l:"دقيقة"},{n:countdown.seconds,l:"ثانية"}].map(({n,l}) => (
+          <div className="countdown reveal reveal-d4">
+            {[
+              { n: countdown.days, l: "يوم" },
+              { n: countdown.hours, l: "ساعة" },
+              { n: countdown.minutes, l: "دقيقة" },
+              { n: countdown.seconds, l: "ثانية" },
+            ].map(({ n, l }) => (
               <div key={l} className="count-block">
                 <span className="count-num">{pad(n)}</span>
                 <span className="count-label">{l}</span>
@@ -175,84 +183,65 @@ export default function Home() {
           </div>
 
           <div className="scroll-hint">
-            <span style={{ fontSize:"18px" }}>↓</span>
-            <span>اكتشف</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            <span>تمرير للأسفل</span>
           </div>
         </section>
 
-        {/* ── FAMILIES SECTION ── */}
-        <section className="section section-alt" style={{ textAlign:"center" }}>
-          <div className="ornament reveal">✦ ✦ ✦</div>
-          <div className="reveal reveal-delay-1" style={{ direction:"rtl", fontSize:"14px", color:"#9a8050", lineHeight:2.6, marginTop:"24px", fontFamily:"Georgia, serif" }}>
-            <div style={{ fontSize:"10px", letterSpacing:"0.2em", color:"#c9a84c", fontFamily:"sans-serif", textTransform:"uppercase", opacity:0.6, marginBottom:"18px", direction:"ltr" }}>
-              عائلتا العروسَين
+        {/* ── FAMILIES ── */}
+        <section className="section section-alt">
+          <div className="section-heading reveal">العائلتان الكريمتان</div>
+          <div className="section-sub reveal reveal-d1">Les familles</div>
+
+          <div className="families-grid reveal reveal-d2">
+            <div className="family-cell">
+              <div className="family-role">عائلة العريس</div>
+              <div className="family-name">{CONFIG.groomDad}<br />{CONFIG.groomMom}</div>
             </div>
-            <div style={{ marginBottom:"20px" }}>
-              <div style={{ color:"#d4b87a", fontSize:"16px", marginBottom:"4px" }}>{CONFIG.groomDad}</div>
-              <div style={{ color:"#9a8050" }}>{CONFIG.groomMom}</div>
-            </div>
-            <div style={{ color:"#c9a84c", fontSize:"20px", margin:"8px 0" }}>✦</div>
-            <div>
-              <div style={{ color:"#d4b87a", fontSize:"16px", marginBottom:"4px" }}>{CONFIG.brideDad}</div>
-              <div style={{ color:"#9a8050" }}>{CONFIG.brideMom}</div>
+            <div className="family-cell">
+              <div className="family-role">عائلة العروس</div>
+              <div className="family-name">{CONFIG.brideDad}<br />{CONFIG.brideMom}</div>
             </div>
           </div>
-          <div className="ornament reveal reveal-delay-2" style={{ marginTop:"24px" }}>✦ ✦ ✦</div>
+
+          <div className="ornament reveal reveal-d3" style={{ marginTop:"28px" }}>◆ ◆ ◆</div>
         </section>
 
-        {/* ── CEREMONY DETAILS ── */}
+        {/* ── CEREMONY ── */}
         <section className="section">
-          <div className="section-heading reveal">تفاصيل حفل الزفاف</div>
-          <div className="section-sub reveal reveal-delay-1">Détails de la cérémonie</div>
+          <div className="section-heading reveal">تفاصيل الحفل</div>
+          <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
 
-          {/* big venue card */}
-          <div className="detail-card reveal reveal-delay-2" style={{ position:"relative", overflow:"hidden" }}>
-            {/* decorative background pattern */}
-            <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 60%)", pointerEvents:"none" }} />
-
-            <div style={{ fontSize:"32px", marginBottom:"16px" }}>💍</div>
-
-            <div style={{ fontSize:"10px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", fontFamily:"sans-serif", opacity:0.6, marginBottom:"16px" }}>
-              Cérémonie de mariage
+          <div className="venue-card reveal reveal-d2">
+            <div className="venue-card-top">
+              <div style={{ fontSize:"9px", letterSpacing:"0.26em", textTransform:"uppercase", color:"#c9a84c", fontFamily:"sans-serif", opacity:0.55, marginBottom:"20px" }}>
+                موعد الحفل · Heure de la cérémonie
+              </div>
+              <div className="venue-time">21<span style={{ fontSize:"2rem", opacity:0.6 }}>h</span>00</div>
+              <div className="venue-time-sub">{CONFIG.time_ar}</div>
             </div>
-
-            {/* time — big */}
-            <div style={{ fontSize:"3rem", color:"#e8c547", fontFamily:"Georgia, serif", fontWeight:300, lineHeight:1, marginBottom:"8px", textShadow:"0 0 30px rgba(232,197,71,0.3)" }}>
-              {CONFIG.time_fr}
+            <div className="venue-card-bottom">
+              <div className="venue-name">{CONFIG.venue_name}</div>
+              <div className="venue-location">{CONFIG.venue_region}</div>
+              <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                عرض على الخريطة · Voir sur la carte
+              </a>
             </div>
-            <div style={{ direction:"rtl", fontSize:"15px", color:"#9a8050", fontFamily:"Georgia, serif", marginBottom:"20px" }}>
-              {CONFIG.time_ar}
-            </div>
-
-            {/* divider */}
-            <div style={{ height:"1px", background:"linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent)", margin:"20px 0" }} />
-
-            {/* venue */}
-            <div style={{ fontSize:"1.6rem", color:"#f5efe6", fontFamily:"Georgia, serif", letterSpacing:"0.05em", marginBottom:"8px" }}>
-              {CONFIG.venue}
-            </div>
-            <div style={{ fontSize:"12px", color:"#7a6030", fontFamily:"sans-serif", letterSpacing:"0.1em", marginBottom:"20px" }}>
-              Bouargoub, Gouvernorat de Nabeul
-            </div>
-
-            <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              الاتجاهات · Itinéraire
-            </a>
           </div>
 
-          {/* date card */}
-          <div className="reveal reveal-delay-3" style={{ background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.15)", borderRadius:"14px", padding:"22px 20px", marginTop:"14px", textAlign:"center" }}>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"24px" }}>
-              <div style={{ textAlign:"center" }}>
-                <div style={{ fontSize:"3rem", color:"#c9a84c", fontFamily:"Georgia, serif", lineHeight:1 }}>08</div>
-                <div style={{ fontSize:"10px", letterSpacing:"0.18em", color:"#7a6030", fontFamily:"sans-serif", textTransform:"uppercase", marginTop:"4px" }}>Août</div>
-              </div>
-              <div style={{ width:"1px", height:"50px", background:"rgba(201,168,76,0.2)" }} />
-              <div style={{ textAlign:"center" }}>
-                <div style={{ fontSize:"3rem", color:"#c9a84c", fontFamily:"Georgia, serif", lineHeight:1 }}>2026</div>
-                <div style={{ fontSize:"10px", letterSpacing:"0.18em", color:"#7a6030", fontFamily:"sans-serif", textTransform:"uppercase", marginTop:"4px" }}>السنة</div>
-              </div>
+          <div className="date-strip reveal reveal-d3">
+            <div className="date-cell">
+              <div className="date-cell-num">08</div>
+              <div className="date-cell-label">Août</div>
+            </div>
+            <div className="date-cell">
+              <div className="date-cell-num">السبت</div>
+              <div className="date-cell-label">Samedi</div>
+            </div>
+            <div className="date-cell">
+              <div className="date-cell-num">2026</div>
+              <div className="date-cell-label">السنة</div>
             </div>
           </div>
         </section>
@@ -260,59 +249,51 @@ export default function Home() {
         {/* ── RSVP ── */}
         <section className="section section-alt">
           <div className="section-heading reveal">تأكيد الحضور</div>
-          <div className="section-sub reveal reveal-delay-1">Merci de confirmer votre présence</div>
+          <div className="section-sub reveal reveal-d1">Confirmez votre présence avant le 1er Août</div>
 
           {rsvpSent ? (
-            <div className="reveal" style={{ textAlign:"center", padding:"36px 0" }}>
-              <div style={{ fontSize:"52px", color:"#c9a84c", marginBottom:"18px", textShadow:"0 0 40px rgba(201,168,76,0.5)" }}>✦</div>
-              <div style={{ color:"#c9a84c", fontSize:"1.4rem", marginBottom:"10px", fontFamily:"Georgia, serif" }}>شكراً جزيلاً</div>
+            <div className="reveal" style={{ textAlign:"center", padding:"40px 0" }}>
+              <div style={{ width:"60px", height:"60px", borderRadius:"50%", border:"1px solid rgba(201,168,76,0.35)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", fontSize:"22px", color:"#c9a84c" }}>✦</div>
+              <div style={{ color:"#c9a84c", fontSize:"1.5rem", fontFamily:"Cormorant Garamond,serif", marginBottom:"10px", direction:"rtl" }}>شكراً جزيلاً</div>
               <div style={{ color:"#7a6030", fontSize:"13px", fontFamily:"sans-serif", lineHeight:2, direction:"rtl" }}>
                 تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
               </div>
             </div>
           ) : (
-            <form className="rsvp-form reveal reveal-delay-1" onSubmit={handleRsvp}>
-              <input className="rsvp-input" type="text" placeholder="الاسم الكامل / Votre nom" required
-                value={rsvp.name} onChange={e => setRsvp({...rsvp, name:e.target.value})} />
-              <input className="rsvp-input" type="tel" placeholder="رقم الهاتف / Téléphone"
-                value={rsvp.phone} onChange={e => setRsvp({...rsvp, phone:e.target.value})} />
-              <select className="rsvp-select" value={rsvp.attending}
-                onChange={e => setRsvp({...rsvp, attending:e.target.value})}>
-                <option value="oui">✓  سأحضر — Je confirme ma présence</option>
-                <option value="non">✗  لن أتمكن من الحضور — Je ne pourrai pas venir</option>
+            <form className="rsvp-form reveal reveal-d1" onSubmit={handleRsvp}>
+              <input className="rsvp-input" type="text" placeholder="الاسم الكامل" required value={rsvp.name} onChange={e => setRsvp({...rsvp, name:e.target.value})} />
+              <input className="rsvp-input" type="tel" placeholder="رقم الهاتف" value={rsvp.phone} onChange={e => setRsvp({...rsvp, phone:e.target.value})} />
+              <select className="rsvp-select" value={rsvp.attending} onChange={e => setRsvp({...rsvp, attending:e.target.value})}>
+                <option value="oui">سأحضر بكل سرور</option>
+                <option value="non">لن أتمكن من الحضور</option>
               </select>
               {rsvp.attending === "oui" && (
-                <select className="rsvp-select" value={rsvp.guests}
-                  onChange={e => setRsvp({...rsvp, guests:e.target.value})}>
-                  {["1","2","3","4","5"].map(n => (
-                    <option key={n} value={n}>{n} personne{parseInt(n)>1?"s":""}</option>
-                  ))}
+                <select className="rsvp-select" value={rsvp.guests} onChange={e => setRsvp({...rsvp, guests:e.target.value})}>
+                  {["1","2","3","4","5"].map(n => <option key={n} value={n}>{n} {parseInt(n)>1?"أشخاص":"شخص"}</option>)}
                 </select>
               )}
-              <button type="submit" className="rsvp-btn">تأكيد الحضور · Confirmer</button>
+              <button type="submit" className="rsvp-btn">تأكيد الحضور</button>
             </form>
           )}
         </section>
 
         {/* ── CLOSING ── */}
         <section className="section" style={{ textAlign:"center" }}>
-          <div className="ornament reveal">✦ ✦ ✦</div>
-          <div className="reveal reveal-delay-1" style={{ direction:"rtl", fontSize:"22px", color:"#c9a84c", fontFamily:"Georgia, serif", margin:"24px 0 8px", opacity:0.85 }}>
-            {CONFIG.groom_ar}
-          </div>
-          <div className="reveal reveal-delay-1" style={{ fontSize:"16px", color:"#c9a84c", margin:"4px 0", opacity:0.5 }}>❤ ❤</div>
-          <div className="reveal reveal-delay-2" style={{ direction:"rtl", fontSize:"22px", color:"#c9a84c", fontFamily:"Georgia, serif", margin:"0 0 24px", opacity:0.85 }}>
+          <span className="gold-rule reveal" style={{ display:"block", marginBottom:"32px" }} />
+          <div className="reveal reveal-d1" style={{ direction:"rtl", fontFamily:"Cormorant Garamond,serif", fontSize:"1.5rem", color:"#c9a84c", fontWeight:300, lineHeight:2, marginBottom:"24px" }}>
+            {CONFIG.groom_ar}<br />
+            <span style={{ fontSize:"0.8rem", color:"#5a4420", letterSpacing:"0.15em", fontStyle:"italic" }}>◆ ◆ ◆</span><br />
             {CONFIG.bride_ar}
           </div>
-          <div className="ornament reveal reveal-delay-3">✦ ✦ ✦</div>
-          <div className="reveal reveal-delay-3" style={{ direction:"rtl", fontSize:"13px", color:"#5a4a20", fontFamily:"Georgia, serif", marginTop:"20px", opacity:0.7 }}>
+          <div className="reveal reveal-d2" style={{ direction:"rtl", fontSize:"12px", color:"#4a3a14", fontStyle:"italic", marginBottom:"16px" }}>
             وذلك بمشيئة الله
           </div>
+          <span className="gold-rule reveal reveal-d3" style={{ display:"block" }} />
         </section>
 
-        <footer style={{ textAlign:"center", padding:"40px 24px", borderTop:"1px solid rgba(201,168,76,0.07)", fontFamily:"sans-serif", fontSize:"10px", letterSpacing:"0.12em", color:"#2a1f08" }}>
-          ✦ &nbsp; {CONFIG.groom_fr} &amp; {CONFIG.bride_fr} &nbsp; ✦<br/>
-          <span style={{ opacity:0.3, marginTop:"6px", display:"block" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
+        <footer style={{ textAlign:"center", padding:"40px 24px", borderTop:"1px solid rgba(201,168,76,0.06)", fontFamily:"sans-serif", fontSize:"10px", letterSpacing:"0.14em", color:"#2a1f08" }}>
+          {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
+          <span style={{ opacity:0.3, marginTop:"5px", display:"block" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
         </footer>
       </div>
 
