@@ -176,8 +176,6 @@ html, body {
 
 .glass-panel {
   background: rgba(255, 248, 240, 0.94);
-  
-  -webkit-
   border: 1px solid rgba(184,146,42,0.22);
   border-radius: 20px;
   padding: 36px 28px;
