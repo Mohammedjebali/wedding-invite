@@ -28,7 +28,7 @@ function useCountdown(d: string) {
       if (diff <= 0) return;
       setT({ days: Math.floor(diff/86400000), hours: Math.floor((diff%86400000)/3600000), minutes: Math.floor((diff%3600000)/60000), seconds: Math.floor((diff%60000)/1000) });
     };
-    tick(); const id = setInterval(tick, 1000); return () => clearInterval(id);
+    tick(); const id = setInterval(tick,1000); return () => clearInterval(id);
   }, [d]);
   return t;
 }
@@ -38,7 +38,7 @@ function useScrollReveal(active: boolean) {
     if (!active) return;
     const run = () => {
       document.querySelectorAll(".reveal:not(.visible)").forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("visible");
+        if (el.getBoundingClientRect().top < window.innerHeight - 40) el.classList.add("visible");
       });
     };
     run();
@@ -46,6 +46,13 @@ function useScrollReveal(active: boolean) {
     return () => window.removeEventListener("scroll", run);
   }, [active]);
 }
+
+// Rose petal SVG paths for variation
+const PETAL_SVG = [
+  "M10,2 C10,2 18,8 18,14 C18,20 14,24 10,24 C6,24 2,20 2,14 C2,8 10,2 10,2Z",
+  "M12,1 C12,1 22,9 20,16 C18,23 12,26 8,22 C4,18 2,10 7,5 C9,3 12,1 12,1Z",
+  "M10,3 C14,0 20,6 19,12 C18,18 12,22 7,20 C2,18 1,11 4,7 C6,4 10,3 10,3Z",
+];
 
 export default function Home() {
   const [opening, setOpening] = useState(false);
@@ -68,6 +75,24 @@ export default function Home() {
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
 
+  // Deterministic petals — 14 petals with preset positions
+  const petals = [
+    { id:0, left:"5%",  size:18, delay:0,   dur:7,  color:"rgba(220,140,140,0.65)", path:0 },
+    { id:1, left:"15%", size:14, delay:0.8, dur:8,  color:"rgba(230,160,160,0.55)", path:1 },
+    { id:2, left:"25%", size:20, delay:1.6, dur:9,  color:"rgba(215,130,130,0.6)",  path:2 },
+    { id:3, left:"35%", size:12, delay:0.3, dur:7,  color:"rgba(240,180,160,0.5)",  path:0 },
+    { id:4, left:"45%", size:16, delay:2.1, dur:8,  color:"rgba(220,150,150,0.6)",  path:1 },
+    { id:5, left:"55%", size:22, delay:1.0, dur:10, color:"rgba(200,120,120,0.55)", path:2 },
+    { id:6, left:"65%", size:13, delay:2.8, dur:7,  color:"rgba(235,165,155,0.5)",  path:0 },
+    { id:7, left:"75%", size:18, delay:0.5, dur:9,  color:"rgba(210,135,135,0.6)",  path:1 },
+    { id:8, left:"85%", size:15, delay:1.8, dur:8,  color:"rgba(225,155,145,0.55)", path:2 },
+    { id:9, left:"92%", size:11, delay:3.2, dur:7,  color:"rgba(240,175,165,0.5)",  path:0 },
+    { id:10,left:"10%", size:16, delay:4.0, dur:9,  color:"rgba(215,138,138,0.6)",  path:1 },
+    { id:11,left:"50%", size:19, delay:3.6, dur:10, color:"rgba(200,125,125,0.55)", path:2 },
+    { id:12,left:"70%", size:13, delay:4.5, dur:8,  color:"rgba(230,158,148,0.5)",  path:0 },
+    { id:13,left:"30%", size:21, delay:5.0, dur:9,  color:"rgba(212,132,132,0.6)",  path:1 },
+  ];
+
   return (
     <>
       {/* ══ ENVELOPE ══ */}
@@ -76,7 +101,7 @@ export default function Home() {
         onClick={!opening ? handleOpen : undefined}
       >
         <div className="env-glow" />
-        {[...Array(8)].map((_, i) => (
+        {[...Array(8)].map((_,i) => (
           <div key={i} className="env-particle" style={{ left:`${8+i*12}%`, bottom:"0", animationDelay:`${i*0.8}s`, animationDuration:`${6+i}s` }} />
         ))}
         <div className={`env-3d${opening ? " open" : ""}`}>
@@ -88,9 +113,7 @@ export default function Home() {
             <div className="env-letter-line" style={{ width:"55%" }} />
           </div>
           <div className="env-body">
-            <div className="env-body-bg" />
-            <div className="env-bottom-folds" />
-            <div className="env-inner-border" />
+            <div className="env-body-bg" /><div className="env-bottom-folds" /><div className="env-inner-border" />
           </div>
           <div className="env-flap-wrap">
             <div className="env-flap-front"><div className="env-flap-triangle" /></div>
@@ -105,44 +128,71 @@ export default function Home() {
       {/* ══ INVITATION ══ */}
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
+      {/* Falling rose petals */}
+      {showContent && (
+        <div className="petal-container">
+          {petals.map(p => (
+            <svg key={p.id} className="petal" viewBox="0 0 24 28"
+              style={{
+                left: p.left, width: p.size, height: p.size,
+                fill: p.color,
+                animationDelay: `${p.delay}s`,
+                animationDuration: `${p.dur}s`,
+              }}
+            >
+              <path d={PETAL_SVG[p.path]} />
+            </svg>
+          ))}
+        </div>
+      )}
+
+      {/* Corner frame */}
+      {showContent && (
+        <div className="inv-frame">
+          <div className="inv-frame-corner tl" /><div className="inv-frame-corner tr" />
+          <div className="inv-frame-corner bl" /><div className="inv-frame-corner br" />
+        </div>
+      )}
+
       <div className={`invitation${showContent ? " visible" : ""}`}>
         <div className="page-bg">
           <div className="page-content">
 
             {/* ── HERO ── */}
             <section className="hero">
+              <div className="glass-panel">
+                <div className="bismillah reveal">
+                  بسم الله الرحمن الرحيم
+                </div>
 
-              <div className="bismillah reveal">
-                بسم الله الرحمن الرحيم
-              </div>
+                <div className="gold-divider reveal reveal-d1">◆ ◆ ◆</div>
 
-              <div className="gold-divider reveal reveal-d1">✦ ✦ ✦</div>
+                <div className="invite-greeting reveal reveal-d1">
+                  بعد اهدائكم عاطر التحية وأزكى السلام<br/>
+                  يسرّنا دعوتكم لحضور حفل زفاف
+                </div>
 
-              <div className="invite-greeting reveal reveal-d1">
-                بعد اهدائكم عاطر التحية وأزكى السلام<br/>
-                يسرّنا دعوتكم لحضور حفل زفاف
-              </div>
+                <div className="reveal reveal-d2" style={{ margin:"20px 0 16px" }}>
+                  <div className="couple-names">
+                    {CONFIG.groom_ar}
+                    <span className="name-sep">— ✦ —</span>
+                    {CONFIG.bride_ar}
+                  </div>
+                </div>
 
-              <div className="couple-wrap reveal reveal-d2">
-                <div className="couple-names">
-                  {CONFIG.groom_ar}
-                  <span className="name-and">— ✦ —</span>
-                  {CONFIG.bride_ar}
+                <div className="tagline reveal reveal-d3">
+                  وذلك بمشيئة الله تعالى
+                </div>
+
+                <div className="gold-divider reveal reveal-d3" style={{ marginTop:"20px" }}>◆ ◆ ◆</div>
+
+                <div className="date-block reveal reveal-d4">
+                  <div className="date-ar">{CONFIG.dateDisplay_ar}</div>
+                  <div className="date-fr">{CONFIG.dateDisplay_fr}</div>
                 </div>
               </div>
 
-              <div className="tagline reveal reveal-d3">
-                وذلك بمشيئة الله تعالى
-              </div>
-
-              <div className="gold-divider reveal reveal-d3" style={{ marginTop:"24px" }}>✦ ✦ ✦</div>
-
-              <div className="date-display reveal reveal-d4">
-                <div className="date-ar">{CONFIG.dateDisplay_ar}</div>
-                <div className="date-fr">{CONFIG.dateDisplay_fr}</div>
-              </div>
-
-              <div className="countdown reveal reveal-d4">
+              <div className="countdown reveal reveal-d4" style={{ marginTop:"20px", width:"100%", maxWidth:"380px" }}>
                 {[
                   { n: countdown.days, l: "يوم" },
                   { n: countdown.hours, l: "ساعة" },
@@ -157,7 +207,9 @@ export default function Home() {
               </div>
 
               <div className="scroll-hint">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="18 14 12 20 6 14"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <line x1="12" y1="4" x2="12" y2="20"/><polyline points="18 14 12 20 6 14"/>
+                </svg>
               </div>
             </section>
 
@@ -165,52 +217,45 @@ export default function Home() {
             <section className="section">
               <div className="section-heading reveal">العائلتان الكريمتان</div>
               <div className="section-sub reveal reveal-d1">Les familles</div>
-
-              <div className="families-wrap">
-                <div className="family-row reveal reveal-d2">
-                  <div className="family-role">عائلة العريس</div>
-                  <div className="family-names">
-                    {CONFIG.groomDad}<br/>{CONFIG.groomMom}
-                  </div>
-                </div>
-                <div className="family-row reveal reveal-d3">
-                  <div className="family-role">عائلة العروس</div>
-                  <div className="family-names">
-                    {CONFIG.brideDad}<br/>{CONFIG.brideMom}
-                  </div>
-                </div>
+              <div className="family-row reveal reveal-d2">
+                <div className="family-role">عائلة العريس</div>
+                <div className="family-names">{CONFIG.groomDad}<br/>{CONFIG.groomMom}</div>
               </div>
-
-              <div className="gold-divider reveal reveal-d4" style={{ marginTop:"32px" }}>✦ ✦ ✦</div>
+              <div className="family-row reveal reveal-d3">
+                <div className="family-role">عائلة العروس</div>
+                <div className="family-names">{CONFIG.brideDad}<br/>{CONFIG.brideMom}</div>
+              </div>
+              <div className="gold-divider reveal reveal-d4" style={{ marginTop:"28px" }}>◆ ◆ ◆</div>
             </section>
 
             {/* ── VENUE ── */}
             <section className="section">
               <div className="section-heading reveal">تفاصيل الحفل</div>
               <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
-
-              <div className="inv-card reveal reveal-d2">
-                <div style={{ fontSize:"9px", letterSpacing:"0.24em", textTransform:"uppercase", color:"#b8922a", fontFamily:"sans-serif", marginBottom:"18px", opacity:0.7 }}>
-                  موعد الحفل · Heure de la cérémonie
+              <div className="venue-card reveal reveal-d2">
+                <div className="venue-top" style={{ textAlign:"center" }}>
+                  <div style={{ fontSize:"9px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#b8922a", fontFamily:"sans-serif", marginBottom:"16px", opacity:0.7 }}>
+                    موعد الحفل · Heure de la cérémonie
+                  </div>
+                  <div className="venue-time">21<span style={{ fontSize:"2.2rem", opacity:0.5 }}>h</span>00</div>
+                  <div className="venue-time-ar">{CONFIG.time_ar}</div>
                 </div>
-                <div className="venue-time">21<span style={{ fontSize:"2rem", opacity:0.55 }}>h</span>00</div>
-                <div className="venue-time-ar">{CONFIG.time_ar}</div>
-                <div className="venue-divider" />
-                <div className="venue-name">{CONFIG.venue_name}</div>
-                <div className="venue-region">{CONFIG.venue_region}</div>
-                <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  عرض الخريطة · Itinéraire
-                </a>
+                <div className="venue-bottom" style={{ textAlign:"center" }}>
+                  <div className="venue-name">{CONFIG.venue_name}</div>
+                  <div className="venue-region">{CONFIG.venue_region}</div>
+                  <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    عرض الخريطة · Itinéraire
+                  </a>
+                </div>
               </div>
-
               <div className="date-strip reveal reveal-d3">
                 <div className="date-cell">
                   <div className="date-cell-num">08</div>
                   <div className="date-cell-label">Août</div>
                 </div>
                 <div className="date-cell">
-                  <div className="date-cell-num" style={{ fontFamily:"Amiri,serif", fontSize:"1.4rem", paddingTop:"6px" }}>السبت</div>
+                  <div className="date-cell-num" style={{ fontFamily:"Amiri Quran,serif", fontSize:"1.3rem", paddingTop:"8px" }}>السبت</div>
                   <div className="date-cell-label">Samedi</div>
                 </div>
                 <div className="date-cell">
@@ -223,18 +268,17 @@ export default function Home() {
             {/* ── RSVP ── */}
             <section className="section">
               <div className="section-heading reveal">تأكيد الحضور</div>
-              <div className="section-sub reveal reveal-d1">Confirmer votre présence</div>
-
+              <div className="section-sub reveal reveal-d1">Confirmer votre présence avant le 1er Août</div>
               {rsvpSent ? (
-                <div className="inv-card reveal" style={{ textAlign:"center", padding:"40px 22px" }}>
-                  <div style={{ fontSize:"36px", color:"#b8922a", marginBottom:"16px" }}>✦</div>
-                  <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.6rem", color:"#5a3810", marginBottom:"10px" }}>شكراً جزيلاً</div>
-                  <div style={{ fontFamily:"Amiri,serif", fontSize:"1rem", color:"#8a6030", direction:"rtl", lineHeight:2 }}>
+                <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 22px" }}>
+                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.4)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontFamily:"Amiri Quran,serif", fontSize:"20px" }}>✦</div>
+                  <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.7rem", color:"#4a2a08", marginBottom:"10px" }}>شكراً جزيلاً</div>
+                  <div style={{ fontFamily:"Amiri Quran,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2 }}>
                     تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
                   </div>
                 </div>
               ) : (
-                <div className="inv-card reveal reveal-d1">
+                <div className="rsvp-card reveal reveal-d1">
                   <form className="rsvp-form" onSubmit={handleRsvp}>
                     <input className="rsvp-input" type="text" placeholder="الاسم الكامل" required value={rsvp.name} onChange={e => setRsvp({...rsvp,name:e.target.value})} />
                     <input className="rsvp-input" type="tel" placeholder="رقم الهاتف" value={rsvp.phone} onChange={e => setRsvp({...rsvp,phone:e.target.value})} />
@@ -254,24 +298,25 @@ export default function Home() {
             </section>
 
             {/* ── CLOSING ── */}
-            <section className="section" style={{ paddingBottom:"80px" }}>
-              <div className="gold-divider reveal">✦ ✦ ✦</div>
-              <div className="reveal reveal-d1" style={{ marginTop:"28px" }}>
+            <section className="section" style={{ paddingBottom:"70px" }}>
+              <div className="gold-divider reveal">◆ ◆ ◆</div>
+              <div className="reveal reveal-d1" style={{ marginTop:"30px" }}>
                 <div className="closing-names">
                   {CONFIG.groom_ar}<br/>
-                  <span style={{ fontSize:"0.6em", color:"#b8922a", fontWeight:400, fontFamily:"Amiri,serif" }}>✦</span><br/>
+                  <span style={{ fontSize:"0.55em", color:"#b8922a", fontWeight:400, fontFamily:"Amiri Quran,serif", display:"block", margin:"4px 0" }}>◆</span>
                   {CONFIG.bride_ar}
                 </div>
-                <div className="closing-masha">وذلك بمشيئة الله</div>
+                <div style={{ fontFamily:"Amiri Quran,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"16px", fontStyle:"italic", opacity:0.8 }}>
+                  وذلك بمشيئة الله
+                </div>
               </div>
-              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"28px" }}>✦ ✦ ✦</div>
+              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"30px" }}>◆ ◆ ◆</div>
             </section>
 
             <footer>
               {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
-              <span style={{ opacity:0.5, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
+              <span style={{ opacity:0.5, marginTop:"4px", display:"block" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
             </footer>
-
           </div>
         </div>
       </div>
