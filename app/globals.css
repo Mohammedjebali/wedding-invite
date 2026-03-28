@@ -1,4 +1,6 @@
-/* Self-hosted Rakkas — no CDN dependency */
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+
+/* Self-hosted Rakkas — guaranteed load, no CDN */
 @font-face {
   font-family: 'Rakkas';
   font-style: normal;
@@ -6,7 +8,6 @@
   font-display: swap;
   src: url('/Rakkas.ttf') format('truetype');
 }
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
