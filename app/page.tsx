@@ -1,5 +1,99 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+
+// ── Letter-by-letter reveal component ─────────────────────────
+function TypeReveal({ text, delay = 0, className = "", style = {} }: {
+  text: string; delay?: number; className?: string; style?: React.CSSProperties;
+}) {
+  const [visible, setVisible] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setStarted(true); obs.disconnect(); }
+    }, { threshold: 0.3 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!started) return;
+    const chars = [...text]; // spread handles Arabic correctly
+    let i = 0;
+    const timer = setTimeout(() => {
+      const id = setInterval(() => {
+        i++;
+        setVisible(i);
+        if (i >= chars.length) clearInterval(id);
+      }, 60);
+      return () => clearInterval(id);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [started, text, delay]);
+  const chars = [...text];
+  return (
+    <span ref={ref} className={className} style={{ direction:"rtl", display:"block", ...style }}>
+      {chars.map((ch, i) => (
+        <span key={i} style={{
+          opacity: i < visible ? 1 : 0,
+          transition: "opacity 0.2s ease",
+          display: "inline-block",
+          whiteSpace: ch === " " ? "pre" : "normal",
+        }}>{ch}</span>
+      ))}
+    </span>
+  );
+}
+
+// ── Gold sparkle particles ─────────────────────────────────────
+function Sparkles({ active }: { active: boolean }) {
+  const sparks = Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    x: 10 + (i * 5.5) % 80,
+    delay: (i * 0.3) % 4,
+    dur: 2.5 + (i % 4) * 0.5,
+    size: 3 + (i % 4),
+  }));
+  if (!active) return null;
+  return (
+    <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:15, overflow:"hidden" }}>
+      {sparks.map(s => (
+        <div key={s.id} style={{
+          position:"absolute", left:`${s.x}%`, bottom:"0",
+          width:s.size, height:s.size, borderRadius:"50%",
+          background:"#c9a84c",
+          animation:`sparkFloat ${s.dur}s ease-in-out ${s.delay}s infinite`,
+        }} />
+      ))}
+    </div>
+  );
+}
+
+// ── Confetti burst ─────────────────────────────────────────────
+function Confetti({ active }: { active: boolean }) {
+  const pieces = Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    x: 5 + (i * 2.3) % 90,
+    color: ["#c9a84c","#e8c547","#f5ede0","#d4956a","#c9a84c","#fff3da"][i % 6],
+    size: 6 + (i % 5),
+    delay: (i * 0.08) % 1.2,
+    dur: 1.8 + (i % 4) * 0.3,
+    rotate: (i * 47) % 360,
+  }));
+  if (!active) return null;
+  return (
+    <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:100, overflow:"hidden" }}>
+      {pieces.map(p => (
+        <div key={p.id} style={{
+          position:"absolute", left:`${p.x}%`, top:"-20px",
+          width:p.size, height:p.size * 0.6,
+          background:p.color, borderRadius:"2px",
+          animation:`confettiFall ${p.dur}s ease-in ${p.delay}s both`,
+          transform:`rotate(${p.rotate}deg)`,
+        }} />
+      ))}
+    </div>
+  );
+}
 
 const CONFIG = {
   groom_ar: "محمد أمين بن سالم",
@@ -75,6 +169,7 @@ export default function Home() {
   const [showContent, setShowContent] = useState(false);
   const [rsvp, setRsvp] = useState({ name:"", phone:"", attending:"oui", guests:"1" });
   const [rsvpSent, setRsvpSent] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const countdown = useCountdown(CONFIG.date);
@@ -95,7 +190,12 @@ export default function Home() {
     setTimeout(() => setGone(true), 4200);
   };
 
-  const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
+  const handleRsvp = (e: React.FormEvent) => {
+    e.preventDefault();
+    setRsvpSent(true);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3500);
+  };
 
   return (
     <>
@@ -187,6 +287,9 @@ export default function Home() {
       {/* ══ INVITATION ══ */}
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
+      <Sparkles active={showContent} />
+      <Confetti active={showConfetti} />
+
       {showContent && (
         <>
           {/* Falling petals */}
@@ -226,9 +329,9 @@ export default function Home() {
 
               <div className="reveal reveal-d2" style={{ margin:"20px 0 14px" }}>
                 <div className="couple-names">
-                  {CONFIG.groom_ar}
+                  <TypeReveal text={CONFIG.groom_ar} delay={300} />
                   <span className="name-sep">— ✦ —</span>
-                  {CONFIG.bride_ar}
+                  <TypeReveal text={CONFIG.bride_ar} delay={800} />
                 </div>
               </div>
 
@@ -261,7 +364,7 @@ export default function Home() {
 
             {/* ── FAMILIES ── */}
             <section className="section">
-              <div className="section-heading reveal">العائلتان الكريمتان</div>
+              <div className="section-heading reveal gold-sweep">العائلتان الكريمتان</div>
               <div className="section-sub reveal reveal-d1">Les familles</div>
               <div className="family-row reveal reveal-d2">
                 <div className="family-role">عائلة العريس</div>
@@ -276,7 +379,7 @@ export default function Home() {
 
             {/* ── VENUE ── */}
             <section className="section">
-              <div className="section-heading reveal">تفاصيل الحفل</div>
+              <div className="section-heading reveal gold-sweep">تفاصيل الحفل</div>
               <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
               <div className="venue-card reveal reveal-d2">
                 <div className="venue-top">
@@ -322,7 +425,7 @@ export default function Home() {
 
             {/* ── RSVP ── */}
             <section className="section">
-              <div className="section-heading reveal">تأكيد الحضور</div>
+              <div className="section-heading reveal gold-sweep">تأكيد الحضور</div>
               <div className="section-sub reveal reveal-d1">Confirmer votre présence avant le 1er Août</div>
               {rsvpSent ? (
                 <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 20px" }}>
