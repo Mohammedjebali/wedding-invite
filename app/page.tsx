@@ -91,8 +91,8 @@ export default function Home() {
       setPlaying(true);
     }
     // Let music play for 4 seconds on video page before transitioning
-    setTimeout(() => setShowContent(true), 4000);
-    setTimeout(() => setGone(true), 5200);
+    setTimeout(() => setShowContent(true), 2500);
+    setTimeout(() => setGone(true), 3700);
   };
 
   const handleRsvp = (e: React.FormEvent) => { e.preventDefault(); setRsvpSent(true); };
