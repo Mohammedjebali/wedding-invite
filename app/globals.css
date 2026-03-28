@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Scheherazade+New:wght@400;700&family=Reem+Kufi:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
   background: #fdf3ec;
   color: #2c1a0e;
-  font-family: 'Amiri Quran', 'Scheherazade New', serif;
+  font-family: 'Aref Ruqaa', 'Scheherazade New', serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -81,7 +81,7 @@ html, body {
   transition: transform 1.1s cubic-bezier(0.22, 0.1, 0.22, 1) 0.9s;
 }
 .env-letter-line { height: 1px; background: rgba(140,110,50,0.18); border-radius: 1px; }
-.env-letter-names { font-family:'Amiri Quran',serif; color:#4a3010; font-size:min(0.85rem,2.8vw); direction:rtl; }
+.env-letter-names { font-family:'Aref Ruqaa',serif; color:#4a3010; font-size:min(0.85rem,2.8vw); direction:rtl; }
 .env-letter-date { font-family:sans-serif; font-size:min(0.5rem,1.7vw); letter-spacing:0.14em; text-transform:uppercase; color:#8a6830; opacity:0.65; }
 .env-3d.open .env-letter { transform: translateX(-50%) translateY(-90%); }
 
@@ -99,11 +99,11 @@ html, body {
   50%{box-shadow:0 6px 26px rgba(110,30,30,0.75),inset 0 2px 5px rgba(255,150,140,0.22),inset 0 -3px 9px rgba(35,0,0,0.45)}
 }
 .wax-seal::before { content:''; position:absolute; inset:5px; border-radius:50%; border:1px solid rgba(255,170,150,0.18); }
-.wax-seal-text { color:rgba(255,210,190,0.85); font-family:'Amiri Quran',serif; position:relative; z-index:1; }
+.wax-seal-text { color:rgba(255,210,190,0.85); font-family:'Aref Ruqaa',serif; position:relative; z-index:1; }
 .env-3d.open .wax-seal { opacity:0; transform:translate(-50%,-50%) scale(0.65); }
 
 .env-hint { position:absolute; bottom:-56px; left:50%; transform:translateX(-50%); white-space:nowrap; }
-.env-hint-text { font-family:'Amiri Quran',serif; font-size:15px; color:#c9a84c; opacity:0.6; animation:hintBreath 2.8s ease-in-out infinite; direction:rtl; }
+.env-hint-text { font-family:'Aref Ruqaa',serif; font-size:15px; color:#c9a84c; opacity:0.6; animation:hintBreath 2.8s ease-in-out infinite; direction:rtl; }
 @keyframes hintBreath { 0%,100%{opacity:0.2} 50%{opacity:0.85} }
 
 /* ══ INVITATION ══════════════════════════════════ */
@@ -175,9 +175,9 @@ html, body {
 }
 
 .glass-panel {
-  background: rgba(255, 248, 240, 0.82);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  background: rgba(255, 248, 240, 0.94);
+  
+  -webkit-
   border: 1px solid rgba(184,146,42,0.22);
   border-radius: 20px;
   padding: 36px 28px;
@@ -187,7 +187,7 @@ html, body {
 }
 
 .bismillah {
-  font-family: 'Reem Kufi', 'Scheherazade New', serif;
+  font-family: 'Aref Ruqaa', 'Scheherazade New', serif;
   font-size: clamp(1.3rem, 5vw, 1.7rem);
   color: #7a4e10;
   direction: rtl; letter-spacing: 0.04em;
@@ -207,7 +207,7 @@ html, body {
 }
 
 .invite-greeting {
-  font-family: 'Amiri Quran', serif;
+  font-family: 'Aref Ruqaa', serif;
   font-size: clamp(0.95rem, 3.8vw, 1.15rem);
   color: #5a3a18; direction: rtl; line-height: 2.2;
   margin-bottom: 24px;
@@ -235,7 +235,7 @@ html, body {
 }
 
 .tagline {
-  font-family: 'Amiri Quran', serif; font-style: normal;
+  font-family: 'Aref Ruqaa', serif; font-style: normal;
   font-size: clamp(0.9rem, 3.5vw, 1.05rem);
   color: #7a5020; direction: rtl; margin-top: 14px; opacity: 0.85;
   line-height: 1.8;
@@ -264,7 +264,7 @@ html, body {
   font-size: 1.75rem; font-weight: 400; color: #7a4e10; line-height: 1;
   font-family: 'Cormorant Garamond', serif;
 }
-.count-label { font-family: 'Amiri Quran', serif; font-size: 12px; color: #9a6830; direction: rtl; }
+.count-label { font-family: 'Aref Ruqaa', serif; font-size: 12px; color: #9a6830; direction: rtl; }
 
 .scroll-hint {
   position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
@@ -276,7 +276,7 @@ html, body {
 /* ── SECTIONS ── */
 .section { padding: 52px 24px; position: relative; text-align: center; }
 .section-heading {
-  font-family: 'Reem Kufi', 'Scheherazade New', serif;
+  font-family: 'Aref Ruqaa', 'Scheherazade New', serif;
   font-size: clamp(1.4rem, 6vw, 1.9rem); color: #4a2a08;
   direction: rtl; font-weight: 600; margin-bottom: 4px;
   text-shadow: 0 1px 6px rgba(74,42,8,0.1);
@@ -296,24 +296,24 @@ html, body {
 
 /* ── FAMILY CARDS ── */
 .family-row {
-  background: rgba(255,248,240,0.85);
+  background: rgba(255,248,240,0.93);
   border: 1px solid rgba(184,146,42,0.22);
   border-radius: 14px; padding: 20px 18px;
   text-align: center; direction: rtl;
-  backdrop-filter: blur(12px);
+  
   margin-bottom: 12px;
   box-shadow: 0 4px 20px rgba(139,98,32,0.07);
 }
 .family-role { font-family:sans-serif; font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:#b8922a; margin-bottom:10px; opacity:0.75; }
-.family-names { font-family:'Amiri Quran',serif; font-size:1.05rem; color:#4a2a08; line-height:2; }
+.family-names { font-family:'Aref Ruqaa',serif; font-size:1.05rem; color:#4a2a08; line-height:2; }
 
 /* ── VENUE CARD ── */
 .venue-card {
-  background: rgba(255,248,240,0.88);
+  background: rgba(255,248,240,0.93);
   border: 1px solid rgba(184,146,42,0.22);
   border-radius: 18px;
   overflow: hidden;
-  backdrop-filter: blur(14px);
+  
   box-shadow: 0 8px 40px rgba(139,98,32,0.1);
 }
 .venue-top {
@@ -326,7 +326,7 @@ html, body {
   text-shadow: 0 2px 20px rgba(122,78,16,0.2);
 }
 .venue-time-ar {
-  font-family: 'Amiri Quran', serif; font-size: 1rem; color: #9a7040;
+  font-family: 'Aref Ruqaa', serif; font-size: 1rem; color: #9a7040;
   direction: rtl; margin: 8px 0 0; font-style: italic;
 }
 .venue-bottom { padding: 22px 22px 26px; }
@@ -339,7 +339,7 @@ html, body {
 .date-strip {
   display: flex; border: 1px solid rgba(184,146,42,0.2); border-radius: 10px;
   overflow: hidden; margin-top: 14px;
-  background: rgba(255,248,240,0.85); backdrop-filter: blur(8px);
+  background: rgba(255,248,240,0.93); 
 }
 .date-cell { flex:1; padding:14px 6px; text-align:center; border-right:1px solid rgba(184,146,42,0.15); }
 .date-cell:last-child { border-right:none; }
@@ -358,10 +358,10 @@ html, body {
 
 /* ── RSVP ── */
 .rsvp-card {
-  background: rgba(255,248,240,0.88);
+  background: rgba(255,248,240,0.93);
   border: 1px solid rgba(184,146,42,0.2);
   border-radius: 18px; padding: 28px 22px;
-  backdrop-filter: blur(14px);
+  
   box-shadow: 0 8px 40px rgba(139,98,32,0.1);
 }
 .rsvp-form { display:flex; flex-direction:column; gap:12px; }
@@ -369,7 +369,7 @@ html, body {
   width:100%; background:rgba(255,252,246,0.95);
   border:1px solid rgba(184,146,42,0.2); border-radius:10px;
   padding:14px 16px; color:#2c1a0e; font-size:15px;
-  font-family:'Amiri Quran',serif; outline:none; direction:rtl;
+  font-family:'Aref Ruqaa',serif; outline:none; direction:rtl;
   transition:border-color 0.2s;
 }
 .rsvp-input:focus { border-color:rgba(184,146,42,0.5); }
@@ -378,13 +378,13 @@ html, body {
   width:100%; background:rgba(255,252,246,0.95);
   border:1px solid rgba(184,146,42,0.2); border-radius:10px;
   padding:14px 16px; color:#2c1a0e; font-size:15px;
-  font-family:'Amiri Quran',serif; outline:none; -webkit-appearance:none; direction:rtl;
+  font-family:'Aref Ruqaa',serif; outline:none; -webkit-appearance:none; direction:rtl;
 }
 .rsvp-btn {
   width:100%;
   background:linear-gradient(135deg, #c9a84c 0%, #9a6e14 50%, #c9a84c 100%);
   background-size:200% auto; color:#fff8f0; border:none; padding:16px;
-  border-radius:10px; font-size:17px; font-family:'Amiri Quran',serif;
+  border-radius:10px; font-size:17px; font-family:'Aref Ruqaa',serif;
   cursor:pointer; transition:background-position 0.4s, transform 0.2s;
   letter-spacing:0.04em; text-shadow:0 1px 3px rgba(0,0,0,0.15);
 }
@@ -409,5 +409,5 @@ footer {
   background:rgba(184,146,42,0.15); border:1px solid rgba(184,146,42,0.35);
   color:#8b6220; font-size:15px; cursor:pointer; display:flex;
   align-items:center; justify-content:center; z-index:50;
-  backdrop-filter:blur(10px);
+  
 }

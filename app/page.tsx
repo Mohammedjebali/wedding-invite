@@ -255,7 +255,7 @@ export default function Home() {
                   <div className="date-cell-label">Août</div>
                 </div>
                 <div className="date-cell">
-                  <div className="date-cell-num" style={{ fontFamily:"Amiri Quran,serif", fontSize:"1.3rem", paddingTop:"8px" }}>السبت</div>
+                  <div className="date-cell-num" style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1.3rem", paddingTop:"8px" }}>السبت</div>
                   <div className="date-cell-label">Samedi</div>
                 </div>
                 <div className="date-cell">
@@ -271,9 +271,9 @@ export default function Home() {
               <div className="section-sub reveal reveal-d1">Confirmer votre présence avant le 1er Août</div>
               {rsvpSent ? (
                 <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 22px" }}>
-                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.4)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontFamily:"Amiri Quran,serif", fontSize:"20px" }}>✦</div>
+                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.4)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontFamily:"Aref Ruqaa,serif", fontSize:"20px" }}>✦</div>
                   <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.7rem", color:"#4a2a08", marginBottom:"10px" }}>شكراً جزيلاً</div>
-                  <div style={{ fontFamily:"Amiri Quran,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2 }}>
+                  <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2 }}>
                     تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
                   </div>
                 </div>
@@ -303,10 +303,10 @@ export default function Home() {
               <div className="reveal reveal-d1" style={{ marginTop:"30px" }}>
                 <div className="closing-names">
                   {CONFIG.groom_ar}<br/>
-                  <span style={{ fontSize:"0.55em", color:"#b8922a", fontWeight:400, fontFamily:"Amiri Quran,serif", display:"block", margin:"4px 0" }}>◆</span>
+                  <span style={{ fontSize:"0.55em", color:"#b8922a", fontWeight:400, fontFamily:"Aref Ruqaa,serif", display:"block", margin:"4px 0" }}>◆</span>
                   {CONFIG.bride_ar}
                 </div>
-                <div style={{ fontFamily:"Amiri Quran,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"16px", fontStyle:"italic", opacity:0.8 }}>
+                <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", marginTop:"16px", fontStyle:"italic", opacity:0.8 }}>
                   وذلك بمشيئة الله
                 </div>
               </div>
