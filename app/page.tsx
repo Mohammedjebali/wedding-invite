@@ -276,34 +276,32 @@ export default function Home() {
           </div>
         )}
 
-        {/* opening animation */}
+        {/* opening animation — white soft petals falling */}
         {opening && (
-          <div style={{ position:"relative", zIndex:10, display:"flex", flexDirection:"column", alignItems:"center", gap:"20px" }}>
-            {/* pulsing gold ring */}
-            <div style={{ position:"relative", width:"80px", height:"80px" }}>
+          <div style={{ position:"relative", zIndex:10, display:"flex", flexDirection:"column", alignItems:"center", gap:"16px" }}>
+            {/* three soft white rings */}
+            <div style={{ position:"relative", width:"90px", height:"90px" }}>
+              {[0, 0.4, 0.8].map((d, i) => (
+                <div key={i} style={{
+                  position:"absolute", inset:0, borderRadius:"50%",
+                  border:`${1.5 - i * 0.4}px solid rgba(255,255,255,${0.6 - i * 0.15})`,
+                  animation:`ringPulse1 2s ease-out ${d}s infinite`,
+                }} />
+              ))}
+              {/* center dot */}
               <div style={{
-                position:"absolute", inset:0, borderRadius:"50%",
-                border:"2px solid rgba(201,168,76,0.8)",
-                animation:"ringPulse1 1.5s ease-out infinite",
-              }} />
-              <div style={{
-                position:"absolute", inset:0, borderRadius:"50%",
-                border:"1px solid rgba(201,168,76,0.5)",
-                animation:"ringPulse1 1.5s ease-out 0.5s infinite",
-              }} />
-              <div style={{
-                position:"absolute", inset:"30%", borderRadius:"50%",
-                background:"radial-gradient(circle, #c9a84c, #8b6014)",
-                boxShadow:"0 0 20px rgba(201,168,76,0.6)",
-                animation:"sealBreath 1.5s ease-in-out infinite",
+                position:"absolute", inset:"42%", borderRadius:"50%",
+                background:"rgba(255,255,255,0.9)",
+                boxShadow:"0 0 16px rgba(255,255,255,0.8)",
+                animation:"sealBreath 2s ease-in-out infinite",
               }} />
             </div>
             <div style={{
-              fontFamily:"'Rakkas',serif", fontSize:"22px",
-              color:"rgba(255,248,220,0.85)",
-              textShadow:"0 2px 12px rgba(0,0,0,0.5)",
-              direction:"rtl",
-              animation:"fadeInOut 1.5s ease-in-out infinite",
+              fontFamily:"'Rakkas',serif", fontSize:"20px",
+              color:"rgba(255,255,255,0.8)",
+              textShadow:"0 2px 16px rgba(0,0,0,0.6)",
+              direction:"rtl", letterSpacing:"0.04em",
+              animation:"fadeInOut 2s ease-in-out infinite",
             }}>
               يُفتح...
             </div>
