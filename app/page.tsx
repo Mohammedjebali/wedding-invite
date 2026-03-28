@@ -116,7 +116,7 @@ export default function Home() {
       )}
 
       {/* falling rose petals */}
-      {showContent && [..."🌸🌹✿🌷❀🌺"].split("").map((p, i) => (
+      {showContent && ["🌸","🌹","✿","🌷","❀","🌺"].map((p, i) => (
         <div key={i} className="petal" style={{ left:`${5+i*16}%`, top:"-20px", fontSize:`${12+i%6}px`, opacity:0.2+(i%4)*0.05, animationDelay:`${i*0.6}s`, animationDuration:`${7+i}s` }}>{p}</div>
       ))}
 
