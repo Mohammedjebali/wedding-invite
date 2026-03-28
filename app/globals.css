@@ -118,6 +118,17 @@ html, body {
   0%,100% { box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 0 rgba(201,168,76,0); }
   50%      { box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 0 0 12px rgba(201,168,76,0); }
 }
+@keyframes ringPulse1 {
+  0%   { transform:scale(0.8); opacity:0.9; }
+  100% { transform:scale(2.2); opacity:0; }
+}
+@keyframes sealBreath {
+  0%,100%{ transform:scale(1); box-shadow:0 0 20px rgba(201,168,76,0.6); }
+  50%    { transform:scale(1.15); box-shadow:0 0 36px rgba(201,168,76,0.9); }
+}
+@keyframes fadeInOut {
+  0%,100%{ opacity:0.4; } 50%{ opacity:1; }
+}
 @keyframes sparkFloat {
   0%   { opacity:0; transform:translateY(0) scale(0.5); }
   20%  { opacity:0.9; }

@@ -276,10 +276,37 @@ export default function Home() {
           </div>
         )}
 
-        {/* loading spinner when opening */}
+        {/* opening animation */}
         {opening && (
-          <div style={{ position: "relative", zIndex: 10, color: "rgba(255,248,224,0.6)", fontFamily: "'Rakkas',serif", fontSize: "20px" }}>
-            ...
+          <div style={{ position:"relative", zIndex:10, display:"flex", flexDirection:"column", alignItems:"center", gap:"20px" }}>
+            {/* pulsing gold ring */}
+            <div style={{ position:"relative", width:"80px", height:"80px" }}>
+              <div style={{
+                position:"absolute", inset:0, borderRadius:"50%",
+                border:"2px solid rgba(201,168,76,0.8)",
+                animation:"ringPulse1 1.5s ease-out infinite",
+              }} />
+              <div style={{
+                position:"absolute", inset:0, borderRadius:"50%",
+                border:"1px solid rgba(201,168,76,0.5)",
+                animation:"ringPulse1 1.5s ease-out 0.5s infinite",
+              }} />
+              <div style={{
+                position:"absolute", inset:"30%", borderRadius:"50%",
+                background:"radial-gradient(circle, #c9a84c, #8b6014)",
+                boxShadow:"0 0 20px rgba(201,168,76,0.6)",
+                animation:"sealBreath 1.5s ease-in-out infinite",
+              }} />
+            </div>
+            <div style={{
+              fontFamily:"'Rakkas',serif", fontSize:"22px",
+              color:"rgba(255,248,220,0.85)",
+              textShadow:"0 2px 12px rgba(0,0,0,0.5)",
+              direction:"rtl",
+              animation:"fadeInOut 1.5s ease-in-out infinite",
+            }}>
+              يُفتح...
+            </div>
           </div>
         )}
       </div>
