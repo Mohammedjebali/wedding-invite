@@ -625,10 +625,10 @@ export default function Template2Page() {
           <div
             style={{
               display: "flex",
-              justifyContent: "center", direction: "ltr" as const,
+              justifyContent: "center",
+              direction: "ltr" as const,
               gap: 0,
               margin: "24px 0",
-              direction: "ltr",
             }}
           >
             {["08", "Août", "Samedi"].map((txt, i) => (
