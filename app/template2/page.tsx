@@ -217,62 +217,52 @@ function useScrollReveal(active: boolean) {
 function WaxSeal({ pulsing }: { pulsing: boolean }) {
   return (
     <svg
-      width="120"
-      height="120"
-      viewBox="0 0 120 120"
+      width="140"
+      height="140"
+      viewBox="0 0 140 140"
       style={{
-        filter: "drop-shadow(0 4px 24px rgba(139,26,26,0.6))",
+        filter: "drop-shadow(0 6px 32px rgba(201,168,76,0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.7))",
         animation: pulsing ? "t2sealPulse 2.5s ease-in-out forwards" : undefined,
       }}
     >
-      {/* Outer seal with wavy edge */}
-      <circle cx="60" cy="60" r="56" fill="#8B1A1A" />
-      <circle
-        cx="60"
-        cy="60"
-        r="52"
-        fill="none"
-        stroke="rgba(201,168,76,0.3)"
-        strokeWidth="1"
+      <defs>
+        <radialGradient id="sealGrad" cx="40%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#C9A84C" />
+          <stop offset="35%" stopColor="#9a6e14" />
+          <stop offset="100%" stopColor="#5a3e00" />
+        </radialGradient>
+        <radialGradient id="sealShine" cx="38%" cy="30%" r="50%">
+          <stop offset="0%" stopColor="rgba(255,240,180,0.25)" />
+          <stop offset="100%" stopColor="rgba(255,240,180,0)" />
+        </radialGradient>
+      </defs>
+      {/* Star/sunburst outer edge — classic wax seal shape */}
+      <path
+        d="M70,4 L76,16 L89,10 L89,24 L103,22 L97,35 L111,38 L100,48 L111,55 L98,61 L105,74 L91,74 L92,89 L79,84 L76,98 L65,90 L54,98 L51,84 L38,89 L39,74 L25,74 L32,61 L19,55 L30,48 L19,38 L33,35 L27,22 L41,24 L41,10 L54,16 Z"
+        fill="url(#sealGrad)"
       />
-      <circle
-        cx="60"
-        cy="60"
-        r="46"
-        fill="none"
-        stroke="rgba(201,168,76,0.2)"
-        strokeWidth="0.5"
-      />
-      {/* Inner circle */}
-      <circle cx="60" cy="60" r="42" fill="#6B0F0F" />
-      <circle
-        cx="60"
-        cy="60"
-        r="38"
-        fill="none"
-        stroke="rgba(201,168,76,0.25)"
-        strokeWidth="0.5"
-      />
-      {/* Gold initials */}
+      {/* Outer ring */}
+      <circle cx="70" cy="70" r="44" fill="none" stroke="rgba(255,240,150,0.4)" strokeWidth="1.5" />
+      {/* Inner filled circle */}
+      <circle cx="70" cy="70" r="40" fill="url(#sealGrad)" />
+      {/* Inner ring */}
+      <circle cx="70" cy="70" r="35" fill="none" stroke="rgba(255,240,150,0.3)" strokeWidth="0.8" />
+      {/* Initials */}
       <text
-        x="60"
-        y="68"
+        x="70"
+        y="80"
         textAnchor="middle"
         fontFamily="Rakkas, serif"
-        fontSize="28"
-        fill="#C9A84C"
+        fontSize="26"
+        fontWeight="bold"
+        fill="#1a0a00"
         direction="rtl"
+        letterSpacing="2"
       >
         م &amp; ن
       </text>
-      {/* Subtle highlight */}
-      <ellipse
-        cx="48"
-        cy="42"
-        rx="18"
-        ry="12"
-        fill="rgba(255,200,180,0.08)"
-      />
+      {/* Shine overlay */}
+      <circle cx="70" cy="70" r="40" fill="url(#sealShine)" />
     </svg>
   );
 }
