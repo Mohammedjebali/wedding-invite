@@ -35,7 +35,7 @@ export default function Template2Page() {
       { threshold: 0.2 }
     );
 
-    const elements = container.querySelectorAll(".anim, .timeline");
+    const elements = container.querySelectorAll(".anim");
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -130,14 +130,9 @@ export default function Template2Page() {
           left: 50%;
           top: 0;
           width: 2px;
-          height: 0;
+          height: 100%;
           background: var(--gold);
           transform: translateX(-50%);
-          transition: height 1.5s ease;
-        }
-
-        .timeline.visible .timeline-line {
-          height: 100%;
         }
 
         .timeline-event {
@@ -178,10 +173,6 @@ export default function Template2Page() {
           z-index: 1;
         }
 
-        .timeline.visible .timeline-dot {
-          transform: rotate(45deg) scale(1);
-          animation: dotPulse 2.5s ease-in-out 1.5s infinite;
-        }
 
         @keyframes t2MandalaSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
         @keyframes dotPulse {
@@ -189,23 +180,6 @@ export default function Template2Page() {
           50% { box-shadow: 0 0 0 6px rgba(212,175,112,0); }
         }
 
-        .tl-node {
-          opacity: 0;
-          transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .tl-node.tl-from-left {
-          transform: translateX(-30px);
-        }
-
-        .tl-node.tl-from-right {
-          transform: translateX(30px);
-        }
-
-        .timeline.visible .tl-node {
-          opacity: 1;
-          transform: translateX(0);
-        }
 
         .tl-event-name {
           font-family: 'Noto Naskh Arabic', serif;
@@ -534,8 +508,12 @@ export default function Template2Page() {
             {/* Event 1 — LEFT: عقد القران */}
             <div className="timeline-event">
               <div
-                className="timeline-half tl-content-left tl-node tl-from-left"
-                style={{ transitionDelay: "0.3s" }}
+                className="timeline-half tl-content-left"
+                style={{
+                  opacity: mandalaPos >= 12 ? 1 : 0,
+                  transform: mandalaPos >= 12 ? "translateX(0)" : "translateX(-40px)",
+                  transition: "opacity 0.6s ease, transform 0.6s ease",
+                }}
               >
                 <p className="tl-event-name">عقد القران</p>
                 <p className="tl-event-venue">جامع الزيتونة، تونس</p>
@@ -543,7 +521,11 @@ export default function Template2Page() {
               </div>
               <div
                 className="timeline-dot"
-                style={{ transitionDelay: "0.3s" }}
+                style={{
+                  transform: mandalaPos >= 12 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  animation: mandalaPos >= 12 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                }}
               />
               <div className="timeline-half" />
             </div>
@@ -553,11 +535,19 @@ export default function Template2Page() {
               <div className="timeline-half" />
               <div
                 className="timeline-dot"
-                style={{ transitionDelay: "0.6s" }}
+                style={{
+                  transform: mandalaPos >= 37 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  animation: mandalaPos >= 37 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                }}
               />
               <div
-                className="timeline-half tl-content-right tl-node tl-from-right"
-                style={{ transitionDelay: "0.6s" }}
+                className="timeline-half tl-content-right"
+                style={{
+                  opacity: mandalaPos >= 37 ? 1 : 0,
+                  transform: mandalaPos >= 37 ? "translateX(0)" : "translateX(40px)",
+                  transition: "opacity 0.6s ease, transform 0.6s ease",
+                }}
               >
                 <p className="tl-event-name">العشاء</p>
                 <p className="tl-event-venue">
@@ -570,8 +560,12 @@ export default function Template2Page() {
             {/* Event 3 — LEFT: الحفل */}
             <div className="timeline-event">
               <div
-                className="timeline-half tl-content-left tl-node tl-from-left"
-                style={{ transitionDelay: "0.9s" }}
+                className="timeline-half tl-content-left"
+                style={{
+                  opacity: mandalaPos >= 62 ? 1 : 0,
+                  transform: mandalaPos >= 62 ? "translateX(0)" : "translateX(-40px)",
+                  transition: "opacity 0.6s ease, transform 0.6s ease",
+                }}
               >
                 <p className="tl-event-name">الحفل (العرس)</p>
                 <p className="tl-event-venue">
@@ -581,7 +575,11 @@ export default function Template2Page() {
               </div>
               <div
                 className="timeline-dot"
-                style={{ transitionDelay: "0.9s" }}
+                style={{
+                  transform: mandalaPos >= 62 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  animation: mandalaPos >= 62 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                }}
               />
               <div className="timeline-half" />
             </div>
@@ -591,11 +589,19 @@ export default function Template2Page() {
               <div className="timeline-half" />
               <div
                 className="timeline-dot"
-                style={{ transitionDelay: "1.2s" }}
+                style={{
+                  transform: mandalaPos >= 87 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  animation: mandalaPos >= 87 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                }}
               />
               <div
-                className="timeline-half tl-content-right tl-node tl-from-right"
-                style={{ transitionDelay: "1.2s" }}
+                className="timeline-half tl-content-right"
+                style={{
+                  opacity: mandalaPos >= 87 ? 1 : 0,
+                  transform: mandalaPos >= 87 ? "translateX(0)" : "translateX(40px)",
+                  transition: "opacity 0.6s ease, transform 0.6s ease",
+                }}
               >
                 <p className="tl-event-name">ليلة الزفاف</p>
                 <p className="tl-event-venue">
