@@ -91,7 +91,6 @@ function VideoSection({
       <video
         autoPlay
         muted
-        loop
         playsInline
         style={{
           position: "absolute",
@@ -266,7 +265,6 @@ export default function Template2Page() {
         <video
           autoPlay
           muted
-          loop
           playsInline
           style={{
             position: "absolute",
