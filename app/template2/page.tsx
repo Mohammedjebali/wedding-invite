@@ -67,6 +67,48 @@ function WordReveal({
   );
 }
 
+/* ── Floating gold particles ────────────────────────────────── */
+function GoldParticles() {
+  const [particles, setParticles] = useState<
+    { id: number; left: number; delay: number; duration: number; drift: number }[]
+  >([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 15 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        delay: Math.random() * 8,
+        duration: 6 + Math.random() * 6,
+        drift: (Math.random() - 0.5) * 40,
+      }))
+    );
+  }, []);
+
+  return (
+    <>
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          style={{
+            position: "absolute",
+            left: `${p.left}%`,
+            bottom: 0,
+            width: 2,
+            height: 2,
+            borderRadius: "50%",
+            background: "#c69874",
+            zIndex: 1,
+            pointerEvents: "none" as const,
+            ["--t2-drift" as string]: `${p.drift}px`,
+            animation: `t2ParticleFloat ${p.duration}s ease-in-out ${p.delay}s infinite`,
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
 /* ── Video background section wrapper ────────────────────── */
 function VideoSection({
   src,
@@ -79,6 +121,7 @@ function VideoSection({
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -89,6 +132,7 @@ function VideoSection({
       ([entry]) => {
         if (entry.isIntersecting) {
           video.play();
+          setEntered(true);
         } else {
           video.pause();
         }
@@ -109,6 +153,9 @@ function VideoSection({
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
+        opacity: entered ? 1 : 0,
+        transform: entered ? "translateY(0)" : "translateY(40px)",
+        transition: "opacity 1s ease, transform 1s ease",
       }}
     >
       <video
@@ -136,10 +183,12 @@ function VideoSection({
           zIndex: 0,
         }}
       />
+      <GoldParticles />
       <div
+        className={`t2-section-content${entered ? " t2-section-entered" : ""}`}
         style={{
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
           textAlign: "center",
           direction: "rtl",
           padding: "80px 24px",
@@ -177,6 +226,33 @@ function createParticles(count: number): Particle[] {
     velocity: Math.random() * 300 + 150,
     spin: (Math.random() - 0.5) * 720,
   }));
+}
+
+/* ── Countdown digit with pulse animation ──────────────────── */
+function CountdownDigit({
+  value,
+  style,
+}: {
+  value: number;
+  style: React.CSSProperties;
+}) {
+  const [pulse, setPulse] = useState(false);
+  const prevRef = useRef(value);
+
+  useEffect(() => {
+    if (prevRef.current !== value) {
+      prevRef.current = value;
+      setPulse(true);
+      const timer = setTimeout(() => setPulse(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [value]);
+
+  return (
+    <div className={pulse ? "t2-count-pulse" : ""} style={style}>
+      {value}
+    </div>
+  );
 }
 
 /* ── Countdown hook ──────────────────────────────────────── */
@@ -270,6 +346,50 @@ export default function Template2Page() {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes t2FadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes t2Shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes t2CountPulse {
+          0% { transform: scale(1.2); }
+          100% { transform: scale(1); }
+        }
+        @keyframes t2ParticleFloat {
+          0% { transform: translateY(0) translateX(0); opacity: 0; }
+          10% { opacity: 0.7; }
+          90% { opacity: 0.7; }
+          100% { transform: translateY(-100vh) translateX(var(--t2-drift)); opacity: 0; }
+        }
+        .t2-section-content > * { opacity: 0; transform: translateY(20px); }
+        .t2-section-entered > * { animation: t2FadeUp 0.7s ease forwards; }
+        .t2-section-entered > *:nth-child(1) { animation-delay: 0s; }
+        .t2-section-entered > *:nth-child(2) { animation-delay: 0.15s; }
+        .t2-section-entered > *:nth-child(3) { animation-delay: 0.3s; }
+        .t2-section-entered > *:nth-child(4) { animation-delay: 0.45s; }
+        .t2-section-entered > *:nth-child(5) { animation-delay: 0.6s; }
+        .t2-section-entered > *:nth-child(6) { animation-delay: 0.75s; }
+        .t2-section-entered > *:nth-child(7) { animation-delay: 0.9s; }
+        .t2-section-entered > *:nth-child(8) { animation-delay: 1.05s; }
+        .t2-section-entered > *:nth-child(9) { animation-delay: 1.2s; }
+        .t2-section-entered > *:nth-child(10) { animation-delay: 1.35s; }
+        .t2-section-entered > *:nth-child(11) { animation-delay: 1.5s; }
+        .t2-section-entered > *:nth-child(12) { animation-delay: 1.65s; }
+        .t2-shimmer-heading {
+          background: linear-gradient(90deg, #c69874 0%, #f5e6d0 40%, #c69874 60%, #8B6914 100%) !important;
+          background-size: 200% auto !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+          background-position: -200% center;
+          text-shadow: none !important;
+        }
+        .t2-section-entered .t2-shimmer-heading {
+          animation: t2FadeUp 0.7s ease forwards, t2Shimmer 2.5s ease 0.5s both !important;
+        }
+        .t2-count-pulse { animation: t2CountPulse 0.3s ease; }
         input:focus, select:focus { outline: none; border-color: ${gold} !important; }
       `}</style>
 
@@ -337,7 +457,7 @@ export default function Template2Page() {
       >
         {/* ── Section 1: Bismillah + Names ─────────────────── */}
         <VideoSection src="/t2-vid1.mp4">
-          <p style={{ ...headingStyle, fontSize: "1.8rem" }}>
+          <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             بسم الله الرحمن الرحيم
           </p>
           {goldDivider}
@@ -376,7 +496,7 @@ export default function Template2Page() {
         {/* ── Section 2: Date + Countdown + Families ────────── */}
         <VideoSection src="/t2-vid2.mp4">
           {diamondDivider}
-          <p style={{ ...headingStyle, fontSize: "1.8rem" }}>
+          <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             يوم السبت ٨ أوت ٢٠٢٦
           </p>
           <p
@@ -409,16 +529,15 @@ export default function Template2Page() {
               { value: seconds, label: "ثانية" },
             ].map((item) => (
               <div key={item.label} style={countdownCardStyle}>
-                <div
+                <CountdownDigit
+                  value={item.value}
                   style={{
                     fontFamily: '"Cormorant Garamond", serif',
                     fontSize: "3rem",
                     color: gold,
                     lineHeight: 1,
                   }}
-                >
-                  {item.value}
-                </div>
+                />
                 <div style={{ fontSize: "0.75rem", color: cream, marginTop: 4 }}>
                   {item.label}
                 </div>
@@ -429,7 +548,7 @@ export default function Template2Page() {
           {starDivider}
 
           {/* Families */}
-          <p style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 20 }}>
+          <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 20 }}>
             العائلتان الكريمتان
           </p>
 
@@ -456,7 +575,7 @@ export default function Template2Page() {
 
         {/* ── Section 3: Details + RSVP ─────────────────────── */}
         <VideoSection src="/t2-vid3.mp4">
-          <p style={{ ...headingStyle, fontSize: "1.6rem" }}>تفاصيل الحفل</p>
+          <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.6rem" }}>تفاصيل الحفل</p>
           <p
             style={{
               fontFamily: '"Cormorant Garamond", serif',
@@ -516,7 +635,7 @@ export default function Template2Page() {
 
           {/* RSVP */}
           <div style={{ marginTop: 20 }}>
-            <p style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 8 }}>
+            <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 8 }}>
               تأكيد الحضور
             </p>
             <p
