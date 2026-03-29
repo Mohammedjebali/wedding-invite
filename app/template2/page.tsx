@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 
-// ── Word-by-word scroll reveal ───────────────────────────────
+/* ── Word-by-word IntersectionObserver reveal ─────────────── */
 function WordReveal({
   text,
   delay = 0,
@@ -35,369 +35,233 @@ function WordReveal({
   useEffect(() => {
     if (!started) return;
     let i = 0;
-    const timer = setTimeout(() => {
-      const id = setInterval(() => {
-        i++;
-        setVisible(i);
-        if (i >= words.length) clearInterval(id);
-      }, 200);
-      return () => clearInterval(id);
-    }, delay);
-    return () => clearTimeout(timer);
+    const interval = setInterval(() => {
+      i++;
+      setVisible(i);
+      if (i >= words.length) clearInterval(interval);
+    }, 200);
+    const timer = setTimeout(() => {}, delay);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
   }, [started, words.length, delay]);
 
   return (
-    <span
-      ref={ref}
-      className={className}
-      style={{ direction: "rtl", display: "block", ...style }}
-    >
-      {words.map((word, i) => (
+    <span ref={ref} className={className} style={{ display: "inline", ...style }}>
+      {words.map((w, i) => (
         <span
           key={i}
           style={{
             opacity: i < visible ? 1 : 0,
-            transform: i < visible ? "translateY(0)" : "translateY(10px)",
-            transition: "opacity 0.4s ease, transform 0.4s ease",
+            transform: i < visible ? "translateY(0)" : "translateY(18px)",
+            transition: "opacity 0.5s ease, transform 0.5s ease",
             display: "inline-block",
-            marginLeft: "0.25em",
+            marginInlineEnd: "0.3em",
           }}
         >
-          {word}
+          {w}
         </span>
       ))}
     </span>
   );
 }
 
-// ── Confetti burst ───────────────────────────────────────────
-function Confetti({ active }: { active: boolean }) {
-  const pieces = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    x: 5 + ((i * 2.3) % 90),
-    color: ["#c9a84c", "#e8c547", "#8B1A1A", "#d4956a", "#f5e6d0", "#fff3da"][
-      i % 6
-    ],
-    size: 6 + (i % 5),
-    delay: (i * 0.08) % 1.2,
-    dur: 1.8 + (i % 4) * 0.3,
-    rotate: (i * 47) % 360,
-  }));
-  if (!active) return null;
+/* ── Video background section wrapper ────────────────────── */
+function VideoSection({
+  src,
+  children,
+  overlayOpacity = 0.55,
+}: {
+  src: string;
+  children: React.ReactNode;
+  overlayOpacity?: number;
+}) {
   return (
-    <div
+    <section
       style={{
-        position: "fixed",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 100,
-        overflow: "hidden",
-      }}
-    >
-      {pieces.map((p) => (
-        <div
-          key={p.id}
-          style={{
-            position: "absolute",
-            left: `${p.x}%`,
-            top: "-20px",
-            width: p.size,
-            height: p.size * 0.6,
-            background: p.color,
-            borderRadius: "2px",
-            animation: `t2confettiFall ${p.dur}s ease-in ${p.delay}s both`,
-            transform: `rotate(${p.rotate}deg)`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ── Gold sparkle particles (20) ──────────────────────────────
-function Sparkles({ active }: { active: boolean }) {
-  const sparks = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    x: 8 + ((i * 4.7) % 84),
-    delay: (i * 0.35) % 5,
-    dur: 3 + (i % 4) * 0.6,
-    size: 2 + (i % 4),
-  }));
-  if (!active) return null;
-  return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 15,
-        overflow: "hidden",
-      }}
-    >
-      {sparks.map((s) => (
-        <div
-          key={s.id}
-          style={{
-            position: "absolute",
-            left: `${s.x}%`,
-            bottom: "0",
-            width: s.size,
-            height: s.size,
-            borderRadius: "50%",
-            background: "#c9a84c",
-            boxShadow: "0 0 4px #c9a84c",
-            animation: `t2sparkFloat ${s.dur}s ease-in-out ${s.delay}s infinite`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ── Config ────────────────────────────────────────────────────
-const CONFIG = {
-  groom_ar: "محمد أمين",
-  bride_ar: "نور الهدى",
-  groom_fr: "Mohamed Amine Ben Salem",
-  bride_fr: "Nour El Hoda Jlel",
-  date: "2026-08-08",
-  time_ar: "على الساعة التاسعة ليلاً",
-  groomDad: "السيّد فوزي بن سالم",
-  groomMom: "السيّدة سماح بن سالم",
-  brideDad: "السيّد نور الدين جلال",
-  brideMom: "السيّدة فاطيمة جلال",
-  bgMusic: "/music.mp3",
-  bgMusicStart: 147,
-};
-
-// ── Countdown hook ────────────────────────────────────────────
-function useCountdown(d: string) {
-  const [t, setT] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  useEffect(() => {
-    const tick = () => {
-      const diff = new Date(d).getTime() - Date.now();
-      if (diff <= 0) return;
-      setT({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff % 86400000) / 3600000),
-        minutes: Math.floor((diff % 3600000) / 60000),
-        seconds: Math.floor((diff % 60000) / 1000),
-      });
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [d]);
-  return t;
-}
-
-// ── Scroll reveal hook ────────────────────────────────────────
-function useScrollReveal(active: boolean) {
-  useEffect(() => {
-    if (!active) return;
-    const run = () => {
-      document
-        .querySelectorAll(".t2-reveal:not(.t2-visible)")
-        .forEach((el) => {
-          if (el.getBoundingClientRect().top < window.innerHeight - 40)
-            el.classList.add("t2-visible");
-        });
-    };
-    run();
-    window.addEventListener("scroll", run, { passive: true });
-    return () => window.removeEventListener("scroll", run);
-  }, [active]);
-}
-
-// ── Thin gold divider ────────────────────────────────────────
-function GoldDivider({ width = 120 }: { width?: number }) {
-  return (
-    <div
-      style={{
-        width,
-        height: 1,
-        background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent)",
-        margin: "16px auto",
-      }}
-    />
-  );
-}
-
-// ── Star divider ─────────────────────────────────────────────
-function StarDivider() {
-  return (
-    <div
-      style={{
+        position: "relative",
+        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: 12,
-        padding: "0 40px",
+        overflow: "hidden",
       }}
     >
-      <span
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
         style={{
-          flex: 1,
-          height: 1,
-          background: "rgba(201,168,76,0.35)",
-          maxWidth: 120,
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      >
+        <source src={src} type="video/mp4" />
+      </video>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `rgba(0,0,0,${overlayOpacity})`,
+          zIndex: 0,
         }}
       />
-      <span style={{ color: "#C9A84C", fontSize: 14, opacity: 0.7 }}>
-        &#10022;
-      </span>
-      <span
+      <div
         style={{
-          flex: 1,
-          height: 1,
-          background: "rgba(201,168,76,0.35)",
-          maxWidth: 120,
+          position: "relative",
+          zIndex: 1,
+          textAlign: "center",
+          direction: "rtl",
+          padding: "80px 24px",
+          width: "100%",
+          maxWidth: 700,
         }}
-      />
-    </div>
+      >
+        {children}
+      </div>
+    </section>
   );
 }
 
-// ── Text shadow for readability ──────────────────────────────
-const txtShadow = "0 2px 8px rgba(0,0,0,0.8)";
+/* ── Confetti particle ───────────────────────────────────── */
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+  size: number;
+  angle: number;
+  velocity: number;
+  spin: number;
+}
 
-// ════════════════════════════════════════════════════════════════
-// ── MAIN COMPONENT ─────────────────────────────────────────────
-// ════════════════════════════════════════════════════════════════
+function createParticles(count: number): Particle[] {
+  const colors = ["#C9A84C", "#f5e6d0", "#e8c97a", "#fff", "#d4a843", "#f0d68a"];
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: 50 + (Math.random() - 0.5) * 10,
+    y: 50,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    size: Math.random() * 8 + 4,
+    angle: Math.random() * 360,
+    velocity: Math.random() * 300 + 150,
+    spin: (Math.random() - 0.5) * 720,
+  }));
+}
+
+/* ── Countdown hook ──────────────────────────────────────── */
+function useCountdown(target: Date) {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const diff = Math.max(0, target.getTime() - now.getTime());
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
+/* ── Main page ───────────────────────────────────────────── */
 export default function Template2Page() {
-  const [opening, setOpening] = useState(false);
-  const [gone, setGone] = useState(false);
-  const [showContent, setShowContent] = useState(false);
-  const [rsvp, setRsvp] = useState({ name: "", attending: "oui" });
-  const [rsvpSent, setRsvpSent] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const countdown = useCountdown(CONFIG.date);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  useScrollReveal(showContent);
+  const [opened, setOpened] = useState(false);
+  const [confetti, setConfetti] = useState<Particle[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [guestName, setGuestName] = useState("");
+  const [attending, setAttending] = useState("نعم");
 
-  const handleOpen = useCallback(() => {
-    if (opening) return;
-    setOpening(true);
-    if (audioRef.current && CONFIG.bgMusic) {
-      audioRef.current.currentTime = CONFIG.bgMusicStart;
-      audioRef.current.play().catch(() => {});
-    }
-    setTimeout(() => setShowContent(true), 2500);
-    setTimeout(() => setGone(true), 3700);
-  }, [opening]);
+  const weddingDate = new Date("2026-08-08T21:00:00");
+  const { days, hours, minutes, seconds } = useCountdown(weddingDate);
 
-  const handleRsvp = (e: React.FormEvent) => {
-    e.preventDefault();
-    setRsvpSent(true);
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 3500);
+  const handleOpen = useCallback(() => setOpened(true), []);
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!guestName.trim()) return;
+      setSubmitted(true);
+      setConfetti(createParticles(60));
+      setTimeout(() => setConfetti([]), 3000);
+    },
+    [guestName]
+  );
+
+  const gold = "#C9A84C";
+  const cream = "#f5e6d0";
+
+  const headingStyle: React.CSSProperties = {
+    fontFamily: '"Scheherazade New", serif',
+    color: gold,
+    textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+    margin: 0,
+  };
+
+  const bodyStyle: React.CSSProperties = {
+    color: cream,
+    fontFamily: '"Scheherazade New", serif',
+    margin: 0,
+  };
+
+  const goldDivider = (
+    <div style={{ width: 60, height: 1, background: gold, margin: "16px auto" }} />
+  );
+
+  const diamondDivider = (
+    <p style={{ color: gold, fontSize: "1rem", margin: "20px 0", letterSpacing: "0.5em" }}>
+      ◆ ◆ ◆
+    </p>
+  );
+
+  const starDivider = (
+    <p style={{ color: gold, fontSize: "1.2rem", margin: "16px 0" }}>✦</p>
+  );
+
+  const countdownCardStyle: React.CSSProperties = {
+    background: "rgba(0,0,0,0.4)",
+    border: "1px solid rgba(201,168,76,0.3)",
+    padding: 16,
+    borderRadius: 4,
+    minWidth: 70,
   };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
-
-        @keyframes t2sparkFloat {
-          0%   { opacity:0; transform:translateY(0) scale(0.5); }
-          20%  { opacity:0.9; }
-          80%  { opacity:0.5; }
-          100% { opacity:0; transform:translateY(-80vh) scale(0.2) rotate(180deg); }
+        @import url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0a0a0a; overflow-x: hidden; }
+        @keyframes confetti-fall {
+          0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+          100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)); opacity: 0; }
         }
-        @keyframes t2confettiFall {
-          0%   { opacity:1; transform:translateY(0) rotate(0deg) scaleX(1); }
-          50%  { transform:translateY(50vh) rotate(360deg) scaleX(-1); }
-          100% { opacity:0; transform:translateY(100vh) rotate(720deg) scaleX(-1); }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes t2btnPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
-          50%     { box-shadow: 0 0 0 12px rgba(201,168,76,0); }
-        }
-        @keyframes t2fadeIn {
-          from { opacity:0; transform:translateY(16px); }
-          to   { opacity:1; transform:translateY(0); }
-        }
-
-        .t2-splash {
-          position: fixed; inset: 0; z-index: 300;
-          display: flex; align-items: center; justify-content: center;
-          flex-direction: column; gap: 32px;
-          transition: opacity 0.9s ease 0.4s, visibility 0.9s ease 0.4s;
-        }
-        .t2-splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
-
-        .t2-reveal {
-          opacity: 0; transform: translateY(24px);
-          transition: opacity 0.9s ease, transform 0.9s ease;
-        }
-        .t2-reveal.t2-visible { opacity: 1; transform: translateY(0); }
-        .t2-reveal-d1 { transition-delay: 0.1s; }
-        .t2-reveal-d2 { transition-delay: 0.22s; }
-        .t2-reveal-d3 { transition-delay: 0.38s; }
-        .t2-reveal-d4 { transition-delay: 0.55s; }
-
-        .t2-invitation {
-          opacity: 0; transform: translateY(24px);
-          transition: opacity 1.4s ease 0.5s, transform 1.4s ease 0.5s;
-          pointer-events: none; position: relative;
-        }
-        .t2-invitation.t2-inv-visible { opacity: 1; transform: translateY(0); pointer-events: all; }
-
-        .t2-page {
-          min-height: 100svh;
-          background-size: cover;
-          background-repeat: no-repeat;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          direction: rtl;
-        }
-
-        .t2-input {
-          width: 100%;
-          background: rgba(0,0,0,0.5);
-          border: 1px solid #C9A84C;
-          border-radius: 8px;
-          padding: 14px 16px;
-          color: #f5e6d0;
-          font-size: 15px;
-          font-family: 'Aref Ruqaa', serif;
-          outline: none;
-          direction: rtl;
-          transition: border-color 0.2s;
-        }
-        .t2-input:focus { border-color: #e8c547; }
-        .t2-input::placeholder { color: rgba(201,168,76,0.4); }
-
-        .t2-select {
-          width: 100%;
-          background: rgba(0,0,0,0.5);
-          border: 1px solid #C9A84C;
-          border-radius: 8px;
-          padding: 14px 16px;
-          color: #f5e6d0;
-          font-size: 15px;
-          font-family: 'Aref Ruqaa', serif;
-          outline: none;
-          -webkit-appearance: none;
-          direction: rtl;
-        }
-        .t2-select option {
-          background: #1a0505;
-          color: #f5e6d0;
-        }
+        input:focus, select:focus { outline: none; border-color: ${gold} !important; }
       `}</style>
 
-      {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
-
-      {/* ══ SPLASH SCREEN ══ */}
+      {/* ── Splash Screen ──────────────────────────────────── */}
       <div
-        className={`t2-splash${gone ? " gone" : ""}`}
-        style={{ cursor: opening ? "default" : "pointer" }}
-        onClick={!opening ? handleOpen : undefined}
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 100,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: opened ? 0 : 1,
+          pointerEvents: opened ? "none" : "auto",
+          transition: "opacity 0.8s ease",
+        }}
       >
         <video
           autoPlay
@@ -410,7 +274,6 @@ export default function Template2Page() {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            pointerEvents: "none",
           }}
         >
           <source src="/splash-t2.mp4" type="video/mp4" />
@@ -420,660 +283,359 @@ export default function Template2Page() {
             position: "absolute",
             inset: 0,
             background: "rgba(0,0,0,0.45)",
-            pointerEvents: "none",
           }}
         />
-        <div
+        <button
+          onClick={handleOpen}
           style={{
             position: "relative",
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 24,
+            zIndex: 1,
+            fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
+            fontFamily: '"Scheherazade New", serif',
+            color: gold,
+            border: `1.5px solid ${gold}`,
+            padding: "16px 48px",
+            background: "transparent",
+            letterSpacing: "0.15em",
+            cursor: "pointer",
           }}
         >
-          {!opening && (
-            <button
-              onClick={handleOpen}
-              style={{
-                background: "transparent",
-                color: "#C9A84C",
-                border: "1px solid #C9A84C",
-                padding: "14px 40px",
-                borderRadius: 2,
-                fontFamily: "'Scheherazade New', serif",
-                fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
-                fontWeight: 700,
-                cursor: "pointer",
-                letterSpacing: "0.15em",
-                animation: "t2btnPulse 2.5s ease-in-out infinite",
-                transition: "background 0.3s, color 0.3s",
-              }}
-            >
-              افتح الدعوة
-            </button>
-          )}
-        </div>
+          افتح الدعوة
+        </button>
       </div>
 
-      {/* ══ CONFETTI & SPARKLES ══ */}
-      <Confetti active={showConfetti} />
-      <Sparkles active={showContent} />
-
-      {/* ══ INVITATION (5 pages) ══ */}
+      {/* ── Invitation Content ─────────────────────────────── */}
       <div
-        className={`t2-invitation${showContent ? " t2-inv-visible" : ""}`}
+        style={{
+          opacity: opened ? 1 : 0,
+          transform: opened ? "translateY(0)" : "translateY(40px)",
+          transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s",
+        }}
       >
-        {/* ═══════════════════════════════════════════════════════
-            PAGE 1 — BISMILLAH + NAMES (t2-bg1.png)
-            Ganesha at top, text in lower 60%
-            ═══════════════════════════════════════════════════════ */}
-        <section
-          className="t2-page"
-          style={{
-            backgroundImage: "url(/t2-bg1.png)",
-            backgroundPosition: "top center",
-            justifyContent: "flex-end",
-            paddingTop: "45vh",
-            paddingBottom: "8vh",
-            paddingLeft: 24,
-            paddingRight: 24,
-          }}
-        >
-          <div
-            className="t2-reveal"
-            style={{
-              fontFamily: "'Scheherazade New', serif",
-              fontSize: "1.8rem",
-              fontWeight: 700,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              letterSpacing: "0.04em",
-              lineHeight: 1.8,
-            }}
-          >
+        {/* ── Section 1: Bismillah + Names ─────────────────── */}
+        <VideoSection src="/t2-vid1.mp4">
+          <p style={{ ...headingStyle, fontSize: "1.8rem" }}>
             بسم الله الرحمن الرحيم
-          </div>
-
-          <GoldDivider />
-
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Aref Ruqaa', serif",
-              fontSize: "1rem",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
-              lineHeight: 2,
-              marginTop: 8,
-              marginBottom: 12,
-            }}
-          >
+          </p>
+          {goldDivider}
+          <p style={{ ...bodyStyle, fontSize: "1rem" }}>
             يسرّنا دعوتكم لحضور حفل زفاف
-          </div>
-
-          <GoldDivider />
-
-          <div
-            className="t2-reveal t2-reveal-d2"
-            style={{ margin: "16px 0 10px" }}
-          >
-            <div
+          </p>
+          <p style={{ color: gold, fontSize: "1rem", margin: "20px 0" }}>
+            — ✦ —
+          </p>
+          <div style={{ margin: "24px 0" }}>
+            <WordReveal
+              text="محمد أمين"
+              style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
+            />
+            <p
               style={{
-                fontFamily: "'Scheherazade New', serif",
-                fontWeight: 700,
-                color: "#C9A84C",
-                textShadow: txtShadow,
-                lineHeight: 1.4,
+                ...bodyStyle,
+                fontSize: "1.2rem",
+                color: gold,
+                margin: "12px 0",
               }}
             >
-              <WordReveal
-                text={CONFIG.groom_ar}
-                delay={300}
-                style={{ fontSize: "clamp(2.6rem, 11vw, 4.8rem)" }}
-              />
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "1.2rem",
-                  color: "rgba(201,168,76,0.7)",
-                  fontWeight: 400,
-                  margin: "6px 0",
-                  fontFamily: "'Aref Ruqaa', serif",
-                  textShadow: txtShadow,
-                }}
-              >
-                و
-              </span>
-              <WordReveal
-                text={CONFIG.bride_ar}
-                delay={800}
-                style={{ fontSize: "clamp(2.6rem, 11vw, 4.8rem)" }}
-              />
-            </div>
+              و
+            </p>
+            <WordReveal
+              text="نور الهدى"
+              delay={600}
+              style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
+            />
           </div>
-
-          <div
-            className="t2-reveal t2-reveal-d3"
-            style={{
-              fontFamily: "'Aref Ruqaa', serif",
-              fontSize: "0.95rem",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
-              marginTop: 12,
-              opacity: 0.8,
-            }}
-          >
+          <p style={{ ...bodyStyle, fontSize: "0.9rem" }}>
             وذلك بمشيئة الله تعالى
-          </div>
-        </section>
+          </p>
+        </VideoSection>
 
-        {/* ═══════════════════════════════════════════════════════
-            PAGE 2 — DATE + COUNTDOWN (t2-bg2.png)
-            4 horizontal line guides in center
-            ═══════════════════════════════════════════════════════ */}
-        <section
-          className="t2-page"
-          style={{
-            backgroundImage: "url(/t2-bg2.png)",
-            backgroundPosition: "center",
-            justifyContent: "center",
-            padding: "30vh 20px",
-          }}
-        >
-          <div
-            className="t2-reveal"
+        {/* ── Section 2: Date + Countdown + Families ────────── */}
+        <VideoSection src="/t2-vid2.mp4">
+          {diamondDivider}
+          <p style={{ ...headingStyle, fontSize: "1.8rem" }}>
+            يوم السبت ٨ أوت ٢٠٢٦
+          </p>
+          <p
             style={{
-              color: "#C9A84C",
-              fontSize: 14,
-              letterSpacing: "0.4em",
-              textShadow: txtShadow,
-              marginBottom: 20,
+              fontFamily: '"Cormorant Garamond", serif',
+              fontSize: "1rem",
+              color: cream,
+              fontStyle: "italic",
+              margin: "8px 0 0",
             }}
           >
-            &#9670; &#9670; &#9670;
-          </div>
-
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Scheherazade New', serif",
-              fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
-              fontWeight: 700,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              marginBottom: 8,
-            }}
-          >
-            يوم السبت
-          </div>
-
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(2.4rem, 10vw, 4rem)",
-              fontWeight: 300,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              lineHeight: 1.2,
-              marginBottom: 4,
-            }}
-          >
-            ٨ أوت ٢٠٢٦
-          </div>
-
-          <div
-            className="t2-reveal t2-reveal-d2"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "0.9rem",
-              letterSpacing: "0.18em",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
-            Samedi 8 Ao&ucirc;t 2026
-          </div>
-
-          <div className="t2-reveal t2-reveal-d2" style={{ marginBottom: 28 }}>
-            <StarDivider />
-          </div>
+            Samedi 8 Août 2026
+          </p>
+          {starDivider}
 
           {/* Countdown */}
           <div
-            className="t2-reveal t2-reveal-d3"
             style={{
               display: "flex",
               justifyContent: "center",
-              gap: 10,
+              gap: 12,
+              flexWrap: "wrap",
+              margin: "20px 0",
             }}
           >
             {[
-              { n: countdown.days, l: "يوم" },
-              { n: countdown.hours, l: "ساعة" },
-              { n: countdown.minutes, l: "دقيقة" },
-              { n: countdown.seconds, l: "ثانية" },
-            ].map(({ n, l }) => (
-              <div
-                key={l}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 4,
-                  minWidth: 58,
-                  padding: "12px 6px 10px",
-                  background: "rgba(0,0,0,0.4)",
-                  border: "1px solid rgba(201,168,76,0.4)",
-                  borderRadius: 8,
-                }}
-              >
-                <span
+              { value: days, label: "يوم" },
+              { value: hours, label: "ساعة" },
+              { value: minutes, label: "دقيقة" },
+              { value: seconds, label: "ثانية" },
+            ].map((item) => (
+              <div key={item.label} style={countdownCardStyle}>
+                <div
                   style={{
-                    fontSize: "1.8rem",
-                    fontWeight: 300,
-                    color: "#C9A84C",
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: "3rem",
+                    color: gold,
                     lineHeight: 1,
-                    fontFamily: "'Cormorant Garamond', serif",
-                    textShadow: txtShadow,
                   }}
                 >
-                  {pad(n)}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'Aref Ruqaa', serif",
-                    fontSize: 12,
-                    color: "#C9A84C",
-                    textShadow: txtShadow,
-                  }}
-                >
-                  {l}
-                </span>
+                  {item.value}
+                </div>
+                <div style={{ fontSize: "0.75rem", color: cream, marginTop: 4 }}>
+                  {item.label}
+                </div>
               </div>
             ))}
           </div>
-        </section>
 
-        {/* ═══════════════════════════════════════════════════════
-            PAGE 3 — FAMILIES (t2-bg3.png)
-            Darker oval arch in center
-            ═══════════════════════════════════════════════════════ */}
-        <section
-          className="t2-page"
-          style={{
-            backgroundImage: "url(/t2-bg3.png)",
-            backgroundPosition: "center",
-            justifyContent: "center",
-            padding: "25vh 30px",
-          }}
-        >
-          <div
-            className="t2-reveal"
-            style={{
-              fontFamily: "'Scheherazade New', serif",
-              fontSize: "clamp(1.5rem, 6vw, 2.2rem)",
-              fontWeight: 700,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              marginBottom: 8,
-            }}
-          >
+          {starDivider}
+
+          {/* Families */}
+          <p style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 20 }}>
             العائلتان الكريمتان
+          </p>
+
+          <div style={{ marginBottom: 20 }}>
+            <p style={{ ...bodyStyle, fontSize: "0.85rem", color: gold, marginBottom: 6 }}>
+              عائلة العريس
+            </p>
+            <p style={{ ...bodyStyle, fontSize: "1rem" }}>
+              السيّد فوزي بن سالم / السيّدة سماح بن سالم
+            </p>
           </div>
 
-          <GoldDivider />
+          <div style={{ width: 40, height: 1, background: gold, margin: "0 auto 20px" }} />
 
-          {/* Groom family */}
-          <div className="t2-reveal t2-reveal-d1" style={{ marginTop: 20, marginBottom: 20 }}>
-            <div
-              style={{
-                fontFamily: "'Aref Ruqaa', serif",
-                fontSize: "1.1rem",
-                color: "#f5e6d0",
-                lineHeight: 2.2,
-                textShadow: txtShadow,
-              }}
-            >
-              {CONFIG.groomDad}
-              <br />
-              {CONFIG.groomMom}
-            </div>
+          <div>
+            <p style={{ ...bodyStyle, fontSize: "0.85rem", color: gold, marginBottom: 6 }}>
+              عائلة العروس
+            </p>
+            <p style={{ ...bodyStyle, fontSize: "1rem" }}>
+              السيّد نور الدين جلال / السيّدة فاطيمة جلال
+            </p>
           </div>
+        </VideoSection>
 
-          <div
-            className="t2-reveal t2-reveal-d2"
+        {/* ── Section 3: Details + RSVP ─────────────────────── */}
+        <VideoSection src="/t2-vid3.mp4">
+          <p style={{ ...headingStyle, fontSize: "1.6rem" }}>تفاصيل الحفل</p>
+          <p
             style={{
-              color: "#C9A84C",
-              fontSize: 14,
-              textShadow: txtShadow,
-              margin: "4px 0",
+              fontFamily: '"Cormorant Garamond", serif',
+              fontSize: "0.9rem",
+              color: cream,
+              margin: "4px 0 0",
             }}
           >
-            &#10022;
-          </div>
+            Détails de la cérémonie
+          </p>
+          {goldDivider}
 
-          {/* Bride family */}
-          <div className="t2-reveal t2-reveal-d3" style={{ marginTop: 20 }}>
-            <div
-              style={{
-                fontFamily: "'Aref Ruqaa', serif",
-                fontSize: "1.1rem",
-                color: "#f5e6d0",
-                lineHeight: 2.2,
-                textShadow: txtShadow,
-              }}
-            >
-              {CONFIG.brideDad}
-              <br />
-              {CONFIG.brideMom}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════
-            PAGE 4 — CEREMONY DETAILS (t2-bg4.png)
-            Small Ganesha top ~20%, divider bottom ~80%
-            ═══════════════════════════════════════════════════════ */}
-        <section
-          className="t2-page"
-          style={{
-            backgroundImage: "url(/t2-bg4.png)",
-            backgroundPosition: "center",
-            justifyContent: "center",
-            padding: "20vh 24px",
-          }}
-        >
-          <div
-            className="t2-reveal"
+          <p
             style={{
-              fontFamily: "'Scheherazade New', serif",
-              fontSize: "clamp(1.5rem, 6vw, 2.2rem)",
-              fontWeight: 700,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              marginBottom: 16,
-            }}
-          >
-            تفاصيل الحفل
-          </div>
-
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Aref Ruqaa', serif",
-              fontSize: "1rem",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
-              marginBottom: 8,
-            }}
-          >
-            {CONFIG.time_ar}
-          </div>
-
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(3rem, 12vw, 5rem)",
-              fontWeight: 300,
-              color: "#C9A84C",
-              textShadow: txtShadow,
+              fontFamily: '"Cormorant Garamond", serif',
+              fontSize: "5rem",
+              color: gold,
               lineHeight: 1,
-              marginBottom: 24,
+              margin: "20px 0 8px",
+            }}
+          >
+            21h00
+          </p>
+          <p style={{ ...bodyStyle, fontSize: "1rem" }}>
+            على الساعة التاسعة ليلاً
+          </p>
+
+          {/* Date strip */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 0,
+              margin: "24px 0",
               direction: "ltr",
             }}
           >
-            21<span style={{ fontSize: "0.55em", opacity: 0.5 }}>h</span>00
-          </div>
-
-          {/* Date card */}
-          <div
-            className="t2-reveal t2-reveal-d2"
-            style={{
-              display: "flex",
-              border: "1px solid rgba(201,168,76,0.35)",
-              borderRadius: 8,
-              overflow: "hidden",
-              background: "rgba(0,0,0,0.35)",
-              maxWidth: 360,
-              width: "100%",
-            }}
-          >
-            {[
-              { top: "08", bottom: "Jour" },
-              { top: "Ao\u00fbt", bottom: "Mois" },
-              { top: "Samedi", bottom: "Jour" },
-              { top: "2026", bottom: "Ann\u00e9e" },
-            ].map((cell, i) => (
+            {["08", "Août", "Samedi"].map((txt, i) => (
               <div
                 key={i}
                 style={{
-                  flex: 1,
-                  padding: "14px 4px",
-                  textAlign: "center",
-                  borderRight:
-                    i < 3 ? "1px solid rgba(201,168,76,0.15)" : "none",
+                  background: "rgba(0,0,0,0.5)",
+                  border: `1px solid rgba(201,168,76,0.4)`,
+                  padding: "12px 20px",
+                  fontFamily: '"Cormorant Garamond", serif',
+                  color: gold,
+                  fontSize: i === 0 ? "1.4rem" : "1rem",
+                  fontWeight: i === 0 ? 600 : 400,
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: i === 2 ? "1rem" : "1.6rem",
-                    fontWeight: 300,
-                    color: "#C9A84C",
-                    lineHeight: 1.2,
-                    textShadow: txtShadow,
-                  }}
-                >
-                  {cell.top}
-                </div>
-                <div
-                  style={{
-                    fontSize: 8,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "rgba(201,168,76,0.5)",
-                    marginTop: 4,
-                    fontFamily: "sans-serif",
-                  }}
-                >
-                  {cell.bottom}
-                </div>
+                {txt}
               </div>
             ))}
           </div>
-        </section>
 
-        {/* ═══════════════════════════════════════════════════════
-            PAGE 5 — RSVP + CLOSING DUA (t2-bg5.png)
-            Star divider slightly below center
-            ═══════════════════════════════════════════════════════ */}
-        <section
-          className="t2-page"
-          style={{
-            backgroundImage: "url(/t2-bg5.png)",
-            backgroundPosition: "center",
-            paddingTop: "15vh",
-            paddingBottom: "10vh",
-            paddingLeft: 24,
-            paddingRight: 24,
-            justifyContent: "flex-start",
-          }}
-        >
-          {/* RSVP heading */}
-          <div
-            className="t2-reveal"
-            style={{
-              fontFamily: "'Scheherazade New', serif",
-              fontSize: "clamp(1.5rem, 6vw, 2.2rem)",
-              fontWeight: 700,
-              color: "#C9A84C",
-              textShadow: txtShadow,
-              marginBottom: 8,
-            }}
-          >
-            تأكيد الحضور
-          </div>
+          {diamondDivider}
 
-          <div
-            className="t2-reveal t2-reveal-d1"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: "italic",
-              fontSize: "0.85rem",
-              letterSpacing: "0.12em",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
-              marginBottom: 24,
-            }}
-          >
-            Confirmer votre pr&eacute;sence avant le 1er Ao&ucirc;t
-          </div>
-
-          {/* RSVP form or success */}
-          {rsvpSent ? (
-            <div
-              className="t2-reveal"
-              style={{ textAlign: "center", padding: "20px 0" }}
+          {/* RSVP */}
+          <div style={{ marginTop: 20 }}>
+            <p style={{ ...headingStyle, fontSize: "1.4rem", marginBottom: 8 }}>
+              تأكيد الحضور
+            </p>
+            <p
+              style={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: "0.85rem",
+                color: cream,
+                marginBottom: 24,
+              }}
             >
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: "50%",
-                  border: "1px solid rgba(201,168,76,0.38)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto 18px",
-                  color: "#C9A84C",
-                  fontSize: 20,
-                }}
-              >
-                &#10022;
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Scheherazade New', serif",
-                  fontSize: "1.7rem",
-                  fontWeight: 700,
-                  color: "#C9A84C",
-                  textShadow: txtShadow,
-                  marginBottom: 10,
-                }}
-              >
-                شكراً جزيلاً
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Aref Ruqaa', serif",
-                  fontSize: "1rem",
-                  color: "#f5e6d0",
-                  textShadow: txtShadow,
-                  lineHeight: 2.2,
-                  opacity: 0.8,
-                }}
-              >
-                تم استلام ردّكم بنجاح
-              </div>
-            </div>
-          ) : (
-            <div
-              className="t2-reveal t2-reveal-d2"
-              style={{ maxWidth: 380, width: "100%" }}
-            >
+              Confirmer votre présence avant le 1er Août
+            </p>
+
+            {!submitted ? (
               <form
+                onSubmit={handleSubmit}
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 12,
+                  gap: 14,
+                  maxWidth: 340,
+                  margin: "0 auto",
                 }}
-                onSubmit={handleRsvp}
               >
                 <input
-                  className="t2-input"
                   type="text"
                   placeholder="الاسم الكامل"
-                  required
-                  value={rsvp.name}
-                  onChange={(e) =>
-                    setRsvp({ ...rsvp, name: e.target.value })
-                  }
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  style={{
+                    background: "rgba(0,0,0,0.4)",
+                    border: `1px solid rgba(201,168,76,0.4)`,
+                    color: cream,
+                    padding: "14px 16px",
+                    borderRadius: 4,
+                    fontFamily: '"Scheherazade New", serif',
+                    fontSize: "1rem",
+                    direction: "rtl",
+                  }}
                 />
                 <select
-                  className="t2-select"
-                  value={rsvp.attending}
-                  onChange={(e) =>
-                    setRsvp({ ...rsvp, attending: e.target.value })
-                  }
+                  value={attending}
+                  onChange={(e) => setAttending(e.target.value)}
+                  style={{
+                    background: "rgba(0,0,0,0.4)",
+                    border: `1px solid rgba(201,168,76,0.4)`,
+                    color: cream,
+                    padding: "14px 16px",
+                    borderRadius: 4,
+                    fontFamily: '"Scheherazade New", serif',
+                    fontSize: "1rem",
+                    direction: "rtl",
+                    appearance: "none",
+                  }}
                 >
-                  <option value="oui">سأحضر بكل سرور</option>
-                  <option value="non">لن أتمكن من الحضور</option>
+                  <option value="نعم">نعم، سأحضر</option>
+                  <option value="لا">لا، لن أتمكن</option>
                 </select>
                 <button
                   type="submit"
                   style={{
-                    width: "100%",
-                    background:
-                      "linear-gradient(135deg, #c9a84c 0%, #9a6e14 50%, #c9a84c 100%)",
-                    backgroundSize: "200% auto",
-                    color: "#fff8f0",
+                    background: gold,
+                    color: "#1a1a1a",
                     border: "none",
-                    padding: 16,
-                    borderRadius: 8,
-                    fontSize: 17,
-                    fontFamily: "'Aref Ruqaa', serif",
+                    padding: "14px 32px",
+                    fontFamily: '"Scheherazade New", serif',
+                    fontSize: "1.1rem",
+                    fontWeight: 700,
+                    borderRadius: 4,
                     cursor: "pointer",
-                    textShadow: txtShadow,
-                    transition: "background-position 0.4s, transform 0.2s",
+                    letterSpacing: "0.05em",
                   }}
                 >
-                  تأكيد الحضور
+                  إرسال
                 </button>
               </form>
-            </div>
-          )}
-
-          {/* Spacer to push closing dua down past the star divider */}
-          <div style={{ flex: 1, minHeight: 60 }} />
-
-          {/* Below star divider */}
-          <div
-            className="t2-reveal t2-reveal-d3"
-            style={{
-              color: "#C9A84C",
-              fontSize: 14,
-              letterSpacing: "0.4em",
-              textShadow: txtShadow,
-              marginBottom: 20,
-            }}
-          >
-            &#9670; &#9670; &#9670;
+            ) : (
+              <p
+                style={{
+                  ...bodyStyle,
+                  fontSize: "1.1rem",
+                  color: gold,
+                  animation: "fadeInUp 0.6s ease",
+                }}
+              >
+                شكراً لتأكيد حضوركم ✦
+              </p>
+            )}
           </div>
 
-          <div
-            className="t2-reveal t2-reveal-d4"
+          {goldDivider}
+
+          {/* Closing dua */}
+          <p
             style={{
-              fontFamily: "'Aref Ruqaa', serif",
-              fontSize: "clamp(0.95rem, 4vw, 1.15rem)",
-              color: "#f5e6d0",
-              textShadow: txtShadow,
+              ...bodyStyle,
+              fontSize: "0.95rem",
               fontStyle: "italic",
-              lineHeight: 2.4,
-              maxWidth: 400,
+              marginTop: 20,
+              lineHeight: 1.8,
             }}
           >
-            نسأل الله أن يجمعهما على خير
-            <br />
-            ويبارك لهما في حياتهما المشتركة
-          </div>
-        </section>
+            نسأل الله أن يجمعهما على خير ويبارك لهما في حياتهما المشتركة
+          </p>
+        </VideoSection>
       </div>
+
+      {/* ── Confetti overlay ───────────────────────────────── */}
+      {confetti.length > 0 && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            pointerEvents: "none",
+            zIndex: 200,
+          }}
+        >
+          {confetti.map((p) => {
+            const rad = (p.angle * Math.PI) / 180;
+            const tx = Math.cos(rad) * p.velocity;
+            const ty = Math.sin(rad) * p.velocity - 200;
+            return (
+              <div
+                key={p.id}
+                style={{
+                  position: "absolute",
+                  left: `${p.x}%`,
+                  top: `${p.y}%`,
+                  width: p.size,
+                  height: p.size,
+                  background: p.color,
+                  borderRadius: Math.random() > 0.5 ? "50%" : "0",
+                  ["--tx" as string]: `${tx}px`,
+                  ["--ty" as string]: `${ty}px`,
+                  ["--rot" as string]: `${p.spin}deg`,
+                  animation: "confetti-fall 2.5s ease-out forwards",
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
