@@ -485,26 +485,43 @@ export default function Template2Page() {
           <p style={{ color: gold, fontSize: "1rem", margin: "20px 0" }}>
             — ✦ —
           </p>
-          <div style={{ margin: "24px 0" }}>
-            <WordReveal
-              text="محمد أمين"
-              style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
-            />
-            <p
+          <div style={{ margin: "24px 0", position: "relative" }}>
+            {/* Couple illustration behind names */}
+            <img
+              src="/couple-hands.png"
+              alt=""
               style={{
-                ...bodyStyle,
-                fontSize: "1.2rem",
-                color: gold,
-                margin: "12px 0",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "220px",
+                opacity: 0.18,
+                pointerEvents: "none",
+                zIndex: 0,
               }}
-            >
-              و
-            </p>
-            <WordReveal
-              text="نور الهدى"
-              delay={600}
-              style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
             />
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <WordReveal
+                text="محمد أمين"
+                style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
+              />
+              <p
+                style={{
+                  ...bodyStyle,
+                  fontSize: "1.2rem",
+                  color: gold,
+                  margin: "12px 0",
+                }}
+              >
+                و
+              </p>
+              <WordReveal
+                text="نور الهدى"
+                delay={600}
+                style={{ ...headingStyle, fontSize: "2.8rem", fontWeight: 700 }}
+              />
+            </div>
           </div>
           <p style={{ ...bodyStyle, fontSize: "0.9rem" }}>
             وذلك بمشيئة الله تعالى
