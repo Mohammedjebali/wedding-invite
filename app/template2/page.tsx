@@ -77,8 +77,31 @@ function VideoSection({
   children: React.ReactNode;
   overlayOpacity?: number;
 }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const section = sectionRef.current;
+    if (!video || !section) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(section);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       style={{
         position: "relative",
         minHeight: "100vh",
@@ -89,7 +112,7 @@ function VideoSection({
       }}
     >
       <video
-        autoPlay
+        ref={videoRef}
         muted
         playsInline
         style={{
@@ -99,6 +122,8 @@ function VideoSection({
           height: "100%",
           objectFit: "cover",
           zIndex: 0,
+          willChange: "transform",
+          transform: "translateZ(0)",
         }}
       >
         <source src={src} type="video/mp4" />
