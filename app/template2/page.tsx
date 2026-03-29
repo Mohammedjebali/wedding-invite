@@ -542,9 +542,6 @@ export default function Template2Page() {
           >
             {[
               { value: days, label: "يوم" },
-              { value: hours, label: "ساعة" },
-              { value: minutes, label: "دقيقة" },
-              { value: seconds, label: "ثانية" },
             ].map((item) => (
               <div key={item.label} style={countdownCardStyle}>
                 <CountdownDigit
