@@ -1,9 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [mandalaPos, setMandalaPos] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+      const rect = timelineRef.current.getBoundingClientRect();
+      const windowH = window.innerHeight;
+      const progress = Math.max(0, Math.min(1, (windowH - rect.top) / (windowH + rect.height)));
+      setMandalaPos(progress * 100);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -493,24 +508,25 @@ export default function Template2Page() {
           <div className="program-underline anim" />
 
           {/* 8. Timeline */}
-          <div className="timeline">
+          <div className="timeline" ref={timelineRef}>
             <div className="timeline-line" />
-            {/* Mandala centered on the timeline line */}
+            {/* Scroll-following mandala on the timeline line */}
             <img
               src="/mandala.png"
               alt=""
               style={{
                 position: "absolute",
                 left: "50%",
-                top: "50%",
+                top: `${mandalaPos}%`,
                 transform: "translate(-50%, -50%)",
-                width: 120,
-                height: 120,
+                width: 28,
+                height: 28,
                 mixBlendMode: "screen",
-                opacity: 0.6,
+                opacity: 0.85,
                 pointerEvents: "none",
-                zIndex: 2,
-                animation: "t2MandalaSpin 20s linear infinite",
+                zIndex: 10,
+                animation: "t2MandalaSpin 12s linear infinite",
+                transition: "top 0.1s linear",
               }}
             />
 
