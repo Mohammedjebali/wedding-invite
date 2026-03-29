@@ -510,23 +510,22 @@ export default function Template2Page() {
           {/* 8. Timeline */}
           <div className="timeline" ref={timelineRef}>
             <div className="timeline-line" />
-            {/* Scroll-following mandala on the timeline line */}
+            {/* Fixed mandala — stays in viewport center, line passes through it */}
             <img
               src="/mandala.png"
               alt=""
               style={{
-                position: "absolute",
+                position: "fixed",
                 left: "50%",
-                top: `${mandalaPos}%`,
+                top: "50%",
                 transform: "translate(-50%, -50%)",
-                width: 28,
-                height: 28,
+                width: 36,
+                height: 36,
                 mixBlendMode: "screen",
-                opacity: 0.85,
+                opacity: 0.9,
                 pointerEvents: "none",
-                zIndex: 10,
+                zIndex: 100,
                 animation: "t2MandalaSpin 12s linear infinite",
-                transition: "top 0.1s linear",
               }}
             />
 
