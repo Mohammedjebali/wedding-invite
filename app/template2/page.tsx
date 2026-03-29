@@ -168,6 +168,7 @@ export default function Template2Page() {
           animation: dotPulse 2.5s ease-in-out 1.5s infinite;
         }
 
+        @keyframes t2MandalaSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
         @keyframes dotPulse {
           0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,112,0.4); }
           50% { box-shadow: 0 0 0 6px rgba(212,175,112,0); }
@@ -494,6 +495,24 @@ export default function Template2Page() {
           {/* 8. Timeline */}
           <div className="timeline">
             <div className="timeline-line" />
+            {/* Mandala centered on the timeline line */}
+            <img
+              src="/mandala.png"
+              alt=""
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 120,
+                height: 120,
+                mixBlendMode: "screen",
+                opacity: 0.6,
+                pointerEvents: "none",
+                zIndex: 2,
+                animation: "t2MandalaSpin 20s linear infinite",
+              }}
+            />
 
             {/* Event 1 — LEFT: عقد القران */}
             <div className="timeline-event">
