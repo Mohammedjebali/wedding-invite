@@ -344,11 +344,10 @@ export default function Template2Page() {
   );
 
   const countdownCardStyle: React.CSSProperties = {
-    background: "rgba(0,0,0,0.4)",
-    border: "1px solid rgba(201,168,76,0.3)",
-    padding: 16,
-    borderRadius: 4,
-    minWidth: 70,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    minWidth: 50,
   };
 
   return (
@@ -552,7 +551,7 @@ export default function Template2Page() {
                   value={item.value}
                   style={{
                     fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: "3rem",
+                    fontSize: "2rem",
                     color: gold,
                     lineHeight: 1,
                   }}
