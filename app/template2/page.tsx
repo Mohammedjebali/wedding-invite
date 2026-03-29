@@ -148,7 +148,7 @@ function VideoSection({
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center", direction: "ltr" as const,
         overflow: "hidden",
         opacity: entered ? 1 : 0,
         transform: entered ? "translateY(0)" : "translateY(40px)",
@@ -419,7 +419,7 @@ export default function Template2Page() {
           zIndex: 100,
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center", direction: "ltr" as const,
           opacity: opened ? 0 : 1,
           pointerEvents: opened ? "none" : "auto",
           transition: "opacity 0.8s ease",
@@ -534,7 +534,7 @@ export default function Template2Page() {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "center", direction: "ltr" as const,
               gap: 12,
               flexWrap: "wrap",
               margin: "20px 0",
@@ -625,7 +625,7 @@ export default function Template2Page() {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "center", direction: "ltr" as const,
               gap: 0,
               margin: "24px 0",
               direction: "ltr",
