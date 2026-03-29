@@ -113,9 +113,13 @@ function GoldParticles() {
 function VideoSection({
   children,
   overlayOpacity = 0.55,
+  flowerSrc,
+  flowerRotation = "0deg",
 }: {
   children: React.ReactNode;
   overlayOpacity?: number;
+  flowerSrc?: string;
+  flowerRotation?: string;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [entered, setEntered] = useState(false);
@@ -163,6 +167,42 @@ function VideoSection({
         }}
       />
       <GoldParticles />
+      {flowerSrc && (
+        <>
+          {/* Bottom-left flower */}
+          <img
+            src={flowerSrc}
+            alt=""
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: 120,
+              opacity: 0.55,
+              mixBlendMode: "screen",
+              pointerEvents: "none",
+              zIndex: 2,
+              transform: `rotate(${flowerRotation})`,
+            }}
+          />
+          {/* Top-right flower (mirrored) */}
+          <img
+            src={flowerSrc}
+            alt=""
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: 80,
+              opacity: 0.35,
+              mixBlendMode: "screen",
+              pointerEvents: "none",
+              zIndex: 2,
+              transform: `scaleX(-1) rotate(${flowerRotation})`,
+            }}
+          />
+        </>
+      )}
       <div
         className={`t2-section-content${entered ? " t2-section-entered" : ""}`}
         style={{
@@ -435,7 +475,7 @@ export default function Template2Page() {
         }}
       >
         {/* ── Section 1: Bismillah + Names ─────────────────── */}
-        <VideoSection>
+        <VideoSection flowerSrc="/flower1.png" flowerRotation="-15deg">
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             بسم الله الرحمن الرحيم
           </p>
@@ -473,7 +513,7 @@ export default function Template2Page() {
         </VideoSection>
 
         {/* ── Section 2: Date + Countdown + Families ────────── */}
-        <VideoSection>
+        <VideoSection flowerSrc="/flower2.png" flowerRotation="10deg">
           {diamondDivider}
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             يوم السبت ٨ أوت ٢٠٢٦
@@ -553,7 +593,7 @@ export default function Template2Page() {
         </VideoSection>
 
         {/* ── Section 3: Details + RSVP ─────────────────────── */}
-        <VideoSection>
+        <VideoSection flowerSrc="/flower3.png" flowerRotation="-8deg">
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.6rem" }}>تفاصيل الحفل</p>
           <p
             style={{
