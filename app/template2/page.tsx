@@ -20,7 +20,7 @@ export default function Template2Page() {
       { threshold: 0.2 }
     );
 
-    const elements = container.querySelectorAll(".anim");
+    const elements = container.querySelectorAll(".anim, .timeline");
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -103,11 +103,115 @@ export default function Template2Page() {
           transform: none;
         }
 
-        /* --- Stagger for event cards --- */
-        .event-card:nth-child(1) { transition-delay: 0ms; }
-        .event-card:nth-child(2) { transition-delay: 150ms; }
-        .event-card:nth-child(3) { transition-delay: 300ms; }
-        .event-card:nth-child(4) { transition-delay: 450ms; }
+        /* --- Timeline --- */
+        .timeline {
+          position: relative;
+          direction: ltr;
+          padding: 20px 0;
+        }
+
+        .timeline-line {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          width: 2px;
+          height: 0;
+          background: var(--gold);
+          transform: translateX(-50%);
+          transition: height 1.5s ease;
+        }
+
+        .timeline.visible .timeline-line {
+          height: 100%;
+        }
+
+        .timeline-event {
+          display: flex;
+          align-items: center;
+          position: relative;
+          margin-bottom: 36px;
+        }
+
+        .timeline-event:last-child {
+          margin-bottom: 0;
+        }
+
+        .timeline-half {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .tl-content-left {
+          text-align: right;
+          padding-right: 20px;
+          direction: rtl;
+        }
+
+        .tl-content-right {
+          text-align: left;
+          padding-left: 20px;
+          direction: rtl;
+        }
+
+        .timeline-dot {
+          width: 10px;
+          height: 10px;
+          background: var(--gold);
+          transform: rotate(45deg) scale(0);
+          flex-shrink: 0;
+          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+          z-index: 1;
+        }
+
+        .timeline.visible .timeline-dot {
+          transform: rotate(45deg) scale(1);
+          animation: dotPulse 2.5s ease-in-out 1.5s infinite;
+        }
+
+        @keyframes dotPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,112,0.4); }
+          50% { box-shadow: 0 0 0 6px rgba(212,175,112,0); }
+        }
+
+        .tl-node {
+          opacity: 0;
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .tl-node.tl-from-left {
+          transform: translateX(-30px);
+        }
+
+        .tl-node.tl-from-right {
+          transform: translateX(30px);
+        }
+
+        .timeline.visible .tl-node {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .tl-event-name {
+          font-family: 'Noto Naskh Arabic', serif;
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--gold);
+          margin-bottom: 4px;
+        }
+
+        .tl-event-venue {
+          font-size: 0.85rem;
+          color: var(--pearl);
+          opacity: 0.8;
+          margin-bottom: 2px;
+        }
+
+        .tl-event-time {
+          font-family: 'Playfair Display', serif;
+          font-size: 0.9rem;
+          color: var(--gold);
+          opacity: 0.7;
+        }
 
         /* --- Gold HR --- */
         .gold-hr {
@@ -247,43 +351,6 @@ export default function Template2Page() {
           width: 120px;
         }
 
-        /* --- Event cards --- */
-        .event-card {
-          background: var(--card);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border-radius: 10px;
-          border-right: 3px solid var(--gold);
-          padding: 18px 16px;
-          margin-bottom: 16px;
-        }
-
-        .event-name {
-          font-size: 1.2rem;
-          font-weight: 700;
-          color: var(--gold);
-          margin-bottom: 6px;
-        }
-
-        .event-name .sym {
-          margin-inline-end: 6px;
-          font-size: 0.75rem;
-          vertical-align: middle;
-        }
-
-        .event-date {
-          font-family: 'Playfair Display', serif;
-          font-size: 0.95rem;
-          color: var(--pearl);
-          margin-bottom: 4px;
-          direction: rtl;
-        }
-
-        .event-venue {
-          font-size: 0.88rem;
-          color: var(--pearl);
-          opacity: 0.7;
-        }
 
         /* --- Dua --- */
         .dua-section {
@@ -424,57 +491,83 @@ export default function Template2Page() {
           <h2 className="program-title anim scale-in">برنامج الأفراح</h2>
           <div className="program-underline anim" />
 
-          {/* 8. Event cards */}
-          <div
-            className="event-card anim from-right"
-            style={{ transitionDelay: "0ms" }}
-          >
-            <p className="event-name">
-              <span className="sym">&#9670;</span>عقد القران
-            </p>
-            <p className="event-date">يوم الجمعة 12 جوان 2026</p>
-            <p className="event-venue">
-              جامع الزيتونة، تونس العاصمة — الساعة 16:00
-            </p>
-          </div>
+          {/* 8. Timeline */}
+          <div className="timeline">
+            <div className="timeline-line" />
 
-          <div
-            className="event-card anim from-left"
-            style={{ transitionDelay: "150ms" }}
-          >
-            <p className="event-name">
-              <span className="sym">&#9670;</span>العشاء
-            </p>
-            <p className="event-date">يوم السبت 13 جوان 2026</p>
-            <p className="event-venue">
-              قاعة الأفراح &ldquo;ليالي قرطاج&rdquo;، قرطاج — الساعة 20:00
-            </p>
-          </div>
+            {/* Event 1 — LEFT: عقد القران */}
+            <div className="timeline-event">
+              <div
+                className="timeline-half tl-content-left tl-node tl-from-left"
+                style={{ transitionDelay: "0.3s" }}
+              >
+                <p className="tl-event-name">عقد القران</p>
+                <p className="tl-event-venue">جامع الزيتونة، تونس</p>
+                <p className="tl-event-time">يوم الجمعة 12 جوان 2026 — 16:00</p>
+              </div>
+              <div
+                className="timeline-dot"
+                style={{ transitionDelay: "0.3s" }}
+              />
+              <div className="timeline-half" />
+            </div>
 
-          <div
-            className="event-card anim from-right"
-            style={{ transitionDelay: "300ms" }}
-          >
-            <p className="event-name">
-              <span className="sym">&#9670;</span>الحفل (العرس)
-            </p>
-            <p className="event-date">يوم الأحد 14 جوان 2026</p>
-            <p className="event-venue">
-              نزل &ldquo;المرادي قمرت&rdquo;، قمرت — الساعة 19:00
-            </p>
-          </div>
+            {/* Event 2 — RIGHT: العشاء */}
+            <div className="timeline-event">
+              <div className="timeline-half" />
+              <div
+                className="timeline-dot"
+                style={{ transitionDelay: "0.6s" }}
+              />
+              <div
+                className="timeline-half tl-content-right tl-node tl-from-right"
+                style={{ transitionDelay: "0.6s" }}
+              >
+                <p className="tl-event-name">العشاء</p>
+                <p className="tl-event-venue">
+                  قاعة الأفراح &ldquo;ليالي قرطاج&rdquo;
+                </p>
+                <p className="tl-event-time">يوم السبت 13 جوان 2026 — 20:00</p>
+              </div>
+            </div>
 
-          <div
-            className="event-card anim from-left"
-            style={{ transitionDelay: "450ms" }}
-          >
-            <p className="event-name">
-              <span className="sym">&#9670;</span>ليلة الزفاف (الدخلة)
-            </p>
-            <p className="event-date">يوم الأحد 14 جوان 2026</p>
-            <p className="event-venue">
-              نزل &ldquo;المرادي قمرت&rdquo;، قمرت — الساعة 23:30
-            </p>
+            {/* Event 3 — LEFT: الحفل */}
+            <div className="timeline-event">
+              <div
+                className="timeline-half tl-content-left tl-node tl-from-left"
+                style={{ transitionDelay: "0.9s" }}
+              >
+                <p className="tl-event-name">الحفل (العرس)</p>
+                <p className="tl-event-venue">
+                  نزل &ldquo;المرادي قمرت&rdquo;
+                </p>
+                <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 19:00</p>
+              </div>
+              <div
+                className="timeline-dot"
+                style={{ transitionDelay: "0.9s" }}
+              />
+              <div className="timeline-half" />
+            </div>
+
+            {/* Event 4 — RIGHT: ليلة الزفاف */}
+            <div className="timeline-event">
+              <div className="timeline-half" />
+              <div
+                className="timeline-dot"
+                style={{ transitionDelay: "1.2s" }}
+              />
+              <div
+                className="timeline-half tl-content-right tl-node tl-from-right"
+                style={{ transitionDelay: "1.2s" }}
+              >
+                <p className="tl-event-name">ليلة الزفاف</p>
+                <p className="tl-event-venue">
+                  نزل &ldquo;المرادي قمرت&rdquo;
+                </p>
+                <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 23:30</p>
+              </div>
+            </div>
           </div>
 
           <hr className="gold-hr anim" />
