@@ -109,32 +109,25 @@ function GoldParticles() {
   );
 }
 
-/* ── Video background section wrapper ────────────────────── */
+/* ── Image background section wrapper ───────────────────── */
 function VideoSection({
-  src,
   children,
   overlayOpacity = 0.55,
 }: {
-  src: string;
   children: React.ReactNode;
   overlayOpacity?: number;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [entered, setEntered] = useState(false);
 
   useEffect(() => {
-    const video = videoRef.current;
     const section = sectionRef.current;
-    if (!video || !section) return;
+    if (!section) return;
 
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play();
           setEntered(true);
-        } else {
-          video.pause();
         }
       },
       { threshold: 0.3 }
@@ -156,25 +149,11 @@ function VideoSection({
         opacity: entered ? 1 : 0,
         transform: entered ? "translateY(0)" : "translateY(40px)",
         transition: "opacity 1s ease, transform 1s ease",
+        backgroundImage: 'url("/t2-bg-section.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      <video
-        ref={videoRef}
-        muted
-        playsInline
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-          willChange: "transform",
-          transform: "translateZ(0)",
-        }}
-      >
-        <source src={src} type="video/mp4" />
-      </video>
       <div
         style={{
           position: "absolute",
@@ -456,7 +435,7 @@ export default function Template2Page() {
         }}
       >
         {/* ── Section 1: Bismillah + Names ─────────────────── */}
-        <VideoSection src="/t2-vid1.mp4">
+        <VideoSection>
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             بسم الله الرحمن الرحيم
           </p>
@@ -494,7 +473,7 @@ export default function Template2Page() {
         </VideoSection>
 
         {/* ── Section 2: Date + Countdown + Families ────────── */}
-        <VideoSection src="/t2-vid2.mp4">
+        <VideoSection>
           {diamondDivider}
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.8rem" }}>
             يوم السبت ٨ أوت ٢٠٢٦
@@ -574,7 +553,7 @@ export default function Template2Page() {
         </VideoSection>
 
         {/* ── Section 3: Details + RSVP ─────────────────────── */}
-        <VideoSection src="/t2-vid3.mp4">
+        <VideoSection>
           <p className="t2-shimmer-heading" style={{ ...headingStyle, fontSize: "1.6rem" }}>تفاصيل الحفل</p>
           <p
             style={{
