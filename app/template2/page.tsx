@@ -166,7 +166,7 @@ interface Particle {
 }
 
 function createParticles(count: number): Particle[] {
-  const colors = ["#C9A84C", "#f5e6d0", "#e8c97a", "#fff", "#d4a843", "#f0d68a"];
+  const colors = ["#c69874", "#f5e6d0", "#e8c97a", "#fff", "#d4a843", "#f0d68a"];
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     x: 50 + (Math.random() - 0.5) * 10,
@@ -218,7 +218,7 @@ export default function Template2Page() {
     [guestName]
   );
 
-  const gold = "#C9A84C";
+  const gold = "#c69874";
   const cream = "#f5e6d0";
 
   const headingStyle: React.CSSProperties = {
