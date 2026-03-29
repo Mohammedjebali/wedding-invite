@@ -6,14 +6,21 @@ export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const [mandalaPos, setMandalaPos] = useState(0);
+  // maxPos only goes up — events revealed once never hide again
+  const [maxPos, setMaxPos] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!timelineRef.current) return;
       const rect = timelineRef.current.getBoundingClientRect();
       const windowH = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (windowH - rect.top) / (windowH + rect.height)));
-      setMandalaPos(progress * 100);
+      // Adjusted: mandala starts when timeline top hits 80% of viewport, ends when bottom leaves 20%
+      const start = windowH * 0.8;
+      const end = windowH * 0.2;
+      const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end + rect.height)));
+      const pos = progress * 100;
+      setMandalaPos(pos);
+      setMaxPos((prev) => Math.max(prev, pos));
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -510,8 +517,8 @@ export default function Template2Page() {
               <div
                 className="timeline-half tl-content-left"
                 style={{
-                  opacity: mandalaPos >= 12 ? 1 : 0,
-                  transform: mandalaPos >= 12 ? "translateX(0)" : "translateX(-40px)",
+                  opacity: maxPos >= 12 ? 1 : 0,
+                  transform: maxPos >= 12 ? "translateX(0)" : "translateX(-40px)",
                   transition: "opacity 0.6s ease, transform 0.6s ease",
                 }}
               >
@@ -522,9 +529,9 @@ export default function Template2Page() {
               <div
                 className="timeline-dot"
                 style={{
-                  transform: mandalaPos >= 12 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transform: maxPos >= 12 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
                   transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  animation: mandalaPos >= 12 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                  animation: maxPos >= 12 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
                 }}
               />
               <div className="timeline-half" />
@@ -536,16 +543,16 @@ export default function Template2Page() {
               <div
                 className="timeline-dot"
                 style={{
-                  transform: mandalaPos >= 37 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transform: maxPos >= 37 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
                   transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  animation: mandalaPos >= 37 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                  animation: maxPos >= 37 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
                 }}
               />
               <div
                 className="timeline-half tl-content-right"
                 style={{
-                  opacity: mandalaPos >= 37 ? 1 : 0,
-                  transform: mandalaPos >= 37 ? "translateX(0)" : "translateX(40px)",
+                  opacity: maxPos >= 37 ? 1 : 0,
+                  transform: maxPos >= 37 ? "translateX(0)" : "translateX(40px)",
                   transition: "opacity 0.6s ease, transform 0.6s ease",
                 }}
               >
@@ -562,8 +569,8 @@ export default function Template2Page() {
               <div
                 className="timeline-half tl-content-left"
                 style={{
-                  opacity: mandalaPos >= 62 ? 1 : 0,
-                  transform: mandalaPos >= 62 ? "translateX(0)" : "translateX(-40px)",
+                  opacity: maxPos >= 62 ? 1 : 0,
+                  transform: maxPos >= 62 ? "translateX(0)" : "translateX(-40px)",
                   transition: "opacity 0.6s ease, transform 0.6s ease",
                 }}
               >
@@ -576,9 +583,9 @@ export default function Template2Page() {
               <div
                 className="timeline-dot"
                 style={{
-                  transform: mandalaPos >= 62 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transform: maxPos >= 62 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
                   transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  animation: mandalaPos >= 62 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                  animation: maxPos >= 62 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
                 }}
               />
               <div className="timeline-half" />
@@ -590,16 +597,16 @@ export default function Template2Page() {
               <div
                 className="timeline-dot"
                 style={{
-                  transform: mandalaPos >= 87 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
+                  transform: maxPos >= 87 ? "rotate(45deg) scale(1)" : "rotate(45deg) scale(0)",
                   transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  animation: mandalaPos >= 87 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
+                  animation: maxPos >= 87 ? "dotPulse 2.5s ease-in-out 0.5s infinite" : "none",
                 }}
               />
               <div
                 className="timeline-half tl-content-right"
                 style={{
-                  opacity: mandalaPos >= 87 ? 1 : 0,
-                  transform: mandalaPos >= 87 ? "translateX(0)" : "translateX(40px)",
+                  opacity: maxPos >= 87 ? 1 : 0,
+                  transform: maxPos >= 87 ? "translateX(0)" : "translateX(40px)",
                   transition: "opacity 0.6s ease, transform 0.6s ease",
                 }}
               >
