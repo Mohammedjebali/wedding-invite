@@ -213,60 +213,6 @@ function useScrollReveal(active: boolean) {
   }, [active]);
 }
 
-// ── Wax seal SVG ───────────────────────────────────────────────
-function WaxSeal({ pulsing }: { pulsing: boolean }) {
-  return (
-    <svg
-      width="140"
-      height="140"
-      viewBox="0 0 140 140"
-      style={{
-        filter: "drop-shadow(0 6px 32px rgba(201,168,76,0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.7))",
-        animation: pulsing ? "t2sealPulse 2.5s ease-in-out forwards" : undefined,
-      }}
-    >
-      <defs>
-        <radialGradient id="sealGrad" cx="40%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#C9A84C" />
-          <stop offset="35%" stopColor="#9a6e14" />
-          <stop offset="100%" stopColor="#5a3e00" />
-        </radialGradient>
-        <radialGradient id="sealShine" cx="38%" cy="30%" r="50%">
-          <stop offset="0%" stopColor="rgba(255,240,180,0.25)" />
-          <stop offset="100%" stopColor="rgba(255,240,180,0)" />
-        </radialGradient>
-      </defs>
-      {/* Star/sunburst outer edge — classic wax seal shape */}
-      <path
-        d="M70,4 L76,16 L89,10 L89,24 L103,22 L97,35 L111,38 L100,48 L111,55 L98,61 L105,74 L91,74 L92,89 L79,84 L76,98 L65,90 L54,98 L51,84 L38,89 L39,74 L25,74 L32,61 L19,55 L30,48 L19,38 L33,35 L27,22 L41,24 L41,10 L54,16 Z"
-        fill="url(#sealGrad)"
-      />
-      {/* Outer ring */}
-      <circle cx="70" cy="70" r="44" fill="none" stroke="rgba(255,240,150,0.4)" strokeWidth="1.5" />
-      {/* Inner filled circle */}
-      <circle cx="70" cy="70" r="40" fill="url(#sealGrad)" />
-      {/* Inner ring */}
-      <circle cx="70" cy="70" r="35" fill="none" stroke="rgba(255,240,150,0.3)" strokeWidth="0.8" />
-      {/* Initials */}
-      <text
-        x="70"
-        y="80"
-        textAnchor="middle"
-        fontFamily="Rakkas, serif"
-        fontSize="26"
-        fontWeight="bold"
-        fill="#1a0a00"
-        direction="rtl"
-        letterSpacing="2"
-      >
-        م &amp; ن
-      </text>
-      {/* Shine overlay */}
-      <circle cx="70" cy="70" r="40" fill="url(#sealShine)" />
-    </svg>
-  );
-}
-
 // ── Gold divider line ──────────────────────────────────────────
 function GoldDivider({ style = {} }: { style?: React.CSSProperties }) {
   return (
@@ -418,11 +364,6 @@ export default function Template2Page() {
     <>
       <style>{`
         /* ══ T2 KEYFRAMES ══ */
-        @keyframes t2sealPulse {
-          0% { transform: scale(1); }
-          40% { transform: scale(1.2); }
-          100% { transform: scale(1.2); opacity: 0; }
-        }
         @keyframes t2sparkFloat {
           0%   { opacity:0; transform:translateY(0) scale(0.5); }
           20%  { opacity:0.9; }
@@ -569,10 +510,7 @@ export default function Template2Page() {
             gap: 24,
           }}
         >
-          {/* Wax seal */}
-          <WaxSeal pulsing={opening} />
-
-          {/* Open button */}
+          {/* Open CTA */}
           {!opening && (
             <button
               onClick={handleOpen}
@@ -581,11 +519,11 @@ export default function Template2Page() {
                 color: "#C9A84C",
                 border: "1px solid #C9A84C",
                 padding: "14px 40px",
-                borderRadius: 40,
+                borderRadius: 2,
                 fontFamily: "'Rakkas', serif",
-                fontSize: 18,
+                fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
                 cursor: "pointer",
-                letterSpacing: "0.06em",
+                letterSpacing: "0.15em",
                 animation: "t2btnPulse 2.5s ease-in-out infinite",
                 transition: "background 0.3s, color 0.3s",
               }}
@@ -604,10 +542,7 @@ export default function Template2Page() {
       <div
         className={`t2-invitation${showContent ? " t2-inv-visible" : ""}`}
         style={{
-          backgroundImage: "url(/bg-t2.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
+          background: "linear-gradient(160deg, #0d0a05 0%, #1a100a 50%, #0d0a05 100%)",
         }}
       >
         {/* Semi-transparent dark overlay */}
