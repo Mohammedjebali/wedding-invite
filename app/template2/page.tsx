@@ -222,7 +222,7 @@ export default function Template2Page() {
   const cream = "#f5e6d0";
 
   const headingStyle: React.CSSProperties = {
-    fontFamily: '"Scheherazade New", serif',
+    fontFamily: '"Aref Ruqaa Ink", serif',
     color: gold,
     textShadow: "0 2px 8px rgba(0,0,0,0.8)",
     margin: 0,
@@ -230,7 +230,7 @@ export default function Template2Page() {
 
   const bodyStyle: React.CSSProperties = {
     color: cream,
-    fontFamily: '"Scheherazade New", serif',
+    fontFamily: '"Aref Ruqaa Ink", serif',
     margin: 0,
   };
 
@@ -259,7 +259,7 @@ export default function Template2Page() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0a0a0a; overflow-x: hidden; }
         @keyframes confetti-fall {
@@ -314,7 +314,7 @@ export default function Template2Page() {
             position: "relative",
             zIndex: 1,
             fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
-            fontFamily: '"Scheherazade New", serif',
+            fontFamily: '"Aref Ruqaa Ink", serif',
             color: gold,
             border: `1.5px solid ${gold}`,
             padding: "16px 48px",
@@ -552,7 +552,7 @@ export default function Template2Page() {
                     color: cream,
                     padding: "14px 16px",
                     borderRadius: 4,
-                    fontFamily: '"Scheherazade New", serif',
+                    fontFamily: '"Aref Ruqaa Ink", serif',
                     fontSize: "1rem",
                     direction: "rtl",
                   }}
@@ -566,7 +566,7 @@ export default function Template2Page() {
                     color: cream,
                     padding: "14px 16px",
                     borderRadius: 4,
-                    fontFamily: '"Scheherazade New", serif',
+                    fontFamily: '"Aref Ruqaa Ink", serif',
                     fontSize: "1rem",
                     direction: "rtl",
                     appearance: "none",
@@ -582,7 +582,7 @@ export default function Template2Page() {
                     color: "#1a1a1a",
                     border: "none",
                     padding: "14px 32px",
-                    fontFamily: '"Scheherazade New", serif',
+                    fontFamily: '"Aref Ruqaa Ink", serif',
                     fontSize: "1.1rem",
                     fontWeight: 700,
                     borderRadius: 4,
