@@ -55,7 +55,7 @@ export default function Template2Page() {
           });
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.5, rootMargin: "-30% 0px -30% 0px" });
     blocks.forEach(b => obs.observe(b));
     return () => obs.disconnect();
   }, []);
@@ -140,24 +140,26 @@ export default function Template2Page() {
         /* --- Timeline section container --- */
         .t2-timeline-section {
           width: 100%;
-          max-width: 680px;
+          max-width: 600px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 16px;
+          box-sizing: border-box;
         }
         /* --- Timeline (CodePen sticky sidebar) --- */
         .ctl-wrapper {
           display: flex;
           align-items: flex-start;
           direction: ltr;
+          width: 100%;
         }
         .ctl-sticky {
           position: sticky;
-          top: 30px;
-          width: 38%;
+          top: 40vh;
+          width: 160px;
           flex-shrink: 0;
           display: flex;
           justify-content: flex-end;
-          padding-right: 24px;
+          padding-right: 20px;
         }
         .ctl-year-container {
           position: relative;
@@ -205,18 +207,18 @@ export default function Template2Page() {
         .ctl-blocks {
           flex: 1;
           border-left: 2px solid rgba(212,175,112,0.4);
-          padding-left: 50px;
+          padding-left: 40px;
         }
         .ctl-block {
           position: relative;
-          min-height: 200px;
+          min-height: 60vh;
           display: flex;
           align-items: center;
           padding: 16px 0;
         }
         .ctl-circle {
           position: absolute;
-          left: -58px;
+          left: -48px;
           top: 50%;
           transform: translateY(-50%);
           width: 14px;
