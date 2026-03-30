@@ -551,6 +551,43 @@ export default function Template2Page() {
           <p className="footer-text anim fade-up">حضوركم يشرفنا ويسعدنا</p>
         </div>
       </div>
+
+      {/* Lottie doves */}
+      <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" async />
+      <style>{`
+        .dove-lottie-wrap {
+          position: fixed;
+          pointer-events: none;
+          z-index: 50;
+        }
+        .dove-1-wrap { top: 8vh; left: -80px; animation: doveFlyR 18s linear 0s infinite; }
+        .dove-2-wrap { top: 35vh; right: -80px; animation: doveFlyL 22s linear 5s infinite; }
+        .dove-3-wrap { top: 65vh; left: -80px; animation: doveFlyR 26s linear 10s infinite; }
+        @keyframes doveFlyR {
+          0%   { transform: translateX(0); opacity: 0; }
+          5%   { opacity: 0.8; }
+          95%  { opacity: 0.8; }
+          100% { transform: translateX(110vw); opacity: 0; }
+        }
+        @keyframes doveFlyL {
+          0%   { transform: translateX(0); opacity: 0; }
+          5%   { opacity: 0.8; }
+          95%  { opacity: 0.8; }
+          100% { transform: translateX(calc(-110vw)); opacity: 0; }
+        }
+      `}</style>
+      <div className="dove-lottie-wrap dove-1-wrap">
+        {/* @ts-ignore */}
+        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'80px',height:'80px'}} autoplay loop />
+      </div>
+      <div className="dove-lottie-wrap dove-2-wrap" style={{transform:'scaleX(-1)'}}>
+        {/* @ts-ignore */}
+        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'70px',height:'70px'}} autoplay loop />
+      </div>
+      <div className="dove-lottie-wrap dove-3-wrap">
+        {/* @ts-ignore */}
+        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'60px',height:'60px'}} autoplay loop />
+      </div>
     </>
   );
 }
