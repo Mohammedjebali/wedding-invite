@@ -9,13 +9,6 @@ const events = [
   { name: "ليلة الزفاف", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "23:30" },
 ];
 
-const DoveSVG = () => (
-  <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
-    <path d="M40 20 C30 10, 10 8, 2 14 C10 12, 20 16, 28 22 C20 20, 8 22, 2 28 C10 22, 30 24, 40 20Z" fill="rgba(212,175,112,0.7)"/>
-    <path d="M40 20 C50 10, 70 8, 78 14 C70 12, 60 16, 52 22 C60 20, 72 22, 78 28 C70 22, 50 24, 40 20Z" fill="rgba(212,175,112,0.7)"/>
-  </svg>
-);
-
 export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement>(null);
@@ -422,68 +415,6 @@ export default function Template2Page() {
           animation: floatUp linear infinite;
         }
 
-        /* --- Flying doves --- */
-        .dove-container {
-          position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          pointer-events: none;
-          z-index: 50;
-          overflow: hidden;
-        }
-        .dove {
-          position: absolute;
-          width: 48px;
-          height: 24px;
-          animation: doveFly linear infinite;
-        }
-        @keyframes wingFlap {
-          0%, 100% { transform: scaleY(1); }
-          50% { transform: scaleY(0.4); }
-        }
-        @keyframes doveFly1 { 0% { left: -60px; top: 15%; opacity: 0; } 5% { opacity: 0.7; } 95% { opacity: 0.7; } 100% { left: 110%; top: 12%; opacity: 0; } }
-        @keyframes doveFly2 { 0% { left: -60px; top: 60%; opacity: 0; } 5% { opacity: 0.5; } 95% { opacity: 0.5; } 100% { left: 110%; top: 55%; opacity: 0; } }
-        @keyframes doveFly3 { 0% { left: 110%; top: 30%; opacity: 0; } 5% { opacity: 0.6; } 95% { opacity: 0.6; } 100% { left: -60px; top: 25%; opacity: 0; } }
-        @keyframes doveFly4 { 0% { left: -60px; top: 80%; opacity: 0; } 5% { opacity: 0.4; } 95% { opacity: 0.4; } 100% { left: 110%; top: 75%; opacity: 0; } }
-        @keyframes doveFly5 { 0% { left: 110%; top: 45%; opacity: 0; } 5% { opacity: 0.65; } 95% { opacity: 0.65; } 100% { left: -60px; top: 40%; opacity: 0; } }
-        @keyframes doveFly6 { 0% { left: -60px; top: 5%; opacity: 0; } 5% { opacity: 0.5; } 95% { opacity: 0.5; } 100% { left: 110%; top: 8%; opacity: 0; } }
-        .dove-1 { animation: doveFly1 18s linear 0s infinite; }
-        .dove-2 { animation: doveFly2 24s linear 4s infinite; }
-        .dove-3 { animation: doveFly3 20s linear 8s infinite; transform: scaleX(-1); }
-        .dove-4 { animation: doveFly4 28s linear 2s infinite; }
-        .dove-5 { animation: doveFly5 22s linear 12s infinite; transform: scaleX(-1); }
-        .dove-6 { animation: doveFly6 16s linear 6s infinite; }
-        .dove svg {
-          animation: wingFlap 0.5s ease-in-out infinite;
-        }
-
-        /* --- Gold shimmer on headings --- */
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        .main-title, .program-title {
-          background: linear-gradient(90deg, #d4af70 0%, #fff8e7 40%, #d4af70 60%, #b8860b 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 4s linear infinite;
-        }
-
-        /* --- Couple name glow pulse --- */
-        @keyframes namePulse {
-          0%, 100% { text-shadow: 0 0 10px rgba(212,175,112,0.2); }
-          50% { text-shadow: 0 0 20px rgba(212,175,112,0.5), 0 0 40px rgba(212,175,112,0.2); }
-        }
-        .couple-name {
-          animation: namePulse 3s ease-in-out infinite;
-        }
-
-        /* --- Stronger glass cards --- */
-        .verse-box, .ctl-block-inner {
-          box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(212,175,112,0.1);
-        }
-
         @keyframes floatUp {
           0% {
             transform: translateY(0) translateX(0);
@@ -521,7 +452,7 @@ export default function Template2Page() {
 
         <div className="t2-content">
           {/* 1. Header */}
-          <h1 className="header-title main-title anim scale-in">دعوة زفاف</h1>
+          <h1 className="header-title anim scale-in">دعوة زفاف</h1>
           <div className="header-lines">
             <span className="header-line anim" />
             <span className="header-dot">&#9670;</span>
@@ -619,16 +550,6 @@ export default function Template2Page() {
           {/* 10. Footer */}
           <p className="footer-text anim fade-up">حضوركم يشرفنا ويسعدنا</p>
         </div>
-      </div>
-
-      {/* Flying doves */}
-      <div className="dove-container" aria-hidden="true">
-        <div className="dove dove-1"><DoveSVG /></div>
-        <div className="dove dove-2"><DoveSVG /></div>
-        <div className="dove dove-3"><DoveSVG /></div>
-        <div className="dove dove-4"><DoveSVG /></div>
-        <div className="dove dove-5"><DoveSVG /></div>
-        <div className="dove dove-6"><DoveSVG /></div>
       </div>
     </>
   );
