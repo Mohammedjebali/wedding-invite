@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const events = [
-  { name: "عقد القران", date: "يوم الجمعة 12 جوان 2026", venue: "جامع الزيتونة، تونس العاصمة", time: "16:00" },
-  { name: "العشاء", date: "يوم السبت 13 جوان 2026", venue: "قاعة الأفراح \u201Cليالي قرطاج\u201D، قرطاج", time: "20:00" },
-  { name: "الحفل (العرس)", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "19:00" },
-  { name: "ليلة الزفاف", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "23:30" },
+const events: { name: string; date: string; venue: string; time: string; maps: string }[] = [
+  { name: "عقد القران", date: "يوم الجمعة 12 جوان 2026", venue: "جامع الزيتونة، تونس العاصمة", time: "16:00", maps: "https://maps.google.com/?q=جامع+الزيتونة+تونس" },
+  { name: "العشاء", date: "يوم السبت 13 جوان 2026", venue: "قاعة الأفراح \u201Cليالي قرطاج\u201D، قرطاج", time: "20:00", maps: "https://maps.google.com/?q=قرطاج+تونس" },
+  { name: "الحفل (العرس)", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "19:00", maps: "https://maps.google.com/?q=نزل+المرادي+قمرت" },
+  { name: "ليلة الزفاف", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "23:30", maps: "https://maps.google.com/?q=نزل+المرادي+قمرت" },
 ];
 
 export default function Template2Page() {
@@ -14,6 +14,26 @@ export default function Template2Page() {
   const blocksRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activated, setActivated] = useState([true, false, false, false]);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  // Countdown timer
+  useEffect(() => {
+    const target = new Date('2026-06-12T16:00:00');
+    const update = () => {
+      const now = new Date();
+      const diff = target.getTime() - now.getTime();
+      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   // IntersectionObserver for general .anim elements
   useEffect(() => {
@@ -225,6 +245,114 @@ export default function Template2Page() {
         .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.82rem; color: rgba(240,236,228,0.65); margin-bottom: 3px; }
         .ctl-block-venue { font-size: 0.78rem; color: rgba(240,236,228,0.45); line-height: 1.4; }
         .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af70; font-weight: 700; margin-top: 8px; }
+
+        /* --- Countdown --- */
+        .countdown-section {
+          margin: 24px 0;
+          text-align: center;
+        }
+        .countdown-label {
+          font-size: 0.75rem;
+          color: rgba(212,175,112,0.5);
+          letter-spacing: 0.2em;
+          margin-bottom: 12px;
+          font-family: 'Playfair Display', serif;
+        }
+        .countdown-grid {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          direction: ltr;
+        }
+        .countdown-unit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: rgba(212,175,112,0.06);
+          border: 1px solid rgba(212,175,112,0.15);
+          border-radius: 8px;
+          padding: 10px 14px;
+          min-width: 56px;
+        }
+        .countdown-num {
+          font-family: 'Playfair Display', serif;
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: #d4af70;
+          line-height: 1;
+        }
+        .countdown-name {
+          font-size: 0.65rem;
+          color: rgba(240,236,228,0.5);
+          margin-top: 4px;
+          font-family: 'Noto Naskh Arabic', serif;
+        }
+
+        /* --- Maps button --- */
+        .maps-btn {
+          display: inline-block;
+          margin-top: 10px;
+          font-size: 0.75rem;
+          color: rgba(212,175,112,0.65);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(212,175,112,0.2);
+          padding-bottom: 2px;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          font-family: 'Noto Naskh Arabic', serif;
+        }
+        .maps-btn:hover { color: #d4af70; border-color: #d4af70; }
+
+        /* --- RSVP --- */
+        .rsvp-section {
+          text-align: center;
+          margin: 32px 0;
+        }
+        .rsvp-label {
+          font-size: 0.75rem;
+          color: rgba(212,175,112,0.5);
+          letter-spacing: 0.2em;
+          margin-bottom: 14px;
+        }
+        .rsvp-btn {
+          display: inline-block;
+          padding: 14px 32px;
+          background: transparent;
+          border: 1px solid #d4af70;
+          border-radius: 4px;
+          color: #d4af70;
+          font-family: 'Noto Naskh Arabic', serif;
+          font-size: 0.95rem;
+          text-decoration: none;
+          letter-spacing: 0.05em;
+          position: relative;
+          overflow: hidden;
+          transition: color 0.3s ease, background 0.3s ease;
+        }
+        .rsvp-btn::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(212,175,112,0.1), transparent);
+          transform: translateX(-100%);
+          transition: transform 0.5s ease;
+        }
+        .rsvp-btn:hover::before { transform: translateX(100%); }
+        .rsvp-btn:hover { background: rgba(212,175,112,0.08); }
+
+        /* --- Share button --- */
+        .share-btn {
+          display: block;
+          margin: 0 auto 24px;
+          background: none;
+          border: none;
+          color: rgba(212,175,112,0.5);
+          font-family: 'Noto Naskh Arabic', serif;
+          font-size: 0.85rem;
+          cursor: pointer;
+          letter-spacing: 0.1em;
+          transition: color 0.3s ease;
+        }
+        .share-btn:hover { color: #d4af70; }
 
         /* --- Gold HR --- */
         .gold-hr {
@@ -472,6 +600,17 @@ export default function Template2Page() {
             </p>
           </div>
 
+          {/* Countdown timer */}
+          <div className="countdown-section anim fade-up">
+            <p className="countdown-label">الوقت المتبقي</p>
+            <div className="countdown-grid">
+              <div className="countdown-unit"><span className="countdown-num">{timeLeft.days}</span><span className="countdown-name">يوم</span></div>
+              <div className="countdown-unit"><span className="countdown-num">{timeLeft.hours}</span><span className="countdown-name">ساعة</span></div>
+              <div className="countdown-unit"><span className="countdown-num">{timeLeft.minutes}</span><span className="countdown-name">دقيقة</span></div>
+              <div className="countdown-unit"><span className="countdown-num">{timeLeft.seconds}</span><span className="countdown-name">ثانية</span></div>
+            </div>
+          </div>
+
           <hr className="gold-hr anim" />
 
           {/* 4. Families label */}
@@ -520,6 +659,9 @@ export default function Template2Page() {
                   <p className="ctl-block-date">{evt.date}</p>
                   <p className="ctl-block-venue">{evt.venue}</p>
                   <p className="ctl-block-time">{evt.time}</p>
+                  <a href={evt.maps} target="_blank" rel="noopener noreferrer" className="maps-btn">
+                    ◆ الموقع على الخريطة
+                  </a>
                 </div>
               </div>
             ))}
@@ -544,6 +686,31 @@ export default function Template2Page() {
               والمحبة
             </p>
           </div>
+
+          {/* RSVP */}
+          <div className="rsvp-section anim fade-up">
+            <p className="rsvp-label">تأكيد الحضور</p>
+            <a
+              href="https://wa.me/21600000000?text=أود تأكيد حضوري لحفل زفاف يوسف وسارة"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rsvp-btn"
+            >
+              تأكيد الحضور عبر واتساب
+            </a>
+          </div>
+
+          {/* Share */}
+          <button className="share-btn anim fade-up" onClick={() => {
+            if (navigator.share) {
+              navigator.share({ title: 'دعوة زفاف يوسف وسارة', url: window.location.href });
+            } else {
+              navigator.clipboard.writeText(window.location.href);
+              alert('تم نسخ رابط الدعوة!');
+            }
+          }}>
+            ✦ شارك الدعوة
+          </button>
 
           <hr className="gold-hr anim" />
 
