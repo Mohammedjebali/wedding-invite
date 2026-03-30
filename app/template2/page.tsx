@@ -4,31 +4,22 @@ import { useEffect, useRef, useState, memo } from "react";
 
 // Isolated countdown — only this re-renders every second
 const Countdown = memo(function Countdown() {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [days, setDays] = useState(0);
   useEffect(() => {
     const target = new Date('2026-06-12T16:00:00');
     const update = () => {
       const diff = target.getTime() - Date.now();
-      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
-      setTimeLeft({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff / 3600000) % 24),
-        minutes: Math.floor((diff / 60000) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      });
+      setDays(diff <= 0 ? 0 : Math.floor(diff / 86400000));
     };
     update();
-    const id = setInterval(update, 1000);
+    const id = setInterval(update, 60000); // update every minute, not every second
     return () => clearInterval(id);
   }, []);
   return (
     <div className="countdown-section anim fade-up">
       <p className="countdown-label">الوقت المتبقي</p>
       <div className="countdown-grid">
-        <div className="countdown-unit"><span className="countdown-num">{timeLeft.days}</span><span className="countdown-name">يوم</span></div>
-        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.hours).padStart(2,'0')}</span><span className="countdown-name">ساعة</span></div>
-        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.minutes).padStart(2,'0')}</span><span className="countdown-name">دقيقة</span></div>
-        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.seconds).padStart(2,'0')}</span><span className="countdown-name">ثانية</span></div>
+        <div className="countdown-unit"><span className="countdown-num">{days}</span><span className="countdown-name">يوم</span></div>
       </div>
     </div>
   );
@@ -111,6 +102,10 @@ export default function Template2Page() {
           padding: 0;
           box-sizing: border-box;
         }
+        html, body {
+          overflow-x: hidden;
+          max-width: 100vw;
+        }
 
         .t2-body {
           background: var(--bg);
@@ -118,8 +113,9 @@ export default function Template2Page() {
           font-family: 'Noto Naskh Arabic', serif;
           direction: rtl;
           min-height: 100vh;
-          overflow-x: hidden;
+          overflow: hidden;
           position: relative;
+          max-width: 100vw;
         }
 
         .t2-body::before {
