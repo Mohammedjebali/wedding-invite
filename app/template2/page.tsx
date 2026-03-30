@@ -140,87 +140,53 @@ export default function Template2Page() {
         /* --- Timeline section container --- */
         .t2-timeline-section {
           width: 100%;
-          max-width: 600px;
+          max-width: 480px;
           margin: 0 auto;
           padding: 0 16px;
           box-sizing: border-box;
         }
-        /* --- Timeline (CodePen sticky sidebar) --- */
+        /* --- Center-line Timeline --- */
         .ctl-wrapper {
-          display: flex;
-          align-items: flex-start;
-          direction: ltr;
-          width: 100%;
-        }
-        .ctl-sticky {
-          position: sticky;
-          top: 40vh;
-          width: 160px;
-          flex-shrink: 0;
-          display: flex;
-          justify-content: flex-end;
-          padding-right: 20px;
-        }
-        .ctl-year-container {
           position: relative;
-          width: 100%;
-          height: 70px;
-          overflow: hidden;
+          padding: 20px 0 40px;
         }
-        .ctl-label {
+        /* The vertical center line */
+        .ctl-wrapper::before {
+          content: '';
           position: absolute;
-          right: 0;
+          left: 50%;
           top: 0;
-          width: 100%;
-          height: 70px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          font-size: 1.4rem;
-          font-weight: 700;
-          font-family: 'Noto Naskh Arabic', serif;
-          color: #d4af70;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          direction: rtl;
-          overflow: hidden;
-        }
-        .ctl-label.animate { opacity: 1; }
-        .ctl-label span {
-          display: inline-block;
-          transform: translateY(110%);
-          transition: transform 0.25s ease;
-        }
-        .ctl-label.animate span { transform: translateY(0); }
-        .ctl-label.animate span:nth-child(1)  { transition-delay: 0.03s; }
-        .ctl-label.animate span:nth-child(2)  { transition-delay: 0.06s; }
-        .ctl-label.animate span:nth-child(3)  { transition-delay: 0.09s; }
-        .ctl-label.animate span:nth-child(4)  { transition-delay: 0.12s; }
-        .ctl-label.animate span:nth-child(5)  { transition-delay: 0.15s; }
-        .ctl-label.animate span:nth-child(6)  { transition-delay: 0.18s; }
-        .ctl-label.animate span:nth-child(7)  { transition-delay: 0.21s; }
-        .ctl-label.animate span:nth-child(8)  { transition-delay: 0.24s; }
-        .ctl-label.animate span:nth-child(9)  { transition-delay: 0.27s; }
-        .ctl-label.animate span:nth-child(10) { transition-delay: 0.30s; }
-        .ctl-label.animate span:nth-child(11) { transition-delay: 0.33s; }
-        .ctl-label.animate span:nth-child(12) { transition-delay: 0.36s; }
-        .ctl-blocks {
-          flex: 1;
-          border-left: 2px solid rgba(212,175,112,0.4);
-          padding-left: 40px;
+          bottom: 0;
+          width: 2px;
+          background: rgba(212,175,112,0.4);
+          transform: translateX(-50%);
         }
         .ctl-block {
           position: relative;
-          min-height: 60vh;
           display: flex;
-          align-items: center;
-          padding: 16px 0;
+          width: 100%;
+          margin-bottom: 48px;
+          align-items: flex-start;
+          direction: ltr;
         }
+        /* LEFT events (0, 2) */
+        .ctl-block.tl-left {
+          flex-direction: row;
+          justify-content: flex-end;
+          padding-right: calc(50% + 24px);
+        }
+        /* RIGHT events (1, 3) */
+        .ctl-block.tl-right {
+          flex-direction: row;
+          justify-content: flex-start;
+          padding-left: calc(50% + 24px);
+        }
+        /* Circle on center line */
         .ctl-circle {
           position: absolute;
-          left: -48px;
-          top: 50%;
-          transform: translateY(-50%);
+          left: 50%;
+          top: 24px;
+          transform: translateX(-50%) scale(0);
           width: 14px;
           height: 14px;
           border: 2px solid #d4af70;
@@ -228,9 +194,9 @@ export default function Template2Page() {
           background: #08091a;
           box-shadow: 0 0 8px rgba(212,175,112,0.5);
           opacity: 0;
-          transition: opacity 0.4s ease 0.2s;
+          transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
         }
-        .ctl-block.active .ctl-circle { opacity: 1; }
+        .ctl-block.active .ctl-circle { opacity: 1; transform: translateX(-50%) scale(1); }
         .ctl-circle::before {
           content: '';
           position: absolute;
@@ -241,26 +207,24 @@ export default function Template2Page() {
           background: #d4af70;
         }
         .ctl-block-inner {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(212,175,112,0.15);
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(212,175,112,0.2);
           border-radius: 10px;
-          padding: 20px;
+          padding: 16px;
           backdrop-filter: blur(8px);
           width: 100%;
           direction: rtl;
           text-align: right;
           opacity: 0;
-          transform: translateX(20px);
-          transition: opacity 0.5s ease, transform 0.5s ease;
+          transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .ctl-block.active .ctl-block-inner {
-          opacity: 1;
-          transform: none;
-        }
-        .ctl-block-name { font-size: 1.05rem; color: #d4af70; font-weight: 700; margin-bottom: 8px; font-family: 'Noto Naskh Arabic', serif; }
-        .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.88rem; color: rgba(240,236,228,0.7); margin-bottom: 4px; }
-        .ctl-block-venue { font-size: 0.82rem; color: rgba(240,236,228,0.5); }
-        .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #d4af70; font-weight: 700; margin-top: 10px; }
+        .ctl-block.tl-left .ctl-block-inner { transform: translateX(-20px); }
+        .ctl-block.tl-right .ctl-block-inner { transform: translateX(20px); }
+        .ctl-block.active .ctl-block-inner { opacity: 1; transform: none; }
+        .ctl-block-name { font-size: 1rem; color: #d4af70; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Naskh Arabic', serif; }
+        .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.82rem; color: rgba(240,236,228,0.65); margin-bottom: 3px; }
+        .ctl-block-venue { font-size: 0.78rem; color: rgba(240,236,228,0.45); line-height: 1.4; }
+        .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af70; font-weight: 700; margin-top: 8px; }
 
         /* --- Gold HR --- */
         .gold-hr {
@@ -542,36 +506,24 @@ export default function Template2Page() {
           <h2 className="program-title anim scale-in">برنامج الأفراح</h2>
           <div className="program-underline anim" />
 
-          {/* 8. Timeline — CodePen sticky sidebar + scrollable blocks */}
-          <div className="ctl-outer"><div className="ctl-wrapper">
-            {/* LEFT: sticky label column */}
-            <div className="ctl-sticky">
-              <div className="ctl-year-container">
-                {events.map((evt, i) => (
-                  <div key={i} className={`ctl-label${activeIndex === i ? " animate" : ""}`}>
-                    {evt.name.split("").map((ch, ci) => (
-                      <span key={ci}>{ch === " " ? "\u00A0" : ch}</span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* RIGHT: scrollable blocks with border-left line */}
-            <div className="ctl-blocks" ref={blocksRef}>
-              {events.map((evt, i) => (
-                <div key={i} data-index={i} className={`ctl-block${activated[i] ? " active" : ""}`}>
-                  <span className="ctl-circle" />
-                  <div className="ctl-block-inner">
-                    <p className="ctl-block-name">{evt.name}</p>
-                    <p className="ctl-block-date">{evt.date}</p>
-                    <p className="ctl-block-venue">{evt.venue}</p>
-                    <p className="ctl-block-time">{evt.time}</p>
-                  </div>
+          {/* 8. Timeline — center line, alternating left/right */}
+          <div className="ctl-wrapper" ref={blocksRef}>
+            {events.map((evt, i) => (
+              <div
+                key={i}
+                data-index={i}
+                className={`ctl-block ${i % 2 === 0 ? "tl-left" : "tl-right"}${activated[i] ? " active" : ""}`}
+              >
+                <span className="ctl-circle" />
+                <div className="ctl-block-inner">
+                  <p className="ctl-block-name">{evt.name}</p>
+                  <p className="ctl-block-date">{evt.date}</p>
+                  <p className="ctl-block-venue">{evt.venue}</p>
+                  <p className="ctl-block-time">{evt.time}</p>
                 </div>
-              ))}
-            </div>
-          </div></div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="t2-content">
