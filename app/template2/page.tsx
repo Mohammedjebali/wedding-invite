@@ -25,6 +25,47 @@ const Countdown = memo(function Countdown() {
   );
 });
 
+// Floating music player — plays on first user interaction
+const MusicPlayer = memo(function MusicPlayer() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  const toggle = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (!started) {
+      audio.volume = 0.4;
+      audio.play().catch(() => {});
+      setStarted(true);
+      setPlaying(true);
+    } else if (playing) {
+      audio.pause();
+      setPlaying(false);
+    } else {
+      audio.play().catch(() => {});
+      setPlaying(true);
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', bottom: 20, left: 20, zIndex: 200,
+      display: 'flex', alignItems: 'center', gap: 8,
+      background: 'rgba(8,9,26,0.85)', border: '1px solid rgba(212,175,112,0.3)',
+      borderRadius: 40, padding: '8px 16px',
+      backdropFilter: 'blur(12px)',
+      cursor: 'pointer',
+    }} onClick={toggle}>
+      <audio ref={audioRef} src="/wedding-music.mp3" loop preload="none" />
+      <span style={{ fontSize: '1.1rem', color: '#d4af70' }}>{playing ? '⏸' : '▶'}</span>
+      <span style={{ fontSize: '0.7rem', color: 'rgba(212,175,112,0.6)', fontFamily: "'Noto Naskh Arabic', serif" }}>
+        {playing ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى'}
+      </span>
+    </div>
+  );
+});
+
 const events: { name: string; date: string; venue: string; time: string; maps: string }[] = [
   { name: "عقد القران", date: "يوم الجمعة 12 جوان 2026", venue: "جامع الزيتونة، تونس العاصمة", time: "16:00", maps: "https://maps.google.com/?q=جامع+الزيتونة+تونس" },
   { name: "العشاء", date: "يوم السبت 13 جوان 2026", venue: "قاعة الأفراح \u201Cليالي قرطاج\u201D، قرطاج", time: "20:00", maps: "https://maps.google.com/?q=قرطاج+تونس" },
@@ -753,6 +794,9 @@ export default function Template2Page() {
           {/* 10. Footer */}
           <p className="footer-text anim fade-up">حضوركم يشرفنا ويسعدنا</p>
         </div>
+
+        {/* Floating music player */}
+        <MusicPlayer />
 
         {/* Lottie doves — inside t2-body so position:absolute is relative to page */}
         <div className="dove-lottie-wrap dove-1-wrap">
