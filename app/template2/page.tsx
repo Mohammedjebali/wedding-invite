@@ -238,18 +238,47 @@ export default function Template2Page() {
           overflow: hidden;
           background: #08091a;
         }
-        .hero-monogram-img {
-          width: 280px;
-          max-width: 80vw;
+        .hero-rose {
+          position: absolute;
           mix-blend-mode: screen;
+          pointer-events: none;
+          width: 160px;
           opacity: 0;
-          margin-bottom: 16px;
-          animation: initialReveal 1.2s ease 0.3s forwards;
-          filter: drop-shadow(0 0 20px rgba(212,175,112,0.3));
+          animation: roseAppear 1.2s ease forwards;
         }
+        .rose-bl { bottom: 10%; left: 0; transform-origin: bottom left; animation-delay: 0.8s; }
+        .rose-br { bottom: 10%; right: 0; transform: scaleX(-1); transform-origin: bottom right; animation-delay: 1s; }
+        @keyframes roseAppear {
+          from { opacity: 0; transform: scale(0.7); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        .rose-br { animation-delay: 1s; }
+        .hero-monogram {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+        .hero-initial {
+          font-family: 'Playfair Display', serif;
+          font-size: 7rem;
+          font-style: italic;
+          font-weight: 700;
+          color: #d4af70;
+          opacity: 0;
+          text-shadow: 0 0 40px rgba(212,175,112,0.4);
+        }
+        .hero-y { animation: initialReveal 1s ease 0.2s forwards; }
+        .hero-s { animation: initialReveal 1s ease 0.5s forwards; }
         @keyframes initialReveal {
-          from { opacity: 0; transform: scale(0.85) translateY(20px); }
-          to   { opacity: 1; transform: scale(1) translateY(0); }
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-amp {
+          font-size: 2rem;
+          color: rgba(212,175,112,0.5);
+          opacity: 0;
+          animation: initialReveal 1s ease 0.35s forwards;
         }
         .hero-subtitle {
           font-family: 'Noto Naskh Arabic', serif;
@@ -521,11 +550,13 @@ export default function Template2Page() {
 
         {/* HERO SECTION */}
         <div className="hero-section">
-          <img
-            src="/roses-corner.png"
-            className="hero-monogram-img"
-            alt=""
-          />
+          <img src="/rose-left.png"  className="hero-rose rose-bl" alt="" />
+          <img src="/rose-right.png" className="hero-rose rose-br" alt="" />
+          <div className="hero-monogram">
+            <span className="hero-initial hero-y">Y</span>
+            <span className="hero-amp">✦</span>
+            <span className="hero-initial hero-s">S</span>
+          </div>
           <p className="hero-subtitle">يوسف ◆ سارة</p>
           <p className="hero-date">12 · 13 · 14 JUIN 2026</p>
           <div className="hero-scroll-hint">↓</div>
