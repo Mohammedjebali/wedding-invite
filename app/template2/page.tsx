@@ -550,33 +550,63 @@ export default function Template2Page() {
           {/* 10. Footer */}
           <p className="footer-text anim fade-up">حضوركم يشرفنا ويسعدنا</p>
         </div>
+
+        {/* Lottie doves — inside t2-body so position:absolute is relative to page */}
+        <div className="dove-lottie-wrap dove-1-wrap">
+          {/* @ts-ignore */}
+          <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'80px',height:'80px'}} autoplay loop />
+        </div>
+        <div className="dove-lottie-wrap dove-2-wrap">
+          {/* @ts-ignore */}
+          <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'70px',height:'70px'}} autoplay loop />
+        </div>
+        <div className="dove-lottie-wrap dove-3-wrap">
+          {/* @ts-ignore */}
+          <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'60px',height:'60px'}} autoplay loop />
+        </div>
       </div>
 
-      {/* Lottie doves */}
       <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" async />
       <style>{`
         .dove-lottie-wrap {
-          position: fixed;
+          position: absolute;
           pointer-events: none;
           z-index: 50;
-          opacity: 0.75;
+          opacity: 0.8;
         }
-        .dove-1-wrap { top: 12vh; left: 4vw; }
-        .dove-2-wrap { top: 45vh; right: 4vw; transform: scaleX(-1); }
-        .dove-3-wrap { bottom: 18vh; left: 8vw; }
+        /* Each dove flies in a looping path within the page */
+        .dove-1-wrap {
+          animation: doveFloat1 14s ease-in-out infinite;
+        }
+        .dove-2-wrap {
+          transform: scaleX(-1);
+          animation: doveFloat2 18s ease-in-out infinite;
+        }
+        .dove-3-wrap {
+          animation: doveFloat3 20s ease-in-out infinite;
+        }
+        @keyframes doveFloat1 {
+          0%   { top: 5vh;  left: 5vw; }
+          25%  { top: 15vh; left: 75vw; }
+          50%  { top: 8vh;  left: 60vw; }
+          75%  { top: 20vh; left: 10vw; }
+          100% { top: 5vh;  left: 5vw; }
+        }
+        @keyframes doveFloat2 {
+          0%   { top: 40vh; left: 80vw; }
+          25%  { top: 55vh; left: 20vw; }
+          50%  { top: 45vh; left: 50vw; }
+          75%  { top: 60vh; left: 70vw; }
+          100% { top: 40vh; left: 80vw; }
+        }
+        @keyframes doveFloat3 {
+          0%   { top: 80vh; left: 15vw; }
+          25%  { top: 90vh; left: 65vw; }
+          50%  { top: 75vh; left: 40vw; }
+          75%  { top: 85vh; left: 8vw; }
+          100% { top: 80vh; left: 15vw; }
+        }
       `}</style>
-      <div className="dove-lottie-wrap dove-1-wrap">
-        {/* @ts-ignore */}
-        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'80px',height:'80px'}} autoplay loop />
-      </div>
-      <div className="dove-lottie-wrap dove-2-wrap">
-        {/* @ts-ignore */}
-        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'70px',height:'70px'}} autoplay loop />
-      </div>
-      <div className="dove-lottie-wrap dove-3-wrap">
-        {/* @ts-ignore */}
-        <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'60px',height:'60px'}} autoplay loop />
-      </div>
     </>
   );
 }
