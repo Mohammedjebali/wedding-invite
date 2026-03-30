@@ -166,33 +166,52 @@ export default function Template2Page() {
         }
         .tl-date {
           font-family: 'Noto Naskh Arabic', serif;
-          font-size: 1.4rem;
+          font-size: 1.3rem;
           font-weight: 700;
           color: #d4af70;
-          opacity: 0.25;
+          opacity: 1;
           transition: opacity 0.4s ease;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
           cursor: default;
           text-align: right;
+        }
+        .tl-date:not(.animate) {
+          opacity: 0.25;
+        }
+        .tl-date:not(.animate) span {
+          opacity: 1 !important;
+          transform: none !important;
         }
         .tl-date span {
           display: inline-block;
           opacity: 0;
-          transform: translateY(10px);
+          transform: translateY(8px);
           transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .tl-date.animate {
           opacity: 1;
         }
-        .tl-date.animate span {
-          opacity: 1;
-          transform: none;
-        }
+        .tl-date.animate span { opacity: 1; transform: none; }
+        .tl-date.animate span:nth-child(1)  { transition-delay: 0.00s; }
+        .tl-date.animate span:nth-child(2)  { transition-delay: 0.05s; }
+        .tl-date.animate span:nth-child(3)  { transition-delay: 0.10s; }
+        .tl-date.animate span:nth-child(4)  { transition-delay: 0.15s; }
+        .tl-date.animate span:nth-child(5)  { transition-delay: 0.20s; }
+        .tl-date.animate span:nth-child(6)  { transition-delay: 0.25s; }
+        .tl-date.animate span:nth-child(7)  { transition-delay: 0.30s; }
+        .tl-date.animate span:nth-child(8)  { transition-delay: 0.35s; }
+        .tl-date.animate span:nth-child(9)  { transition-delay: 0.40s; }
+        .tl-date.animate span:nth-child(10) { transition-delay: 0.45s; }
+        .tl-date.animate span:nth-child(11) { transition-delay: 0.50s; }
+        .tl-date.animate span:nth-child(12) { transition-delay: 0.55s; }
+        .tl-date.animate span:nth-child(13) { transition-delay: 0.60s; }
+        .tl-date.animate span:nth-child(14) { transition-delay: 0.65s; }
+        .tl-date.animate span:nth-child(15) { transition-delay: 0.70s; }
         .tl-block {
-          min-height: 50vh;
+          min-height: 35vh;
           display: flex;
           align-items: center;
-          padding: 40px 20px;
+          padding: 30px 20px;
           opacity: 0;
           transform: translateY(20px);
           transition: opacity 0.6s ease, transform 0.6s ease;
