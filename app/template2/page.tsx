@@ -2,11 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const events = [
+  { name: "عقد القران", date: "يوم الجمعة 12 جوان 2026", venue: "جامع الزيتونة، تونس العاصمة", time: "16:00" },
+  { name: "العشاء", date: "يوم السبت 13 جوان 2026", venue: "قاعة الأفراح \u201Cليالي قرطاج\u201D، قرطاج", time: "20:00" },
+  { name: "الحفل (العرس)", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "19:00" },
+  { name: "ليلة الزفاف", date: "يوم الأحد 14 جوان 2026", venue: "نزل \u201Cالمرادي قمرت\u201D، قمرت", time: "23:30" },
+];
+
 export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [lineHeight, setLineHeight] = useState(0);
-  const [maxLine, setMaxLine] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activatedBlocks, setActivatedBlocks] = useState([false, false, false, false]);
 
   // IntersectionObserver for general .anim elements
   useEffect(() => {
@@ -32,18 +39,30 @@ export default function Template2Page() {
     };
   }, []);
 
-  // Scroll-driven timeline line growth
+  // Scroll-driven sticky sidebar timeline
   useEffect(() => {
     const handleScroll = () => {
-      if (!timelineRef.current) return;
-      const rect = timelineRef.current.getBoundingClientRect();
-      const windowH = window.innerHeight;
-      const progress = Math.max(0, Math.min(1,
-        (windowH * 0.7 - rect.top) / (rect.height - windowH * 0.3)
-      ));
-      const pct = progress * 100;
-      setLineHeight(pct);
-      setMaxLine((prev) => Math.max(prev, pct));
+      if (!listRef.current) return;
+      const blocks = Array.from(listRef.current.querySelectorAll(".tl-block"));
+      const list = listRef.current;
+      const listTop = list.offsetTop;
+      const listHeight = list.offsetHeight;
+      const sidebarHeight = window.innerHeight;
+      const tarOff = listHeight + listTop - sidebarHeight;
+      const winScroll = window.scrollY;
+
+      blocks.forEach((block, index) => {
+        const thisOff = (block as HTMLElement).offsetTop - tarOff;
+        if (winScroll > thisOff && winScroll < thisOff + sidebarHeight) {
+          setActiveIndex(index);
+          setActivatedBlocks((prev) => {
+            if (prev[index]) return prev;
+            const next = [...prev];
+            next[index] = true;
+            return next;
+          });
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -128,73 +147,96 @@ export default function Template2Page() {
           transform: none;
         }
 
-        /* --- Timeline --- */
-        .timeline {
-          position: relative;
-          direction: ltr;
-          padding: 40px 0;
-        }
-
-        .tl-row {
+        /* --- Timeline (sticky sidebar) --- */
+        .tl-wrapper {
           display: flex;
-          align-items: center;
-          margin: 60px 0;
+          gap: 0;
           position: relative;
-          z-index: 2;
-        }
-
-        .tl-left, .tl-right {
-          flex: 1;
-          padding: 0 20px;
-        }
-
-        .tl-left { text-align: right; }
-        .tl-right { text-align: left; }
-
-        .tl-dot {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          background: #d4af70;
-          border: 2px solid rgba(212,175,112,0.5);
-          box-shadow: 0 0 10px rgba(212,175,112,0.6);
-          flex-shrink: 0;
-        }
-
-        .tl-card {
-          background: rgba(255,255,255,0.04);
-          border-radius: 8px;
-          padding: 16px;
-          backdrop-filter: blur(8px);
           direction: rtl;
         }
-
-        .tl-card-left {
-          border-right: 2px solid rgba(212,175,112,0.4);
+        .tl-sidebar {
+          position: sticky;
+          top: 40vh;
+          align-self: flex-start;
+          width: 40%;
+          padding: 20px;
         }
-
-        .tl-card-right {
-          border-left: 2px solid rgba(212,175,112,0.4);
+        .tl-list {
+          flex: 1;
         }
-
-        .tl-event-name {
+        .tl-date {
           font-family: 'Noto Naskh Arabic', serif;
-          font-size: 1.1rem;
+          font-size: 1.4rem;
           font-weight: 700;
           color: #d4af70;
+          opacity: 0.25;
+          transition: opacity 0.4s ease;
+          margin-bottom: 20px;
+          cursor: default;
+          text-align: right;
         }
-
-        .tl-event-venue {
-          font-size: 0.8rem;
-          color: rgba(240,236,228,0.7);
-          margin-top: 4px;
+        .tl-date span {
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
         }
-
-        .tl-event-time {
+        .tl-date.animate {
+          opacity: 1;
+        }
+        .tl-date.animate span {
+          opacity: 1;
+          transform: none;
+        }
+        .tl-block {
+          min-height: 50vh;
+          display: flex;
+          align-items: center;
+          padding: 40px 20px;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .tl-block.active {
+          opacity: 1;
+          transform: none;
+        }
+        .tl-block-inner {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(212,175,112,0.2);
+          border-radius: 12px;
+          padding: 24px;
+          width: 100%;
+          backdrop-filter: blur(8px);
+        }
+        .tl-block-inner::before {
+          content: '\u25C6';
+          display: block;
+          color: #d4af70;
+          font-size: 0.6rem;
+          margin-bottom: 12px;
+        }
+        .tl-block-name {
+          font-size: 0.75rem;
+          color: rgba(212,175,112,0.6);
+          margin-bottom: 8px;
+        }
+        .tl-block-date {
           font-family: 'Playfair Display', serif;
-          font-size: 0.85rem;
+          font-size: 1rem;
           color: #f0ece4;
-          margin-top: 6px;
+          margin-bottom: 6px;
+        }
+        .tl-block-venue {
+          font-size: 0.85rem;
+          color: rgba(240,236,228,0.65);
+        }
+        .tl-block-time {
+          font-family: 'Playfair Display', serif;
+          font-size: 1.2rem;
+          color: #d4af70;
+          margin-top: 10px;
+          font-weight: 700;
         }
 
         /* --- Gold HR --- */
@@ -475,87 +517,42 @@ export default function Template2Page() {
           <h2 className="program-title anim scale-in">برنامج الأفراح</h2>
           <div className="program-underline anim" />
 
-          {/* 8. Timeline */}
-          <div className="timeline" ref={timelineRef}>
-            {/* Growing center line */}
-            <div style={{
-              position: "absolute",
-              left: "50%",
-              top: 0,
-              width: 2,
-              height: `${lineHeight}%`,
-              background: "linear-gradient(to bottom, #d4af70, rgba(212,175,112,0.3))",
-              transform: "translateX(-50%)",
-              transition: "height 0.1s linear",
-              zIndex: 1,
-            }} />
-
-            {/* Event 1 — LEFT: عقد القران */}
-            <div className="tl-row">
-              <div className="tl-left" style={{
-                opacity: maxLine >= 15 ? 1 : 0,
-                transform: maxLine >= 15 ? "translateX(0)" : "translateX(-30px)",
-                transition: "opacity 0.6s ease, transform 0.6s ease",
-              }}>
-                <div className="tl-card tl-card-left">
-                  <p className="tl-event-name">عقد القران</p>
-                  <p className="tl-event-venue">جامع الزيتونة، تونس العاصمة</p>
-                  <p className="tl-event-time">يوم الجمعة 12 جوان 2026 — 16:00</p>
+          {/* 8. Timeline — sticky sidebar + scrollable blocks */}
+          <div className="tl-wrapper">
+            {/* Sticky sidebar with event names */}
+            <div className="tl-sidebar">
+              {events.map((evt, i) => (
+                <div
+                  key={i}
+                  className={`tl-date${activeIndex === i ? " animate" : ""}`}
+                >
+                  {evt.name.split("").map((char, ci) => (
+                    <span
+                      key={ci}
+                      style={{ transitionDelay: `${ci * 0.05}s` }}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
                 </div>
-              </div>
-              <div className="tl-dot" style={{ opacity: maxLine >= 15 ? 1 : 0, transition: "opacity 0.4s ease" }} />
-              <div className="tl-right" />
+              ))}
             </div>
 
-            {/* Event 2 — RIGHT: العشاء */}
-            <div className="tl-row">
-              <div className="tl-left" />
-              <div className="tl-dot" style={{ opacity: maxLine >= 38 ? 1 : 0, transition: "opacity 0.4s ease" }} />
-              <div className="tl-right" style={{
-                opacity: maxLine >= 38 ? 1 : 0,
-                transform: maxLine >= 38 ? "translateX(0)" : "translateX(30px)",
-                transition: "opacity 0.6s ease, transform 0.6s ease",
-              }}>
-                <div className="tl-card tl-card-right">
-                  <p className="tl-event-name">العشاء</p>
-                  <p className="tl-event-venue">قاعة الأفراح &ldquo;ليالي قرطاج&rdquo;، قرطاج</p>
-                  <p className="tl-event-time">يوم السبت 13 جوان 2026 — 20:00</p>
+            {/* Scrollable content blocks */}
+            <div className="tl-list" ref={listRef}>
+              {events.map((evt, i) => (
+                <div
+                  key={i}
+                  className={`tl-block${activatedBlocks[i] ? " active" : ""}`}
+                >
+                  <div className="tl-block-inner">
+                    <p className="tl-block-name">{evt.name}</p>
+                    <p className="tl-block-date">{evt.date}</p>
+                    <p className="tl-block-venue">{evt.venue}</p>
+                    <p className="tl-block-time">{evt.time}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Event 3 — LEFT: الحفل */}
-            <div className="tl-row">
-              <div className="tl-left" style={{
-                opacity: maxLine >= 62 ? 1 : 0,
-                transform: maxLine >= 62 ? "translateX(0)" : "translateX(-30px)",
-                transition: "opacity 0.6s ease, transform 0.6s ease",
-              }}>
-                <div className="tl-card tl-card-left">
-                  <p className="tl-event-name">الحفل (العرس)</p>
-                  <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
-                  <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 19:00</p>
-                </div>
-              </div>
-              <div className="tl-dot" style={{ opacity: maxLine >= 62 ? 1 : 0, transition: "opacity 0.4s ease" }} />
-              <div className="tl-right" />
-            </div>
-
-            {/* Event 4 — RIGHT: ليلة الزفاف */}
-            <div className="tl-row">
-              <div className="tl-left" />
-              <div className="tl-dot" style={{ opacity: maxLine >= 85 ? 1 : 0, transition: "opacity 0.4s ease" }} />
-              <div className="tl-right" style={{
-                opacity: maxLine >= 85 ? 1 : 0,
-                transform: maxLine >= 85 ? "translateX(0)" : "translateX(30px)",
-                transition: "opacity 0.6s ease, transform 0.6s ease",
-              }}>
-                <div className="tl-card tl-card-right">
-                  <p className="tl-event-name">ليلة الزفاف</p>
-                  <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
-                  <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 23:30</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
