@@ -11,9 +11,9 @@ const events = [
 
 export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [activatedBlocks, setActivatedBlocks] = useState([false, false, false, false]);
+  const blocksRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [activated, setActivated] = useState([true, false, false, false]);
 
   // IntersectionObserver for general .anim elements
   useEffect(() => {
@@ -41,27 +41,23 @@ export default function Template2Page() {
 
   // IntersectionObserver for timeline blocks
   useEffect(() => {
-    if (!listRef.current) return;
-    const blocks = Array.from(listRef.current.querySelectorAll(".tl-block"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt((entry.target as HTMLElement).dataset.index || "0");
-            setActiveIndex(index);
-            setActivatedBlocks((prev) => {
-              if (prev[index]) return prev;
-              const next = [...prev];
-              next[index] = true;
-              return next;
-            });
-          }
-        });
-      },
-      { threshold: 0.4, rootMargin: "0px 0px -10% 0px" }
-    );
-    blocks.forEach((b) => observer.observe(b));
-    return () => observer.disconnect();
+    if (!blocksRef.current) return;
+    const blocks = Array.from(blocksRef.current.querySelectorAll(".ctl-block"));
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = parseInt((entry.target as HTMLElement).dataset.index || "0");
+          setActiveIndex(idx);
+          setActivated((prev) => {
+            const next = [...prev];
+            next[idx] = true;
+            return next;
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+    blocks.forEach((b) => obs.observe(b));
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -141,116 +137,124 @@ export default function Template2Page() {
           transform: none;
         }
 
-        /* --- Timeline (sticky sidebar) --- */
-        .tl-wrapper {
+        /* --- Timeline (CodePen sticky sidebar) --- */
+        .ctl-wrapper {
           display: flex;
-          gap: 0;
-          position: relative;
+          flex-wrap: wrap;
+          align-items: flex-start;
           direction: rtl;
         }
-        .tl-sidebar {
+        .ctl-sticky {
           position: sticky;
-          top: 40vh;
-          align-self: flex-start;
-          width: 40%;
+          top: 0;
+          width: 45%;
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .ctl-year-container {
+          position: relative;
+          width: 100%;
+          height: 120px;
+          overflow: hidden;
           padding: 20px;
         }
-        .tl-list {
-          flex: 1;
-        }
-        .tl-date {
-          font-family: 'Noto Naskh Arabic', serif;
-          font-size: 1.3rem;
+        .ctl-label {
+          position: absolute;
+          right: 20px;
+          top: 20px;
+          width: 100%;
+          display: block;
+          font-size: 1.8rem;
           font-weight: 700;
+          font-family: 'Noto Naskh Arabic', serif;
           color: #d4af70;
-          opacity: 1;
-          transition: opacity 0.4s ease;
-          margin-bottom: 16px;
-          cursor: default;
+          line-height: 1;
+          opacity: 0;
           text-align: right;
+          padding-right: 20px;
         }
-        .tl-date:not(.animate) {
-          opacity: 0.25;
+        .ctl-label .lbl-chars {
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: flex-start;
         }
-        .tl-date:not(.animate) span {
-          opacity: 1 !important;
-          transform: none !important;
-        }
-        .tl-date span {
+        .ctl-label .lbl-chars span {
+          transform: translateY(100%);
+          transition: 0.2s;
           display: inline-block;
-          opacity: 0;
-          transform: translateY(8px);
-          transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .tl-date.animate {
+        .ctl-label.animate {
           opacity: 1;
         }
-        .tl-date.animate span { opacity: 1; transform: none; }
-        .tl-date.animate span:nth-child(1)  { transition-delay: 0.00s; }
-        .tl-date.animate span:nth-child(2)  { transition-delay: 0.05s; }
-        .tl-date.animate span:nth-child(3)  { transition-delay: 0.10s; }
-        .tl-date.animate span:nth-child(4)  { transition-delay: 0.15s; }
-        .tl-date.animate span:nth-child(5)  { transition-delay: 0.20s; }
-        .tl-date.animate span:nth-child(6)  { transition-delay: 0.25s; }
-        .tl-date.animate span:nth-child(7)  { transition-delay: 0.30s; }
-        .tl-date.animate span:nth-child(8)  { transition-delay: 0.35s; }
-        .tl-date.animate span:nth-child(9)  { transition-delay: 0.40s; }
-        .tl-date.animate span:nth-child(10) { transition-delay: 0.45s; }
-        .tl-date.animate span:nth-child(11) { transition-delay: 0.50s; }
-        .tl-date.animate span:nth-child(12) { transition-delay: 0.55s; }
-        .tl-date.animate span:nth-child(13) { transition-delay: 0.60s; }
-        .tl-date.animate span:nth-child(14) { transition-delay: 0.65s; }
-        .tl-date.animate span:nth-child(15) { transition-delay: 0.70s; }
-        .tl-block {
-          min-height: auto;
-          display: flex;
-          align-items: center;
-          padding: 16px 20px 16px 0;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease, transform 0.6s ease;
+        .ctl-label.animate .lbl-chars span {
+          transform: translateY(0);
         }
-        .tl-block.active {
+        .ctl-label.animate .lbl-chars span:nth-child(1) { transition-delay: 0.05s; }
+        .ctl-label.animate .lbl-chars span:nth-child(2) { transition-delay: 0.10s; }
+        .ctl-label.animate .lbl-chars span:nth-child(3) { transition-delay: 0.15s; }
+        .ctl-label.animate .lbl-chars span:nth-child(4) { transition-delay: 0.20s; }
+        .ctl-label.animate .lbl-chars span:nth-child(5) { transition-delay: 0.25s; }
+        .ctl-label.animate .lbl-chars span:nth-child(6) { transition-delay: 0.30s; }
+        .ctl-label.animate .lbl-chars span:nth-child(7) { transition-delay: 0.35s; }
+        .ctl-label.animate .lbl-chars span:nth-child(8) { transition-delay: 0.40s; }
+        .ctl-blocks {
+          width: 55%;
+          margin-right: auto;
+          padding-right: 75px;
+          border-right: 2px solid rgba(212,175,112,0.3);
+        }
+        .ctl-block {
+          position: relative;
+          display: block;
+          margin-top: 80px;
+          padding-top: 20px;
+        }
+        .ctl-block:first-child {
+          margin-top: 0;
+          padding-top: 0;
+        }
+        .ctl-circle {
+          position: absolute;
+          right: -84px;
+          top: 28px;
+          width: 14px;
+          height: 14px;
+          border: 2px solid #d4af70;
+          border-radius: 50%;
+          background-color: #08091a;
+        }
+        .ctl-circle::before {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          width: 6px;
+          height: 6px;
+          background-color: #d4af70;
+          content: "";
+        }
+        .ctl-block:first-child .ctl-circle {
+          display: none;
+        }
+        .ctl-block-inner {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(212,175,112,0.15);
+          border-radius: 10px;
+          padding: 20px;
+          backdrop-filter: blur(8px);
+          opacity: 0;
+          transform: translateY(15px);
+          transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .ctl-block.active .ctl-block-inner {
           opacity: 1;
           transform: none;
         }
-        .tl-block-inner {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(212,175,112,0.2);
-          border-radius: 12px;
-          padding: 24px;
-          width: 100%;
-          backdrop-filter: blur(8px);
-        }
-        .tl-block-inner::before {
-          content: '\u25C6';
-          display: block;
-          color: #d4af70;
-          font-size: 0.6rem;
-          margin-bottom: 12px;
-        }
-        .tl-block-name {
-          font-size: 0.75rem;
-          color: rgba(212,175,112,0.6);
-          margin-bottom: 8px;
-        }
-        .tl-block-date {
-          font-family: 'Playfair Display', serif;
-          font-size: 1rem;
-          color: #f0ece4;
-          margin-bottom: 6px;
-        }
-        .tl-block-venue {
-          font-size: 0.85rem;
-          color: rgba(240,236,228,0.65);
-        }
-        .tl-block-time {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.2rem;
-          color: #d4af70;
-          margin-top: 10px;
-          font-weight: 700;
-        }
+        .ctl-block-name { font-size: 1.1rem; color: #d4af70; font-weight: 700; margin-bottom: 8px; font-family: 'Noto Naskh Arabic', serif; }
+        .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: rgba(240,236,228,0.75); margin-bottom: 4px; }
+        .ctl-block-venue { font-size: 0.82rem; color: rgba(240,236,228,0.55); }
+        .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #d4af70; font-weight: 700; margin-top: 10px; }
 
         /* --- Gold HR --- */
         .gold-hr {
@@ -530,40 +534,35 @@ export default function Template2Page() {
           <h2 className="program-title anim scale-in">برنامج الأفراح</h2>
           <div className="program-underline anim" />
 
-          {/* 8. Timeline — sticky sidebar + scrollable blocks */}
-          <div className="tl-wrapper">
-            {/* Sticky sidebar with event names */}
-            <div className="tl-sidebar">
-              {events.map((evt, i) => (
-                <div
-                  key={i}
-                  className={`tl-date${activeIndex === i ? " animate" : ""}`}
-                >
-                  {evt.name.split("").map((char, ci) => (
-                    <span
-                      key={ci}
-                      style={{ transitionDelay: `${ci * 0.05}s` }}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </span>
-                  ))}
-                </div>
-              ))}
+          {/* 8. Timeline — CodePen sticky sidebar + scrollable blocks */}
+          <div className="ctl-wrapper">
+            {/* RIGHT: sticky label column */}
+            <div className="ctl-sticky">
+              <div className="ctl-year-container">
+                {events.map((evt, i) => (
+                  <div key={i} className={`ctl-label${activeIndex === i ? " animate" : ""}`}>
+                    <div className="lbl-chars">
+                      {evt.name.split("").map((ch, ci) => (
+                        <span key={ci} style={{ transitionDelay: `${ci * 0.05}s` }}>
+                          {ch === " " ? "\u00A0" : ch}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Scrollable content blocks */}
-            <div className="tl-list" ref={listRef}>
+            {/* LEFT: scrollable blocks with border-right line */}
+            <div className="ctl-blocks" ref={blocksRef}>
               {events.map((evt, i) => (
-                <div
-                  key={i}
-                  data-index={i}
-                  className={`tl-block${activatedBlocks[i] ? " active" : ""}`}
-                >
-                  <div className="tl-block-inner">
-                    <p className="tl-block-name">{evt.name}</p>
-                    <p className="tl-block-date">{evt.date}</p>
-                    <p className="tl-block-venue">{evt.venue}</p>
-                    <p className="tl-block-time">{evt.time}</p>
+                <div key={i} data-index={i} className={`ctl-block${activated[i] ? " active" : ""}`}>
+                  <span className="ctl-circle" />
+                  <div className="ctl-block-inner">
+                    <p className="ctl-block-name">{evt.name}</p>
+                    <p className="ctl-block-date">{evt.date}</p>
+                    <p className="ctl-block-venue">{evt.venue}</p>
+                    <p className="ctl-block-time">{evt.time}</p>
                   </div>
                 </div>
               ))}
