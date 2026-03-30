@@ -130,6 +130,16 @@ export default function Template2Page() {
           z-index: 0;
         }
 
+        .t2-body::after {
+          content: '';
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+          opacity: 0.03;
+          pointer-events: none;
+          z-index: 999;
+        }
+
         .t2-content {
           max-width: 480px;
           margin: 0 auto;
@@ -365,26 +375,46 @@ export default function Template2Page() {
 
         /* --- Gold HR --- */
         .gold-hr {
-          height: 1px;
-          background: var(--gold);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin: 24px auto;
+          color: rgba(212,175,112,0.5);
+          font-size: 0.55rem;
+          letter-spacing: 4px;
           border: none;
-          width: 0;
-          margin: 20px auto;
-          transition: width 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          height: auto;
+          opacity: 0;
+          transition: opacity 0.7s ease;
         }
-
+        .gold-hr::before, .gold-hr::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(to right, transparent, rgba(212,175,112,0.35), transparent);
+        }
         .gold-hr.visible {
-          width: 100%;
+          opacity: 1;
         }
 
         /* --- Header --- */
         .header-title {
           font-size: 3.5rem;
-          color: var(--gold);
           text-align: center;
           letter-spacing: 0.08em;
           font-weight: 700;
           padding: 48px 0 8px;
+          background: linear-gradient(90deg, #b8860b 0%, #d4af70 30%, #fff8e7 50%, #d4af70 70%, #b8860b 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: goldShimmer 4s linear infinite;
+        }
+        @keyframes goldShimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
         }
 
         .header-lines {
@@ -465,6 +495,11 @@ export default function Template2Page() {
           font-weight: 700;
           color: var(--gold);
           padding: 8px 0;
+          animation: namePulse 3s ease-in-out infinite;
+        }
+        @keyframes namePulse {
+          0%, 100% { text-shadow: 0 0 8px rgba(212,175,112,0.15); }
+          50% { text-shadow: 0 0 20px rgba(212,175,112,0.45), 0 0 40px rgba(212,175,112,0.15); }
         }
 
         .couple-symbol {
@@ -596,7 +631,7 @@ export default function Template2Page() {
             <span className="header-line anim" />
           </div>
 
-          <hr className="gold-hr anim" />
+          <div className="gold-hr anim" role="separator">◆</div>
 
           {/* 2. Bismillah */}
           <p className="bismillah anim fade-up">بسم الله الرحمن الرحيم</p>
@@ -612,7 +647,7 @@ export default function Template2Page() {
           {/* Countdown timer — isolated component, won't re-render the page */}
           <Countdown />
 
-          <hr className="gold-hr anim" />
+          <div className="gold-hr anim" role="separator">◆</div>
 
           {/* 4. Families label */}
           <p className="label-text anim from-left">
@@ -638,7 +673,7 @@ export default function Template2Page() {
             <p className="couple-name anim from-left">سارة خالد التونسي</p>
           </div>
 
-          <hr className="gold-hr anim" />
+          <div className="gold-hr anim" role="separator">◆</div>
         </div>
 
         <div className="t2-timeline-section">
@@ -670,7 +705,7 @@ export default function Template2Page() {
         </div>
 
         <div className="t2-content">
-          <hr className="gold-hr anim" />
+          <div className="gold-hr anim" role="separator">◆</div>
 
           {/* 9. Dua */}
           <div className="dua-section">
@@ -713,7 +748,7 @@ export default function Template2Page() {
             ✦ شارك الدعوة
           </button>
 
-          <hr className="gold-hr anim" />
+          <div className="gold-hr anim" role="separator">◆</div>
 
           {/* 10. Footer */}
           <p className="footer-text anim fade-up">حضوركم يشرفنا ويسعدنا</p>
