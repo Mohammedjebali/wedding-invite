@@ -39,35 +39,29 @@ export default function Template2Page() {
     };
   }, []);
 
-  // Scroll-driven sticky sidebar timeline
+  // IntersectionObserver for timeline blocks
   useEffect(() => {
-    const handleScroll = () => {
-      if (!listRef.current) return;
-      const blocks = Array.from(listRef.current.querySelectorAll(".tl-block"));
-      const list = listRef.current;
-      const listTop = list.offsetTop;
-      const listHeight = list.offsetHeight;
-      const sidebarHeight = window.innerHeight;
-      const tarOff = listHeight + listTop - sidebarHeight;
-      const winScroll = window.scrollY;
-
-      blocks.forEach((block, index) => {
-        const thisOff = (block as HTMLElement).offsetTop - tarOff;
-        if (winScroll > thisOff && winScroll < thisOff + sidebarHeight) {
-          setActiveIndex(index);
-          setActivatedBlocks((prev) => {
-            if (prev[index]) return prev;
-            const next = [...prev];
-            next[index] = true;
-            return next;
-          });
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (!listRef.current) return;
+    const blocks = Array.from(listRef.current.querySelectorAll(".tl-block"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt((entry.target as HTMLElement).dataset.index || "0");
+            setActiveIndex(index);
+            setActivatedBlocks((prev) => {
+              if (prev[index]) return prev;
+              const next = [...prev];
+              next[index] = true;
+              return next;
+            });
+          }
+        });
+      },
+      { threshold: 0.4, rootMargin: "0px 0px -10% 0px" }
+    );
+    blocks.forEach((b) => observer.observe(b));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -208,10 +202,10 @@ export default function Template2Page() {
         .tl-date.animate span:nth-child(14) { transition-delay: 0.65s; }
         .tl-date.animate span:nth-child(15) { transition-delay: 0.70s; }
         .tl-block {
-          min-height: 35vh;
+          min-height: auto;
           display: flex;
           align-items: center;
-          padding: 30px 20px;
+          padding: 16px 20px 16px 0;
           opacity: 0;
           transform: translateY(20px);
           transition: opacity 0.6s ease, transform 0.6s ease;
@@ -562,6 +556,7 @@ export default function Template2Page() {
               {events.map((evt, i) => (
                 <div
                   key={i}
+                  data-index={i}
                   className={`tl-block${activatedBlocks[i] ? " active" : ""}`}
                 >
                   <div className="tl-block-inner">
