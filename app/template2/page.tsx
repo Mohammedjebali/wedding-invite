@@ -226,104 +226,6 @@ export default function Template2Page() {
         .ctl-block-venue { font-size: 0.78rem; color: rgba(240,236,228,0.45); line-height: 1.4; }
         .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af70; font-weight: 700; margin-top: 8px; }
 
-        /* --- Hero Section --- */
-        .hero-section {
-          position: relative;
-          width: 100%;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          background: #08091a;
-        }
-        .hero-rose {
-          position: absolute;
-          mix-blend-mode: screen;
-          pointer-events: none;
-          width: 160px;
-          opacity: 0;
-          animation: roseAppear 1.2s ease forwards;
-        }
-        .rose-bl { bottom: 10%; left: 0; transform-origin: bottom left; animation-delay: 0.8s; }
-        .rose-br { bottom: 10%; right: 0; transform: scaleX(-1); transform-origin: bottom right; animation-delay: 1s; }
-        @keyframes roseAppear {
-          from { opacity: 0; transform: scale(0.7); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        .rose-br { animation-delay: 1s; }
-        .hero-monogram {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          margin-bottom: 24px;
-        }
-        .hero-initial {
-          font-family: 'Playfair Display', serif;
-          font-size: 7rem;
-          font-style: italic;
-          font-weight: 700;
-          color: #d4af70;
-          opacity: 0;
-          text-shadow: 0 0 40px rgba(212,175,112,0.4);
-        }
-        .hero-y { animation: initialReveal 1s ease 0.2s forwards; }
-        .hero-s { animation: initialReveal 1s ease 0.5s forwards; }
-        @keyframes initialReveal {
-          from { opacity: 0; transform: translateY(30px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .hero-amp {
-          font-size: 2rem;
-          color: rgba(212,175,112,0.5);
-          opacity: 0;
-          animation: initialReveal 1s ease 0.35s forwards;
-        }
-        .hero-subtitle {
-          font-family: 'Noto Naskh Arabic', serif;
-          font-size: 1.2rem;
-          color: rgba(240,236,228,0.7);
-          letter-spacing: 0.1em;
-          opacity: 0;
-          animation: initialReveal 1s ease 0.9s forwards;
-          margin-bottom: 8px;
-        }
-        .hero-date {
-          font-family: 'Playfair Display', serif;
-          font-size: 0.8rem;
-          color: rgba(212,175,112,0.5);
-          letter-spacing: 0.3em;
-          text-transform: uppercase;
-          opacity: 0;
-          animation: initialReveal 1s ease 1.1s forwards;
-        }
-        .hero-scroll-hint {
-          position: absolute;
-          bottom: 24px;
-          font-size: 1.5rem;
-          color: rgba(212,175,112,0.4);
-          animation: scrollBounce 2s ease-in-out 1.5s infinite;
-        }
-        @keyframes scrollBounce {
-          0%, 100% { transform: translateY(0); opacity: 0.4; }
-          50% { transform: translateY(8px); opacity: 0.8; }
-        }
-        /* Gold ring around monogram */
-        .hero-section::after {
-          content: '';
-          position: absolute;
-          width: 260px;
-          height: 260px;
-          border-radius: 50%;
-          border: 1px solid rgba(212,175,112,0.2);
-          animation: ringPulse 3s ease-in-out 1s infinite;
-        }
-        @keyframes ringPulse {
-          0%, 100% { transform: scale(1); opacity: 0.3; }
-          50% { transform: scale(1.05); opacity: 0.6; }
-        }
-
         /* --- Gold HR --- */
         .gold-hr {
           height: 1px;
@@ -546,20 +448,6 @@ export default function Template2Page() {
               }}
             />
           ))}
-        </div>
-
-        {/* HERO SECTION */}
-        <div className="hero-section">
-          <img src="/rose-left.png"  className="hero-rose rose-bl" alt="" />
-          <img src="/rose-right.png" className="hero-rose rose-br" alt="" />
-          <div className="hero-monogram">
-            <span className="hero-initial hero-y">Y</span>
-            <span className="hero-amp">✦</span>
-            <span className="hero-initial hero-s">S</span>
-          </div>
-          <p className="hero-subtitle">يوسف ◆ سارة</p>
-          <p className="hero-date">12 · 13 · 14 JUIN 2026</p>
-          <div className="hero-scroll-hint">↓</div>
         </div>
 
         <div className="t2-content">
