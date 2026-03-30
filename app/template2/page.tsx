@@ -221,16 +221,6 @@ export default function Template2Page() {
         .ctl-block.tl-left .ctl-block-inner { transform: translateX(-20px); }
         .ctl-block.tl-right .ctl-block-inner { transform: translateX(20px); }
         .ctl-block.active .ctl-block-inner { opacity: 1; transform: none; }
-        .event-graphic {
-          position: absolute;
-          bottom: calc(100% - 20px);
-          left: 50%;
-          transform: translateX(-50%);
-          width: 180px;
-          mix-blend-mode: screen;
-          pointer-events: none;
-          z-index: 5;
-        }
         .ctl-block-name { font-size: 1rem; color: #d4af70; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Naskh Arabic', serif; }
         .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.82rem; color: rgba(240,236,228,0.65); margin-bottom: 3px; }
         .ctl-block-venue { font-size: 0.78rem; color: rgba(240,236,228,0.45); line-height: 1.4; }
@@ -525,18 +515,6 @@ export default function Template2Page() {
                 className={`ctl-block ${i % 2 === 0 ? "tl-left" : "tl-right"}${activated[i] ? " active" : ""}`}
               >
                 <span className="ctl-circle" />
-                {i === 3 && (
-                  <img
-                    src="/jazz-band.png"
-                    alt=""
-                    className="event-graphic"
-                    style={{
-                      opacity: activated[3] ? 1 : 0,
-                      transform: activated[3] ? "translateY(0)" : "translateY(16px)",
-                      transition: "opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s",
-                    }}
-                  />
-                )}
                 <div className="ctl-block-inner">
                   <p className="ctl-block-name">{evt.name}</p>
                   <p className="ctl-block-date">{evt.date}</p>
