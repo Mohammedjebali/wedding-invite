@@ -1,6 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
+
+// Isolated countdown — only this re-renders every second
+const Countdown = memo(function Countdown() {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => {
+    const target = new Date('2026-06-12T16:00:00');
+    const update = () => {
+      const diff = target.getTime() - Date.now();
+      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff / 3600000) % 24),
+        minutes: Math.floor((diff / 60000) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className="countdown-section anim fade-up">
+      <p className="countdown-label">الوقت المتبقي</p>
+      <div className="countdown-grid">
+        <div className="countdown-unit"><span className="countdown-num">{timeLeft.days}</span><span className="countdown-name">يوم</span></div>
+        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.hours).padStart(2,'0')}</span><span className="countdown-name">ساعة</span></div>
+        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.minutes).padStart(2,'0')}</span><span className="countdown-name">دقيقة</span></div>
+        <div className="countdown-unit"><span className="countdown-num">{String(timeLeft.seconds).padStart(2,'0')}</span><span className="countdown-name">ثانية</span></div>
+      </div>
+    </div>
+  );
+});
 
 const events: { name: string; date: string; venue: string; time: string; maps: string }[] = [
   { name: "عقد القران", date: "يوم الجمعة 12 جوان 2026", venue: "جامع الزيتونة، تونس العاصمة", time: "16:00", maps: "https://maps.google.com/?q=جامع+الزيتونة+تونس" },
@@ -14,26 +46,7 @@ export default function Template2Page() {
   const blocksRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activated, setActivated] = useState([true, false, false, false]);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  // Countdown timer
-  useEffect(() => {
-    const target = new Date('2026-06-12T16:00:00');
-    const update = () => {
-      const now = new Date();
-      const diff = target.getTime() - now.getTime();
-      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      });
-    };
-    update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
-  }, []);
 
   // IntersectionObserver for general .anim elements
   useEffect(() => {
@@ -600,16 +613,8 @@ export default function Template2Page() {
             </p>
           </div>
 
-          {/* Countdown timer */}
-          <div className="countdown-section anim fade-up">
-            <p className="countdown-label">الوقت المتبقي</p>
-            <div className="countdown-grid">
-              <div className="countdown-unit"><span className="countdown-num">{timeLeft.days}</span><span className="countdown-name">يوم</span></div>
-              <div className="countdown-unit"><span className="countdown-num">{timeLeft.hours}</span><span className="countdown-name">ساعة</span></div>
-              <div className="countdown-unit"><span className="countdown-num">{timeLeft.minutes}</span><span className="countdown-name">دقيقة</span></div>
-              <div className="countdown-unit"><span className="countdown-num">{timeLeft.seconds}</span><span className="countdown-name">ثانية</span></div>
-            </div>
-          </div>
+          {/* Countdown timer — isolated component, won't re-render the page */}
+          <Countdown />
 
           <hr className="gold-hr anim" />
 
