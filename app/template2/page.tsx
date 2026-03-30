@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Template2Page() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [lineHeight, setLineHeight] = useState(0);
+  const [maxLine, setMaxLine] = useState(0);
 
+  // IntersectionObserver for general .anim elements
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -20,33 +24,31 @@ export default function Template2Page() {
       { threshold: 0.2 }
     );
 
-    const tlObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("tl-visible");
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
     const elements = container.querySelectorAll(".anim");
     elements.forEach((el) => observer.observe(el));
 
-    const tlNodes = container.querySelectorAll(".tl-node, .timeline-dot");
-    tlNodes.forEach((el) => tlObserver.observe(el));
-
-    // Timeline line height animation
-    const timelineLine = container.querySelector(".timeline-line");
-    if (timelineLine) {
-      observer.observe(timelineLine);
-    }
-
     return () => {
       observer.disconnect();
-      tlObserver.disconnect();
     };
+  }, []);
+
+  // Scroll-driven timeline line growth
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+      const rect = timelineRef.current.getBoundingClientRect();
+      const windowH = window.innerHeight;
+      const progress = Math.max(0, Math.min(1,
+        (windowH * 0.7 - rect.top) / (rect.height - windowH * 0.3)
+      ));
+      const pct = progress * 100;
+      setLineHeight(pct);
+      setMaxLine((prev) => Math.max(prev, pct));
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -130,124 +132,69 @@ export default function Template2Page() {
         .timeline {
           position: relative;
           direction: ltr;
-          padding: 20px 0;
+          padding: 40px 0;
         }
 
-        .timeline-line {
-          position: absolute;
-          left: 50%;
-          top: 0;
-          width: 2px;
-          height: 0;
-          background: var(--gold);
-          transform: translateX(-50%);
-          transition: height 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .timeline-line.visible {
-          height: 100%;
-        }
-
-        .timeline-event {
+        .tl-row {
           display: flex;
           align-items: center;
+          margin: 60px 0;
           position: relative;
-          margin-bottom: 36px;
+          z-index: 2;
         }
 
-        .timeline-event:last-child {
-          margin-bottom: 0;
-        }
-
-        .timeline-half {
+        .tl-left, .tl-right {
           flex: 1;
-          min-width: 0;
+          padding: 0 20px;
         }
 
-        .tl-content-left {
-          text-align: right;
-          padding-right: 20px;
-          direction: rtl;
-        }
+        .tl-left { text-align: right; }
+        .tl-right { text-align: left; }
 
-        .tl-content-right {
-          text-align: left;
-          padding-left: 20px;
-          direction: rtl;
-        }
-
-        .timeline-dot {
-          width: 10px;
-          height: 10px;
-          background: var(--gold);
-          transform: rotate(45deg) scale(0);
+        .tl-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #d4af70;
+          border: 2px solid rgba(212,175,112,0.5);
+          box-shadow: 0 0 10px rgba(212,175,112,0.6);
           flex-shrink: 0;
-          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-          z-index: 1;
         }
 
-        .timeline-dot.tl-visible {
-          transform: rotate(45deg) scale(1);
-          animation: dotPulse 2.5s ease-in-out 0.5s infinite;
+        .tl-card {
+          background: rgba(255,255,255,0.04);
+          border-radius: 8px;
+          padding: 16px;
+          backdrop-filter: blur(8px);
+          direction: rtl;
         }
 
-        @keyframes dotPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,112,0.4); }
-          50% { box-shadow: 0 0 0 6px rgba(212,175,112,0); }
+        .tl-card-left {
+          border-right: 2px solid rgba(212,175,112,0.4);
         }
 
-        /* Timeline node reveal */
-        .tl-node {
-          opacity: 0;
-          transition: opacity 0.7s ease, transform 0.7s ease;
+        .tl-card-right {
+          border-left: 2px solid rgba(212,175,112,0.4);
         }
-
-        .tl-node.tl-from-left {
-          transform: translateX(-40px);
-        }
-
-        .tl-node.tl-from-right {
-          transform: translateX(40px);
-        }
-
-        .tl-node.tl-visible {
-          opacity: 1;
-          transform: translateX(0) !important;
-        }
-
-        /* Stagger delays */
-        .tl-node[data-delay="0"] { transition-delay: 0s; }
-        .tl-node[data-delay="1"] { transition-delay: 0.15s; }
-        .tl-node[data-delay="2"] { transition-delay: 0.3s; }
-        .tl-node[data-delay="3"] { transition-delay: 0.45s; }
-        .tl-node.tl-visible { transition-delay: 0s; }
-        .timeline-dot[data-delay="0"] { transition-delay: 0s; }
-        .timeline-dot[data-delay="1"] { transition-delay: 0.15s; }
-        .timeline-dot[data-delay="2"] { transition-delay: 0.3s; }
-        .timeline-dot[data-delay="3"] { transition-delay: 0.45s; }
-        .timeline-dot.tl-visible { transition-delay: 0s; }
-
 
         .tl-event-name {
           font-family: 'Noto Naskh Arabic', serif;
           font-size: 1.1rem;
           font-weight: 700;
-          color: var(--gold);
-          margin-bottom: 4px;
+          color: #d4af70;
         }
 
         .tl-event-venue {
-          font-size: 0.85rem;
-          color: var(--pearl);
-          opacity: 0.8;
-          margin-bottom: 2px;
+          font-size: 0.8rem;
+          color: rgba(240,236,228,0.7);
+          margin-top: 4px;
         }
 
         .tl-event-time {
           font-family: 'Playfair Display', serif;
-          font-size: 0.9rem;
-          color: var(--gold);
-          opacity: 0.7;
+          font-size: 0.85rem;
+          color: #f0ece4;
+          margin-top: 6px;
         }
 
         /* --- Gold HR --- */
@@ -529,50 +476,85 @@ export default function Template2Page() {
           <div className="program-underline anim" />
 
           {/* 8. Timeline */}
-          <div className="timeline anim">
-            <div className="timeline-line" />
+          <div className="timeline" ref={timelineRef}>
+            {/* Growing center line */}
+            <div style={{
+              position: "absolute",
+              left: "50%",
+              top: 0,
+              width: 2,
+              height: `${lineHeight}%`,
+              background: "linear-gradient(to bottom, #d4af70, rgba(212,175,112,0.3))",
+              transform: "translateX(-50%)",
+              transition: "height 0.1s linear",
+              zIndex: 1,
+            }} />
 
             {/* Event 1 — LEFT: عقد القران */}
-            <div className="timeline-event">
-              <div className="timeline-half tl-content-left tl-node tl-from-left" data-delay="0">
-                <p className="tl-event-name">عقد القران</p>
-                <p className="tl-event-venue">جامع الزيتونة، تونس العاصمة</p>
-                <p className="tl-event-time">يوم الجمعة 12 جوان 2026 — 16:00</p>
+            <div className="tl-row">
+              <div className="tl-left" style={{
+                opacity: maxLine >= 15 ? 1 : 0,
+                transform: maxLine >= 15 ? "translateX(0)" : "translateX(-30px)",
+                transition: "opacity 0.6s ease, transform 0.6s ease",
+              }}>
+                <div className="tl-card tl-card-left">
+                  <p className="tl-event-name">عقد القران</p>
+                  <p className="tl-event-venue">جامع الزيتونة، تونس العاصمة</p>
+                  <p className="tl-event-time">يوم الجمعة 12 جوان 2026 — 16:00</p>
+                </div>
               </div>
-              <div className="timeline-dot tl-node" data-delay="0" />
-              <div className="timeline-half" />
+              <div className="tl-dot" style={{ opacity: maxLine >= 15 ? 1 : 0, transition: "opacity 0.4s ease" }} />
+              <div className="tl-right" />
             </div>
 
             {/* Event 2 — RIGHT: العشاء */}
-            <div className="timeline-event">
-              <div className="timeline-half" />
-              <div className="timeline-dot tl-node" data-delay="1" />
-              <div className="timeline-half tl-content-right tl-node tl-from-right" data-delay="1">
-                <p className="tl-event-name">العشاء</p>
-                <p className="tl-event-venue">قاعة الأفراح &ldquo;ليالي قرطاج&rdquo;، قرطاج</p>
-                <p className="tl-event-time">يوم السبت 13 جوان 2026 — 20:00</p>
+            <div className="tl-row">
+              <div className="tl-left" />
+              <div className="tl-dot" style={{ opacity: maxLine >= 38 ? 1 : 0, transition: "opacity 0.4s ease" }} />
+              <div className="tl-right" style={{
+                opacity: maxLine >= 38 ? 1 : 0,
+                transform: maxLine >= 38 ? "translateX(0)" : "translateX(30px)",
+                transition: "opacity 0.6s ease, transform 0.6s ease",
+              }}>
+                <div className="tl-card tl-card-right">
+                  <p className="tl-event-name">العشاء</p>
+                  <p className="tl-event-venue">قاعة الأفراح &ldquo;ليالي قرطاج&rdquo;، قرطاج</p>
+                  <p className="tl-event-time">يوم السبت 13 جوان 2026 — 20:00</p>
+                </div>
               </div>
             </div>
 
             {/* Event 3 — LEFT: الحفل */}
-            <div className="timeline-event">
-              <div className="timeline-half tl-content-left tl-node tl-from-left" data-delay="2">
-                <p className="tl-event-name">الحفل (العرس)</p>
-                <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
-                <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 19:00</p>
+            <div className="tl-row">
+              <div className="tl-left" style={{
+                opacity: maxLine >= 62 ? 1 : 0,
+                transform: maxLine >= 62 ? "translateX(0)" : "translateX(-30px)",
+                transition: "opacity 0.6s ease, transform 0.6s ease",
+              }}>
+                <div className="tl-card tl-card-left">
+                  <p className="tl-event-name">الحفل (العرس)</p>
+                  <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
+                  <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 19:00</p>
+                </div>
               </div>
-              <div className="timeline-dot tl-node" data-delay="2" />
-              <div className="timeline-half" />
+              <div className="tl-dot" style={{ opacity: maxLine >= 62 ? 1 : 0, transition: "opacity 0.4s ease" }} />
+              <div className="tl-right" />
             </div>
 
             {/* Event 4 — RIGHT: ليلة الزفاف */}
-            <div className="timeline-event">
-              <div className="timeline-half" />
-              <div className="timeline-dot tl-node" data-delay="3" />
-              <div className="timeline-half tl-content-right tl-node tl-from-right" data-delay="3">
-                <p className="tl-event-name">ليلة الزفاف</p>
-                <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
-                <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 23:30</p>
+            <div className="tl-row">
+              <div className="tl-left" />
+              <div className="tl-dot" style={{ opacity: maxLine >= 85 ? 1 : 0, transition: "opacity 0.4s ease" }} />
+              <div className="tl-right" style={{
+                opacity: maxLine >= 85 ? 1 : 0,
+                transform: maxLine >= 85 ? "translateX(0)" : "translateX(30px)",
+                transition: "opacity 0.6s ease, transform 0.6s ease",
+              }}>
+                <div className="tl-card tl-card-right">
+                  <p className="tl-event-name">ليلة الزفاف</p>
+                  <p className="tl-event-venue">نزل &ldquo;المرادي قمرت&rdquo;، قمرت</p>
+                  <p className="tl-event-time">يوم الأحد 14 جوان 2026 — 23:30</p>
+                </div>
               </div>
             </div>
           </div>
