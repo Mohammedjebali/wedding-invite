@@ -25,45 +25,28 @@ const Countdown = memo(function Countdown() {
   );
 });
 
-// Floating music player — plays on first user interaction
+// Silent autoplay — starts on first user interaction, no UI
 const MusicPlayer = memo(function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [started, setStarted] = useState(false);
 
-  const toggle = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (!started) {
-      audio.volume = 0.4;
+  useEffect(() => {
+    const start = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.volume = 0.35;
       audio.play().catch(() => {});
-      setStarted(true);
-      setPlaying(true);
-    } else if (playing) {
-      audio.pause();
-      setPlaying(false);
-    } else {
-      audio.play().catch(() => {});
-      setPlaying(true);
-    }
-  };
+      document.removeEventListener('click', start);
+      document.removeEventListener('touchstart', start);
+    };
+    document.addEventListener('click', start, { once: true });
+    document.addEventListener('touchstart', start, { once: true });
+    return () => {
+      document.removeEventListener('click', start);
+      document.removeEventListener('touchstart', start);
+    };
+  }, []);
 
-  return (
-    <div style={{
-      position: 'fixed', bottom: 20, left: 20, zIndex: 200,
-      display: 'flex', alignItems: 'center', gap: 8,
-      background: 'rgba(8,9,26,0.85)', border: '1px solid rgba(212,175,112,0.3)',
-      borderRadius: 40, padding: '8px 16px',
-      backdropFilter: 'blur(12px)',
-      cursor: 'pointer',
-    }} onClick={toggle}>
-      <audio ref={audioRef} src="/wedding-music.mp3" loop preload="none" />
-      <span style={{ fontSize: '1.1rem', color: '#d4af70' }}>{playing ? '⏸' : '▶'}</span>
-      <span style={{ fontSize: '0.7rem', color: 'rgba(212,175,112,0.6)', fontFamily: "'Noto Naskh Arabic', serif" }}>
-        {playing ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى'}
-      </span>
-    </div>
-  );
+  return <audio ref={audioRef} src="/wedding-music.mp3" loop preload="none" />;
 });
 
 const events: { name: string; date: string; venue: string; time: string; maps: string }[] = [
