@@ -564,6 +564,14 @@ export default function Template2Page() {
           {/* @ts-ignore */}
           <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'60px',height:'60px'}} autoplay loop />
         </div>
+        <div className="dove-lottie-wrap dove-4-wrap">
+          {/* @ts-ignore */}
+          <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'75px',height:'75px'}} autoplay loop />
+        </div>
+        <div className="dove-lottie-wrap dove-5-wrap">
+          {/* @ts-ignore */}
+          <dotlottie-wc src="https://lottie.host/fd22777d-03ed-4c47-9438-4d11970d8ab2/KoVMWyCQ7S.lottie" style={{width:'55px',height:'55px'}} autoplay loop />
+        </div>
       </div>
 
       <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" async />
@@ -585,6 +593,13 @@ export default function Template2Page() {
         .dove-3-wrap {
           animation: doveFloat3 20s ease-in-out infinite;
         }
+        .dove-4-wrap {
+          transform: scaleX(-1);
+          animation: doveFloat4 16s ease-in-out 3s infinite;
+        }
+        .dove-5-wrap {
+          animation: doveFloat5 22s ease-in-out 8s infinite;
+        }
         @keyframes doveFloat1 {
           0%   { top: 5vh;  left: 5vw; }
           25%  { top: 15vh; left: 75vw; }
@@ -605,6 +620,20 @@ export default function Template2Page() {
           50%  { top: 75vh; left: 40vw; }
           75%  { top: 85vh; left: 8vw; }
           100% { top: 80vh; left: 15vw; }
+        }
+        @keyframes doveFloat4 {
+          0%   { top: 110vh; left: 70vw; }
+          25%  { top: 125vh; left: 20vw; }
+          50%  { top: 115vh; left: 50vw; }
+          75%  { top: 130vh; left: 80vw; }
+          100% { top: 110vh; left: 70vw; }
+        }
+        @keyframes doveFloat5 {
+          0%   { top: 140vh; left: 30vw; }
+          25%  { top: 150vh; left: 75vw; }
+          50%  { top: 145vh; left: 55vw; }
+          75%  { top: 135vh; left: 15vw; }
+          100% { top: 140vh; left: 30vw; }
         }
       `}</style>
     </>
