@@ -39,25 +39,37 @@ export default function Template2Page() {
     };
   }, []);
 
-  // IntersectionObserver for timeline blocks
+  // Exact jQuery logic translated: window.onscroll with offset math
   useEffect(() => {
-    if (!blocksRef.current) return;
-    const blocks = Array.from(blocksRef.current.querySelectorAll(".ctl-block"));
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const idx = parseInt((entry.target as HTMLElement).dataset.index || "0");
-          setActiveIndex(idx);
+    const listEl = document.querySelector(".ctl-sticky") as HTMLElement | null;
+    const yearEl = document.querySelector(".ctl-year-container") as HTMLElement | null;
+
+    const handleScroll = () => {
+      if (!blocksRef.current || !listEl || !yearEl) return;
+      const blocks = Array.from(blocksRef.current.querySelectorAll(".ctl-block")) as HTMLElement[];
+      const listHeight = listEl.offsetHeight;
+      const listTop = parseInt(getComputedStyle(listEl).top) || 0;
+      const yearHeight = yearEl.offsetHeight;
+      const tarOff = listHeight + listTop - yearHeight;
+      const winScroll = window.scrollY;
+
+      blocks.forEach((block, index) => {
+        const thisOff = block.getBoundingClientRect().top + winScroll - tarOff;
+        if (winScroll > thisOff && winScroll < thisOff + yearHeight) {
+          setActiveIndex(index);
           setActivated((prev) => {
             const next = [...prev];
-            next[idx] = true;
+            next[index] = true;
             return next;
           });
         }
       });
-    }, { threshold: 0.5 });
-    blocks.forEach((b) => obs.observe(b));
-    return () => obs.disconnect();
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // trigger once on load
+    setTimeout(handleScroll, 100);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -138,6 +150,14 @@ export default function Template2Page() {
         }
 
         /* --- Timeline (CodePen sticky sidebar) --- */
+        .ctl-outer {
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+          padding: 0 20px;
+          max-width: 760px;
+          margin-left: auto;
+          margin-right: auto;
+        }
         .ctl-wrapper {
           display: flex;
           flex-wrap: wrap;
@@ -535,6 +555,7 @@ export default function Template2Page() {
           <div className="program-underline anim" />
 
           {/* 8. Timeline — CodePen sticky sidebar + scrollable blocks */}
+          <div className="ctl-outer">
           <div className="ctl-wrapper">
             {/* RIGHT: sticky label column */}
             <div className="ctl-sticky">
@@ -567,6 +588,7 @@ export default function Template2Page() {
                 </div>
               ))}
             </div>
+          </div>
           </div>
 
           <hr className="gold-hr anim" />
