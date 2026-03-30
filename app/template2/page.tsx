@@ -39,37 +39,25 @@ export default function Template2Page() {
     };
   }, []);
 
-  // Exact jQuery logic translated: window.onscroll with offset math
+  // IntersectionObserver for timeline blocks
   useEffect(() => {
-    const listEl = document.querySelector(".ctl-sticky") as HTMLElement | null;
-    const yearEl = document.querySelector(".ctl-year-container") as HTMLElement | null;
-
-    const handleScroll = () => {
-      if (!blocksRef.current || !listEl || !yearEl) return;
-      const blocks = Array.from(blocksRef.current.querySelectorAll(".ctl-block")) as HTMLElement[];
-      const listHeight = listEl.offsetHeight;
-      const listTop = parseInt(getComputedStyle(listEl).top) || 0;
-      const yearHeight = yearEl.offsetHeight;
-      const tarOff = listHeight + listTop - yearHeight;
-      const winScroll = window.scrollY;
-
-      blocks.forEach((block, index) => {
-        const thisOff = block.getBoundingClientRect().top + winScroll - tarOff;
-        if (winScroll > thisOff && winScroll < thisOff + yearHeight) {
-          setActiveIndex(index);
-          setActivated((prev) => {
+    if (!blocksRef.current) return;
+    const blocks = Array.from(blocksRef.current.querySelectorAll('.ctl-block')) as HTMLElement[];
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = parseInt((entry.target as HTMLElement).dataset.index || '0');
+          setActiveIndex(idx);
+          setActivated(prev => {
             const next = [...prev];
-            next[index] = true;
+            next[idx] = true;
             return next;
           });
         }
       });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    // trigger once on load
-    setTimeout(handleScroll, 100);
-    return () => window.removeEventListener("scroll", handleScroll);
+    }, { threshold: 0.4 });
+    blocks.forEach(b => obs.observe(b));
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -149,121 +137,106 @@ export default function Template2Page() {
           transform: none;
         }
 
-        /* --- Timeline (CodePen sticky sidebar) --- */
-        .ctl-outer {
-          max-width: 700px;
+        /* --- Timeline section container --- */
+        .t2-timeline-section {
+          width: 100%;
+          max-width: 680px;
           margin: 0 auto;
-          padding: 0 16px;
+          padding: 0 24px;
         }
+        /* --- Timeline (CodePen sticky sidebar) --- */
         .ctl-wrapper {
           display: flex;
           align-items: flex-start;
-          direction: rtl;
-          gap: 0;
+          direction: ltr;
         }
-        /* RIGHT: sticky label column */
         .ctl-sticky {
           position: sticky;
-          top: 20px;
-          width: 45%;
+          top: 30px;
+          width: 38%;
           flex-shrink: 0;
-          padding-right: 16px;
+          display: flex;
+          justify-content: flex-end;
+          padding-right: 24px;
         }
-        /* Clipping container — only active label shows */
         .ctl-year-container {
           position: relative;
           width: 100%;
-          height: 80px;
+          height: 70px;
           overflow: hidden;
         }
-        /* All labels stacked at same position */
         .ctl-label {
           position: absolute;
           right: 0;
           top: 0;
           width: 100%;
-          font-size: 1.6rem;
-          font-weight: 700;
-          font-family: 'Noto Naskh Arabic', serif;
-          color: #d4af70;
-          line-height: 1.2;
-          opacity: 0;
-          text-align: right;
-          transition: opacity 0.3s ease;
-          overflow: hidden;
-          height: 80px;
+          height: 70px;
           display: flex;
           align-items: center;
           justify-content: flex-end;
-        }
-        .ctl-label .lbl-chars {
-          display: flex;
-          flex-direction: row-reverse;
+          font-size: 1.4rem;
+          font-weight: 700;
+          font-family: 'Noto Naskh Arabic', serif;
+          color: #d4af70;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          direction: rtl;
           overflow: hidden;
         }
-        .ctl-label .lbl-chars span {
-          transform: translateY(100%);
-          transition: transform 0.2s ease;
+        .ctl-label.animate { opacity: 1; }
+        .ctl-label span {
           display: inline-block;
+          transform: translateY(110%);
+          transition: transform 0.25s ease;
         }
-        .ctl-label.animate {
-          opacity: 1;
-        }
-        .ctl-label.animate .lbl-chars span { transform: translateY(0); }
-        .ctl-label.animate .lbl-chars span:nth-child(1)  { transition-delay: 0.05s; }
-        .ctl-label.animate .lbl-chars span:nth-child(2)  { transition-delay: 0.10s; }
-        .ctl-label.animate .lbl-chars span:nth-child(3)  { transition-delay: 0.15s; }
-        .ctl-label.animate .lbl-chars span:nth-child(4)  { transition-delay: 0.20s; }
-        .ctl-label.animate .lbl-chars span:nth-child(5)  { transition-delay: 0.25s; }
-        .ctl-label.animate .lbl-chars span:nth-child(6)  { transition-delay: 0.30s; }
-        .ctl-label.animate .lbl-chars span:nth-child(7)  { transition-delay: 0.35s; }
-        .ctl-label.animate .lbl-chars span:nth-child(8)  { transition-delay: 0.40s; }
-        .ctl-label.animate .lbl-chars span:nth-child(9)  { transition-delay: 0.45s; }
-        .ctl-label.animate .lbl-chars span:nth-child(10) { transition-delay: 0.50s; }
-        /* LEFT: scrollable content blocks */
+        .ctl-label.animate span { transform: translateY(0); }
+        .ctl-label.animate span:nth-child(1)  { transition-delay: 0.03s; }
+        .ctl-label.animate span:nth-child(2)  { transition-delay: 0.06s; }
+        .ctl-label.animate span:nth-child(3)  { transition-delay: 0.09s; }
+        .ctl-label.animate span:nth-child(4)  { transition-delay: 0.12s; }
+        .ctl-label.animate span:nth-child(5)  { transition-delay: 0.15s; }
+        .ctl-label.animate span:nth-child(6)  { transition-delay: 0.18s; }
+        .ctl-label.animate span:nth-child(7)  { transition-delay: 0.21s; }
+        .ctl-label.animate span:nth-child(8)  { transition-delay: 0.24s; }
+        .ctl-label.animate span:nth-child(9)  { transition-delay: 0.27s; }
+        .ctl-label.animate span:nth-child(10) { transition-delay: 0.30s; }
+        .ctl-label.animate span:nth-child(11) { transition-delay: 0.33s; }
+        .ctl-label.animate span:nth-child(12) { transition-delay: 0.36s; }
         .ctl-blocks {
           flex: 1;
-          padding-left: 40px;
-          border-left: 2px solid rgba(212,175,112,0.35);
+          border-left: 2px solid rgba(212,175,112,0.4);
+          padding-left: 50px;
         }
         .ctl-block {
           position: relative;
-          display: block;
-          margin-top: 70px;
-          min-height: 30vh;
+          min-height: 200px;
           display: flex;
           align-items: center;
+          padding: 16px 0;
         }
-        .ctl-block:first-child {
-          margin-top: 0;
-          min-height: 25vh;
-        }
-        /* Circle dot on the left border line */
         .ctl-circle {
           position: absolute;
-          left: -49px;
+          left: -58px;
           top: 50%;
           transform: translateY(-50%);
           width: 14px;
           height: 14px;
           border: 2px solid #d4af70;
           border-radius: 50%;
-          background-color: #08091a;
+          background: #08091a;
           box-shadow: 0 0 8px rgba(212,175,112,0.5);
+          opacity: 0;
+          transition: opacity 0.4s ease 0.2s;
         }
+        .ctl-block.active .ctl-circle { opacity: 1; }
         .ctl-circle::before {
+          content: '';
           position: absolute;
-          left: 50%;
-          top: 50%;
+          left: 50%; top: 50%;
           transform: translate(-50%, -50%);
+          width: 6px; height: 6px;
           border-radius: 50%;
-          width: 6px;
-          height: 6px;
-          background-color: #d4af70;
-          content: "";
-        }
-        .ctl-block:first-child .ctl-circle {
-          display: none;
+          background: #d4af70;
         }
         .ctl-block-inner {
           background: rgba(255,255,255,0.04);
@@ -272,18 +245,20 @@ export default function Template2Page() {
           padding: 20px;
           backdrop-filter: blur(8px);
           width: 100%;
+          direction: rtl;
+          text-align: right;
           opacity: 0;
-          transform: translateY(15px);
+          transform: translateX(20px);
           transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .ctl-block.active .ctl-block-inner {
           opacity: 1;
           transform: none;
         }
-        .ctl-block-name { font-size: 1.1rem; color: #d4af70; font-weight: 700; margin-bottom: 8px; font-family: 'Noto Naskh Arabic', serif; }
-        .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: rgba(240,236,228,0.75); margin-bottom: 4px; }
-        .ctl-block-venue { font-size: 0.82rem; color: rgba(240,236,228,0.55); }
-        .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #d4af70; font-weight: 700; margin-top: 10px; }
+        .ctl-block-name { font-size: 1.05rem; color: #d4af70; font-weight: 700; margin-bottom: 8px; font-family: 'Noto Naskh Arabic', serif; }
+        .ctl-block-date { font-family: 'Playfair Display', serif; font-size: 0.88rem; color: rgba(240,236,228,0.7); margin-bottom: 4px; }
+        .ctl-block-venue { font-size: 0.82rem; color: rgba(240,236,228,0.5); }
+        .ctl-block-time { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #d4af70; font-weight: 700; margin-top: 10px; }
 
         /* --- Gold HR --- */
         .gold-hr {
@@ -558,31 +533,29 @@ export default function Template2Page() {
           </div>
 
           <hr className="gold-hr anim" />
+        </div>
 
+        <div className="t2-timeline-section">
           {/* 7. Program title */}
           <h2 className="program-title anim scale-in">برنامج الأفراح</h2>
           <div className="program-underline anim" />
 
           {/* 8. Timeline — CodePen sticky sidebar + scrollable blocks */}
           <div className="ctl-outer"><div className="ctl-wrapper">
-            {/* RIGHT: sticky label column */}
+            {/* LEFT: sticky label column */}
             <div className="ctl-sticky">
               <div className="ctl-year-container">
                 {events.map((evt, i) => (
                   <div key={i} className={`ctl-label${activeIndex === i ? " animate" : ""}`}>
-                    <div className="lbl-chars">
-                      {evt.name.split("").map((ch, ci) => (
-                        <span key={ci} style={{ transitionDelay: `${ci * 0.05}s` }}>
-                          {ch === " " ? "\u00A0" : ch}
-                        </span>
-                      ))}
-                    </div>
+                    {evt.name.split("").map((ch, ci) => (
+                      <span key={ci}>{ch === " " ? "\u00A0" : ch}</span>
+                    ))}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* LEFT: scrollable blocks with border-right line */}
+            {/* RIGHT: scrollable blocks with border-left line */}
             <div className="ctl-blocks" ref={blocksRef}>
               {events.map((evt, i) => (
                 <div key={i} data-index={i} className={`ctl-block${activated[i] ? " active" : ""}`}>
@@ -597,7 +570,9 @@ export default function Template2Page() {
               ))}
             </div>
           </div></div>
+        </div>
 
+        <div className="t2-content">
           <hr className="gold-hr anim" />
 
           {/* 9. Dua */}
