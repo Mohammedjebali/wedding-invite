@@ -151,97 +151,105 @@ export default function Template2Page() {
 
         /* --- Timeline (CodePen sticky sidebar) --- */
         .ctl-outer {
-          width: 100vw;
-          margin-left: calc(-50vw + 50%);
-          padding: 0 20px;
-          max-width: 760px;
-          margin-left: auto;
-          margin-right: auto;
+          max-width: 700px;
+          margin: 0 auto;
+          padding: 0 16px;
         }
         .ctl-wrapper {
           display: flex;
-          flex-wrap: wrap;
           align-items: flex-start;
           direction: rtl;
+          gap: 0;
         }
+        /* RIGHT: sticky label column */
         .ctl-sticky {
           position: sticky;
-          top: 0;
+          top: 20px;
           width: 45%;
-          display: flex;
-          flex-wrap: wrap;
+          flex-shrink: 0;
+          padding-right: 16px;
         }
+        /* Clipping container — only active label shows */
         .ctl-year-container {
           position: relative;
           width: 100%;
-          height: 120px;
+          height: 80px;
           overflow: hidden;
-          padding: 20px;
         }
+        /* All labels stacked at same position */
         .ctl-label {
           position: absolute;
-          right: 20px;
-          top: 20px;
+          right: 0;
+          top: 0;
           width: 100%;
-          display: block;
-          font-size: 1.8rem;
+          font-size: 1.6rem;
           font-weight: 700;
           font-family: 'Noto Naskh Arabic', serif;
           color: #d4af70;
-          line-height: 1;
+          line-height: 1.2;
           opacity: 0;
           text-align: right;
-          padding-right: 20px;
+          transition: opacity 0.3s ease;
+          overflow: hidden;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
         }
         .ctl-label .lbl-chars {
           display: flex;
           flex-direction: row-reverse;
-          justify-content: flex-start;
+          overflow: hidden;
         }
         .ctl-label .lbl-chars span {
           transform: translateY(100%);
-          transition: 0.2s;
+          transition: transform 0.2s ease;
           display: inline-block;
         }
         .ctl-label.animate {
           opacity: 1;
         }
-        .ctl-label.animate .lbl-chars span {
-          transform: translateY(0);
-        }
-        .ctl-label.animate .lbl-chars span:nth-child(1) { transition-delay: 0.05s; }
-        .ctl-label.animate .lbl-chars span:nth-child(2) { transition-delay: 0.10s; }
-        .ctl-label.animate .lbl-chars span:nth-child(3) { transition-delay: 0.15s; }
-        .ctl-label.animate .lbl-chars span:nth-child(4) { transition-delay: 0.20s; }
-        .ctl-label.animate .lbl-chars span:nth-child(5) { transition-delay: 0.25s; }
-        .ctl-label.animate .lbl-chars span:nth-child(6) { transition-delay: 0.30s; }
-        .ctl-label.animate .lbl-chars span:nth-child(7) { transition-delay: 0.35s; }
-        .ctl-label.animate .lbl-chars span:nth-child(8) { transition-delay: 0.40s; }
+        .ctl-label.animate .lbl-chars span { transform: translateY(0); }
+        .ctl-label.animate .lbl-chars span:nth-child(1)  { transition-delay: 0.05s; }
+        .ctl-label.animate .lbl-chars span:nth-child(2)  { transition-delay: 0.10s; }
+        .ctl-label.animate .lbl-chars span:nth-child(3)  { transition-delay: 0.15s; }
+        .ctl-label.animate .lbl-chars span:nth-child(4)  { transition-delay: 0.20s; }
+        .ctl-label.animate .lbl-chars span:nth-child(5)  { transition-delay: 0.25s; }
+        .ctl-label.animate .lbl-chars span:nth-child(6)  { transition-delay: 0.30s; }
+        .ctl-label.animate .lbl-chars span:nth-child(7)  { transition-delay: 0.35s; }
+        .ctl-label.animate .lbl-chars span:nth-child(8)  { transition-delay: 0.40s; }
+        .ctl-label.animate .lbl-chars span:nth-child(9)  { transition-delay: 0.45s; }
+        .ctl-label.animate .lbl-chars span:nth-child(10) { transition-delay: 0.50s; }
+        /* LEFT: scrollable content blocks */
         .ctl-blocks {
-          width: 55%;
-          margin-right: auto;
-          padding-right: 75px;
-          border-right: 2px solid rgba(212,175,112,0.3);
+          flex: 1;
+          padding-left: 40px;
+          border-left: 2px solid rgba(212,175,112,0.35);
         }
         .ctl-block {
           position: relative;
           display: block;
-          margin-top: 80px;
-          padding-top: 20px;
+          margin-top: 70px;
+          min-height: 30vh;
+          display: flex;
+          align-items: center;
         }
         .ctl-block:first-child {
           margin-top: 0;
-          padding-top: 0;
+          min-height: 25vh;
         }
+        /* Circle dot on the left border line */
         .ctl-circle {
           position: absolute;
-          right: -84px;
-          top: 28px;
+          left: -49px;
+          top: 50%;
+          transform: translateY(-50%);
           width: 14px;
           height: 14px;
           border: 2px solid #d4af70;
           border-radius: 50%;
           background-color: #08091a;
+          box-shadow: 0 0 8px rgba(212,175,112,0.5);
         }
         .ctl-circle::before {
           position: absolute;
@@ -263,6 +271,7 @@ export default function Template2Page() {
           border-radius: 10px;
           padding: 20px;
           backdrop-filter: blur(8px);
+          width: 100%;
           opacity: 0;
           transform: translateY(15px);
           transition: opacity 0.5s ease, transform 0.5s ease;
@@ -555,8 +564,7 @@ export default function Template2Page() {
           <div className="program-underline anim" />
 
           {/* 8. Timeline — CodePen sticky sidebar + scrollable blocks */}
-          <div className="ctl-outer">
-          <div className="ctl-wrapper">
+          <div className="ctl-outer"><div className="ctl-wrapper">
             {/* RIGHT: sticky label column */}
             <div className="ctl-sticky">
               <div className="ctl-year-container">
@@ -588,8 +596,7 @@ export default function Template2Page() {
                 </div>
               ))}
             </div>
-          </div>
-          </div>
+          </div></div>
 
           <hr className="gold-hr anim" />
 
