@@ -516,22 +516,6 @@ export default function Template2Page() {
               >
                 <span className="ctl-circle" />
                 <div className="ctl-block-inner">
-                  {i === 3 && (
-                    <img
-                      src="/jazz-band.png"
-                      alt=""
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        maxWidth: 220,
-                        margin: "0 auto 12px",
-                        mixBlendMode: "screen",
-                        opacity: activated[3] ? 1 : 0,
-                        transform: activated[3] ? "translateY(0)" : "translateY(20px)",
-                        transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s",
-                      }}
-                    />
-                  )}
                   <p className="ctl-block-name">{evt.name}</p>
                   <p className="ctl-block-date">{evt.date}</p>
                   <p className="ctl-block-venue">{evt.venue}</p>
