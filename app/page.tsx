@@ -111,7 +111,7 @@ const CONFIG = {
   groomMom: "السيّدة سماح بن سالم",
   brideDad: "السيّد نور الدين جلال",
   brideMom: "السيّدة فاطيمة جلال",
-  bgMusic: "/music.mp3",
+  bgMusic: "",
   bgMusicStart: 147, // 2:27
 };
 
