@@ -101,12 +101,12 @@ const CONFIG = {
   groom_fr: "Mohamed Amine Ben Salem",
   bride_fr: "Nour El Hoda Jlel",
   date: "2026-08-08",
-  dateDisplay_ar: "يوم السبت ٨ أوت ٢٠٢٦",
+  dateDisplay_ar: "السبت 8 أوت 2026",
   dateDisplay_fr: "Samedi 8 Août 2026",
-  time_ar: "على الساعة التاسعة ليلاً",
+  time_ar: "من الساعة 21:00 إلى 00:00",
   venue_name: "BOUARGOUB",
   venue_region: "Gouvernorat de Nabeul",
-  mapsUrl: "https://maps.google.com/?q=Bouargoub+Nabeul+Tunisia",
+  mapsUrl: "https://maps.app.goo.gl/2S15smtxwb5858mKA?g_st=iw",
   groomDad: "السيّد فوزي بن سالم",
   groomMom: "السيّدة سماح بن سالم",
   brideDad: "السيّد نور الدين جلال",
@@ -348,8 +348,7 @@ export default function Home() {
               <div className="gold-divider reveal reveal-d1">◆ ◆ ◆</div>
 
               <div className="invite-greeting reveal reveal-d2">
-                بعد اهدائكم عاطر التحية وأزكى السلام<br/>
-                يسرّنا دعوتكم لحضور حفل زفاف
+                بدعوة كريمة من العائلتين
               </div>
 
               <div className="reveal reveal-d2" style={{ margin:"20px 0 14px" }}>
@@ -484,6 +483,9 @@ export default function Home() {
             <section className="section" style={{ paddingBottom:"60px", textAlign:"center" }}>
               <div className="gold-divider reveal">◆ ◆ ◆</div>
               <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#7a5020", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+                أحلامًا هانئة لصغاركم، وتشريفكم يسعدنا
+              </div>
+              <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#7a5020", direction:"rtl", lineHeight:2, opacity:0.85 }}>
                 نسأل الله أن يجمعهما على خير<br/>
                 ويبارك لهما في حياتهما المشتركة
               </div>
