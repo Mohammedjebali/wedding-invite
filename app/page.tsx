@@ -361,15 +361,35 @@ export default function Home() {
                 بدعوة كريمة من العائلتين
               </div>
 
-              <div className="reveal reveal-d2" style={{ margin:"20px 0 14px" }}>
+              <div className="reveal reveal-d2" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.15rem", color:"#4a2a08", textAlign:"center", lineHeight:2.4, marginTop:"18px" }}>
+                يتشرّف كلّ من
+              </div>
+
+              <div className="reveal reveal-d2" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.15rem", color:"#4a2a08", textAlign:"center", lineHeight:2.4 }}>
+                {CONFIG.groomDad}
+                <br/>
+                و{CONFIG.groomMom}
+              </div>
+
+              <div className="reveal reveal-d2" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.15rem", color:"#4a2a08", textAlign:"center", lineHeight:2.4 }}>
+                و{CONFIG.brideDad}
+                <br/>
+                و{CONFIG.brideMom}
+              </div>
+
+              <div className="reveal reveal-d3" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.15rem", color:"#4a2a08", textAlign:"center", lineHeight:2.4, marginTop:"14px" }}>
+                بدعوتكم لحضور حفل زفاف ابنيهما
+              </div>
+
+              <div className="reveal reveal-d3" style={{ margin:"20px 0 14px" }}>
                 <div className="couple-names">
-                  <TypeReveal text={CONFIG.groom_ar} delay={300} />
-                  <span className="name-sep">— ✦ —</span>
-                  <TypeReveal text={CONFIG.bride_ar} delay={800} />
+                  <TypeReveal text={`✦ ${CONFIG.groom_ar} ✦`} delay={300} />
+                  <span style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.2rem", color:"#7a5020" }}>على</span>
+                  <TypeReveal text={`✦ ${CONFIG.bride_ar} ✦`} delay={800} />
                 </div>
               </div>
 
-              <div className="tagline reveal reveal-d3">وذلك بمشيئة الله تعالى</div>
+              <div className="tagline reveal reveal-d4">وذلك بمشيئة الله تعالى</div>
 
               <div className="gold-divider reveal reveal-d3" style={{ marginTop:"18px" }}>◆ ◆ ◆</div>
 
@@ -394,21 +414,6 @@ export default function Home() {
                   <line x1="12" y1="4" x2="12" y2="20"/><polyline points="18 14 12 20 6 14"/>
                 </svg>
               </div>
-            </section>
-
-            {/* ── FAMILIES ── */}
-            <section className="section">
-              <div className="section-heading reveal gold-sweep">العائلتان الكريمتان</div>
-              <div className="section-sub reveal reveal-d1">Les familles</div>
-              <div className="family-row reveal reveal-d2">
-                <div className="family-role">عائلة العريس</div>
-                <div className="family-names">{CONFIG.groomDad}<br/>{CONFIG.groomMom}</div>
-              </div>
-              <div className="family-row reveal reveal-d3">
-                <div className="family-role">عائلة العروس</div>
-                <div className="family-names">{CONFIG.brideDad}<br/>{CONFIG.brideMom}</div>
-              </div>
-              <div className="gold-divider reveal reveal-d4" style={{ marginTop:"28px" }}>◆ ◆ ◆</div>
             </section>
 
             {/* ── VENUE ── */}
