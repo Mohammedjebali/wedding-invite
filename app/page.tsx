@@ -334,8 +334,18 @@ export default function Home() {
         <div className="page-bg">
           <div className="page-content">
 
-            {/* top bouquet */}
-            <img src="/bouquet-sm.png" className="bouquet-top" alt="" />
+            {/* falling petals */}
+            <div className="petals-overlay" aria-hidden="true">
+              <div className="petal-css p1" />
+              <div className="petal-css p2" />
+              <div className="petal-css p3" />
+              <div className="petal-css p4" />
+              <div className="petal-css p5" />
+              <div className="petal-css p6" />
+              <div className="petal-css p7" />
+              <div className="petal-css p8" />
+              <div className="petal-css p9" />
+            </div>
 
             {/* ── HERO ── */}
             <section className="hero">
