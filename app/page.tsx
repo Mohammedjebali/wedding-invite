@@ -171,6 +171,7 @@ export default function Home() {
   const [rsvpSent, setRsvpSent] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const introVideoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const countdown = useCountdown(CONFIG.date);
   const pad = (n: number) => String(n).padStart(2,"0");
@@ -178,16 +179,23 @@ export default function Home() {
 
   const handleOpen = () => {
     if (opening) return;
-    setOpening(true);
-    // Start music immediately on tap
-    if (audioRef.current && CONFIG.bgMusic) {
-      audioRef.current.currentTime = CONFIG.bgMusicStart;
-      audioRef.current.play().catch(() => {});
-      setPlaying(true);
+    // Play the intro video first
+    const vid = introVideoRef.current;
+    if (vid) {
+      vid.currentTime = 0;
+      vid.play().catch(() => {});
+      vid.onended = () => {
+        setOpening(true);
+        // Start music
+        if (audioRef.current && CONFIG.bgMusic) {
+          audioRef.current.currentTime = CONFIG.bgMusicStart;
+          audioRef.current.play().catch(() => {});
+          setPlaying(true);
+        }
+        setTimeout(() => setShowContent(true), 3000);
+        setTimeout(() => setGone(true), 4200);
+      };
     }
-    // Let music play for 4 seconds on video page before transitioning
-    setTimeout(() => setShowContent(true), 3000);
-    setTimeout(() => setGone(true), 4200);
   };
 
   const handleRsvp = (e: React.FormEvent) => {
@@ -204,9 +212,11 @@ export default function Home() {
         style={{ cursor: opening ? "default" : "pointer", padding: 0 }}
         onClick={!opening ? handleOpen : undefined}
       >
-        {/* fullscreen video */}
+        {/* fullscreen video — paused on first frame, plays on click */}
         <video
-          autoPlay muted loop playsInline
+          ref={introVideoRef}
+          muted playsInline
+          preload="auto"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
