@@ -217,64 +217,12 @@ export default function Home() {
           <source src="/intro.mp4" type="video/mp4" />
         </video>
 
-        {/* dark overlay so button is readable */}
+        {/* light overlay — keeps colors warm without hiding the wax seal */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 100%)",
+          background: "rgba(0,0,0,0.1)",
           pointerEvents: "none",
         }} />
-
-        {/* center tap button */}
-        {!opening && (
-          <div style={{
-            position: "relative", zIndex: 10,
-            display: "flex", flexDirection: "column",
-            alignItems: "center", gap: "24px",
-          }}>
-            <div style={{
-              fontFamily: "'Rakkas', serif",
-              fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
-              color: "#f5efe0",
-              direction: "rtl",
-              textShadow: "0 2px 20px rgba(0,0,0,0.6)",
-              textAlign: "center",
-              lineHeight: 1.6,
-            }}>
-              {CONFIG.groom_ar}<br/>
-              <span style={{ fontSize: "0.5em", color: "#e8c57a", letterSpacing: "0.15em", fontFamily: "Cormorant Garamond, serif", fontStyle: "italic" }}>— ✦ —</span><br/>
-              {CONFIG.bride_ar}
-            </div>
-
-            <button
-              onClick={handleOpen}
-              style={{
-                background: "linear-gradient(135deg, rgba(201,168,76,0.95), rgba(160,120,20,0.95))",
-                color: "#fff8f0",
-                border: "none",
-                padding: "16px 44px",
-                borderRadius: "40px",
-                fontFamily: "'Rakkas', serif",
-                fontSize: "18px",
-                cursor: "pointer",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
-                animation: "openBtnPulse 2.5s ease-in-out infinite",
-                letterSpacing: "0.04em",
-              }}
-            >
-              افتح الدعوة
-            </button>
-
-            <div style={{
-              fontFamily: "sans-serif",
-              fontSize: "11px",
-              letterSpacing: "0.18em",
-              color: "rgba(255,248,224,0.5)",
-              textTransform: "uppercase",
-            }}>
-              {CONFIG.dateDisplay_fr}
-            </div>
-          </div>
-        )}
 
         {/* opening animation — white soft petals falling */}
         {opening && (
