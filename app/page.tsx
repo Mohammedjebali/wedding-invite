@@ -479,7 +479,7 @@ export default function Home() {
             <section className="section" style={{ paddingBottom:"60px", textAlign:"center" }}>
               <div className="gold-divider reveal">◆ ◆ ◆</div>
               <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
-                أحلامًا هانئة لصغاركم، وتشريفكم يسعدنا
+                أحلامًا هنيئة لصغاركم، وتشريفكم يسعدنا
               </div>
               <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
                 نسأل الله أن يجمعهما على خير<br/>
