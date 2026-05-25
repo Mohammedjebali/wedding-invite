@@ -190,12 +190,13 @@ export default function Home() {
     if (vid) {
       vid.currentTime = 0;
       vid.play().catch(() => {});
-      vid.onended = () => {
-        setOpening(true);
-        setTimeout(() => setShowContent(true), 3000);
-        setTimeout(() => setGone(true), 4200);
-      };
     }
+    // After 3 seconds, show the letter
+    setTimeout(() => {
+      setOpening(true);
+      setShowContent(true);
+    }, 3000);
+    setTimeout(() => setGone(true), 3500);
   }, [opening]);
 
   const handleRsvp = (e: React.FormEvent) => {
