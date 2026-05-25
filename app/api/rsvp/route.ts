@@ -7,9 +7,17 @@ async function readData(): Promise<any[]> {
   try {
     const { blobs } = await list({ prefix: BLOB_PATH });
     if (!blobs.length) return [];
-    // Private blobs include token in URL from list()
-    const res = await fetch(blobs[0].url);
-    if (!res.ok) return [];
+    const url = blobs[0].url;
+    // Add token for private access
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    const separator = url.includes("?") ? "&" : "?";
+    const res = await fetch(`${url}${separator}token=${token}`);
+    if (!res.ok) {
+      // Fallback: try without token (public)
+      const res2 = await fetch(url);
+      if (!res2.ok) return [];
+      return await res2.json();
+    }
     return await res.json();
   } catch (e: any) {
     console.error("readData error:", e.message);
@@ -19,7 +27,7 @@ async function readData(): Promise<any[]> {
 
 async function writeData(data: any[]) {
   await put(BLOB_PATH, JSON.stringify(data), {
-    access: "private",
+    access: "public",
     contentType: "application/json",
     addRandomSuffix: false,
     allowOverwrite: true,
