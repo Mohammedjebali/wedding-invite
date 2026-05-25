@@ -217,6 +217,12 @@ export default function Home() {
           ref={introVideoRef}
           muted playsInline
           preload="auto"
+          poster="/poster.jpg"
+          autoPlay={false}
+          onLoadedData={() => {
+            const vid = introVideoRef.current;
+            if (vid) { vid.currentTime = 0; vid.pause(); }
+          }}
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
@@ -227,10 +233,10 @@ export default function Home() {
           <source src="/intro.mp4" type="video/mp4" />
         </video>
 
-        {/* dark overlay so envelope area is visible even before video loads */}
+        {/* subtle tap hint overlay */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "rgba(0,0,0,0.15)",
+          background: "rgba(0,0,0,0.05)",
           pointerEvents: "none",
         }} />
 
