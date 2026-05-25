@@ -320,7 +320,7 @@ export default function Home() {
 
       <div className={`invitation${showContent ? " visible" : ""}`}>
         <div className="page-bg">
-          <div className="page-content">
+          <div className="page-content page-content-fade">
 
             {/* falling petals */}
             <div className="petals-overlay" aria-hidden="true">
