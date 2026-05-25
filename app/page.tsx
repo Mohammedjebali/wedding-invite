@@ -177,6 +177,14 @@ export default function Home() {
   const pad = (n: number) => String(n).padStart(2,"0");
   useScrollReveal(showContent);
 
+  // Auto-open envelope on page load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleOpen();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleOpen = () => {
     if (opening) return;
     // Play the intro video first
