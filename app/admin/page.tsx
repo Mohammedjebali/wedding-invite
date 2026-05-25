@@ -13,12 +13,10 @@ interface RSVP {
 export default function AdminPage() {
   const [rsvps, setRsvps] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState(true);
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (authenticated) fetchRSVPs();
-  }, [authenticated]);
+    fetchRSVPs();
+  }, []);
 
   async function fetchRSVPs() {
     setLoading(true);
@@ -31,30 +29,6 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
-  }
-
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#1a1a2e", fontFamily: "sans-serif" }}>
-        <div style={{ background: "#16213e", padding: "40px", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", textAlign: "center" }}>
-          <h2 style={{ color: "#e8c547", marginBottom: "20px", fontSize: "20px" }}>🔐 Admin Dashboard</h2>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && password === "wedding2025" && setAuthenticated(true)}
-            style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #333", background: "#0f3460", color: "#fff", fontSize: "14px", width: "200px" }}
-          />
-          <button
-            onClick={() => password === "wedding2025" ? setAuthenticated(true) : alert("Wrong password")}
-            style={{ display: "block", margin: "16px auto 0", padding: "10px 24px", borderRadius: "8px", border: "none", background: "#e8c547", color: "#1a1a2e", fontWeight: "bold", cursor: "pointer" }}
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    );
   }
 
   const totalAttending = rsvps.filter(r => r.attending === "oui").reduce((sum, r) => sum + parseInt(r.guests || "1"), 0);
