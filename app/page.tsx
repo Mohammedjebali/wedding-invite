@@ -30,7 +30,7 @@ function TypeReveal({ text, delay = 0, className = "", style = {} }: {
     return () => clearTimeout(timer);
   }, [started, text, delay]);
   return (
-    <span ref={ref} className={className} style={{ direction:"rtl", display:"block", ...style }}>
+    <span ref={ref} className={className} style={{ direction:"rtl", display:"block", whiteSpace:"nowrap", ...style }}>
       {words.map((word, i) => (
         <span key={i} style={{
           opacity: i < visible ? 1 : 0,
