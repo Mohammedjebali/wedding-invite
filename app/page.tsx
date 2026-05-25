@@ -104,8 +104,8 @@ const CONFIG = {
   dateDisplay_ar: "السبت 8 أوت 2026",
   dateDisplay_fr: "Samedi 8 Août 2026",
   time_ar: "من الساعة 21:00 إلى 00:00",
-  venue_name: "BOUARGOUB",
-  venue_region: "Gouvernorat de Nabeul",
+  venue_name: "Les Chalets d'Alba",
+  venue_region: "Bouargoub, Nabeul",
   mapsUrl: "https://maps.app.goo.gl/2S15smtxwb5858mKA?g_st=iw",
   groomDad: "السيّد فوزي بن سالم",
   groomMom: "السيّدة سماح بن سالم",
@@ -458,7 +458,7 @@ export default function Home() {
 
             <footer>
               {CONFIG.groom_fr} &amp; {CONFIG.bride_fr}<br/>
-              <span style={{ opacity:0.45, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · BOUARGOUB</span>
+              <span style={{ opacity:0.45, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · Les Chalets d'Alba</span>
             </footer>
           </div>
         </div>
