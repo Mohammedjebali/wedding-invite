@@ -199,11 +199,25 @@ export default function Home() {
     setTimeout(() => setGone(true), 5500);
   }, [opening]);
 
-  const handleRsvp = (e: React.FormEvent) => {
+  const [rsvpSending, setRsvpSending] = useState(false);
+
+  const handleRsvp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setRsvpSent(true);
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 3500);
+    setRsvpSending(true);
+    try {
+      await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rsvp),
+      });
+      setRsvpSent(true);
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3500);
+    } catch {
+      alert("Error submitting, please try again.");
+    } finally {
+      setRsvpSending(false);
+    }
   };
 
   return (
@@ -435,7 +449,7 @@ export default function Home() {
                         {["1","2","3","4","5"].map(n => <option key={n} value={n}>{n} {parseInt(n)>1?"أشخاص":"شخص"}</option>)}
                       </select>
                     )}
-                    <button type="submit" className="rsvp-btn">تأكيد الحضور</button>
+                    <button type="submit" className="rsvp-btn" disabled={rsvpSending}>{rsvpSending ? "..." : "تأكيد الحضور"}</button>
                   </form>
                 </div>
               )}
