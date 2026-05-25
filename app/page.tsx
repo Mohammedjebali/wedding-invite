@@ -108,9 +108,9 @@ const CONFIG = {
   venue_region: "Bouargoub, Nabeul",
   mapsUrl: "https://maps.app.goo.gl/2S15smtxwb5858mKA?g_st=iw",
   groomDad: "السيّد فوزي بن سالم",
-  groomMom: "السيّدة سماح بن سالم",
+  groomMom: "السيّدة سماح اللوني",
   brideDad: "السيّد نور الدين جلال",
-  brideMom: "السيّدة فاطمة جلال",
+  brideMom: "السيّدة فاطمة امكون",
   bgMusic: "/song.mp3",
   bgMusicStart: 0,
 };
