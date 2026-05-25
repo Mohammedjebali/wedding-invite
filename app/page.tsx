@@ -208,30 +208,26 @@ export default function Home() {
   return (
     <>
       {/* ══ VIDEO INTRO ══ */}
-      <div className={`env-screen${gone ? " gone" : ""}`}
-        style={{ cursor: opening ? "default" : "pointer", padding: 0 }}
-        onClick={!opening ? handleOpen : undefined}
-      >
-        {/* fullscreen video — paused on first frame, plays on click */}
+      <div className={`env-screen${gone ? " gone" : ""}`}>
         <video
           ref={introVideoRef}
           muted playsInline
           preload="auto"
           autoPlay={false}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            cursor: opening ? "default" : "pointer",
+          }}
+          onClick={!opening ? handleOpen : undefined}
           onLoadedData={() => {
             const vid = introVideoRef.current;
             if (vid) { vid.currentTime = 0; vid.pause(); }
           }}
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover",
-            pointerEvents: "none",
-          }}
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
-
       </div>
 
       {/* ══ INVITATION ══ */}
