@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put, list, download } from "@vercel/blob";
+import { put, list } from "@vercel/blob";
 
 const BLOB_PATH = "wedding-rsvps.json";
 
@@ -7,9 +7,10 @@ async function readData(): Promise<any[]> {
   try {
     const { blobs } = await list({ prefix: BLOB_PATH });
     if (!blobs.length) return [];
-    const blob = await download(blobs[0].url);
-    const text = await blob.text();
-    return JSON.parse(text);
+    // Private blobs include token in URL from list()
+    const res = await fetch(blobs[0].url);
+    if (!res.ok) return [];
+    return await res.json();
   } catch (e: any) {
     console.error("readData error:", e.message);
     return [];
