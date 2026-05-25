@@ -217,7 +217,6 @@ export default function Home() {
           ref={introVideoRef}
           muted playsInline
           preload="auto"
-          poster="/poster.jpg"
           autoPlay={false}
           onLoadedData={() => {
             const vid = introVideoRef.current;
@@ -232,13 +231,6 @@ export default function Home() {
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
-
-        {/* subtle tap hint overlay */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "rgba(0,0,0,0.05)",
-          pointerEvents: "none",
-        }} />
 
       </div>
 
