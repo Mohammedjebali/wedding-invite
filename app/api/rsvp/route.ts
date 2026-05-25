@@ -17,7 +17,7 @@ async function readData(): Promise<any[]> {
 
 async function writeData(data: any[]) {
   await put(BLOB_PATH, JSON.stringify(data), {
-    access: "public",
+    access: "private",
     contentType: "application/json",
     addRandomSuffix: false,
   });
