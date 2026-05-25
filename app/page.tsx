@@ -111,8 +111,8 @@ const CONFIG = {
   groomMom: "السيّدة سماح بن سالم",
   brideDad: "السيّد نور الدين جلال",
   brideMom: "السيّدة فاطمة جلال",
-  bgMusic: "",
-  bgMusicStart: 147, // 2:27
+  bgMusic: "/song.mp3",
+  bgMusicStart: 0,
 };
 
 function useCountdown(d: string) {
@@ -179,32 +179,24 @@ export default function Home() {
 
   const handleOpen = useCallback(() => {
     if (opening) return;
-    // Play the intro video first
+    // Play the song instantly on click
+    if (audioRef.current) {
+      audioRef.current.currentTime = CONFIG.bgMusicStart;
+      audioRef.current.play().catch(() => {});
+      setPlaying(true);
+    }
+    // Play the intro video
     const vid = introVideoRef.current;
     if (vid) {
       vid.currentTime = 0;
       vid.play().catch(() => {});
       vid.onended = () => {
         setOpening(true);
-        // Start music
-        if (audioRef.current && CONFIG.bgMusic) {
-          audioRef.current.currentTime = CONFIG.bgMusicStart;
-          audioRef.current.play().catch(() => {});
-          setPlaying(true);
-        }
         setTimeout(() => setShowContent(true), 3000);
         setTimeout(() => setGone(true), 4200);
       };
     }
   }, [opening]);
-
-  // Auto-open on page load (browsers require user gesture for audio, so video plays muted)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleOpen();
-    }, 800);
-    return () => clearTimeout(timer);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRsvp = (e: React.FormEvent) => {
     e.preventDefault();
