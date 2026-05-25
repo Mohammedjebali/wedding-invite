@@ -397,14 +397,26 @@ export default function Home() {
                 <div className="venue-bottom">
                   <div className="venue-name">{CONFIG.venue_name}</div>
                   <div className="venue-region">{CONFIG.venue_region}</div>
-                  <div onClick={() => {
-                    const overlay = document.getElementById("venue-vid-overlay");
-                    if (overlay) { overlay.style.display = "flex"; const v = overlay.querySelector("video") as HTMLVideoElement; if (v) v.play().catch(() => {}); }
-                  }} className="map-btn" style={{ cursor:"pointer" }}>
+                  <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     عرض الخريطة · Location-Map
-                  </div>
+                  </a>
                 </div>
+              </div>
+              {/* Venue video - autoplay on scroll */}
+              <div style={{ maxWidth:"400px", margin:"16px auto", borderRadius:"8px", overflow:"hidden" }} className="reveal">
+                <video
+                  muted playsInline loop
+                  src="/venue.mp4"
+                  ref={(el) => {
+                    if (!el) return;
+                    const obs = new IntersectionObserver(([e]) => {
+                      if (e.isIntersecting) { el.play().catch(() => {}); } else { el.pause(); }
+                    }, { threshold: 0.3 });
+                    obs.observe(el);
+                  }}
+                  style={{ width:"100%", display:"block", borderRadius:"8px" }}
+                />
               </div>
               <div className="date-strip reveal reveal-d3">
                 <div className="date-cell">
@@ -483,24 +495,6 @@ export default function Home() {
               <span style={{ opacity:0.45, display:"block", marginTop:"4px" }}>{CONFIG.dateDisplay_fr} · Les Chalets d'Alba</span>
             </footer>
           </div>
-        </div>
-      </div>
-
-      {/* Venue video overlay */}
-      <div id="venue-vid-overlay" style={{ display:"none", position:"fixed", inset:0, zIndex:9999, background:"rgba(0,0,0,0.9)", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
-        <video src="/venue.mp4" controls playsInline style={{ maxWidth:"95vw", maxHeight:"85vh", borderRadius:"8px" }} onEnded={() => {
-          window.open(CONFIG.mapsUrl, "_blank");
-          const o = document.getElementById("venue-vid-overlay");
-          if (o) o.style.display = "none";
-        }} />
-        <div style={{ display:"flex", gap:"12px", marginTop:"16px" }}>
-          <button onClick={() => {
-            const o = document.getElementById("venue-vid-overlay"); if (o) o.style.display = "none";
-          }} style={{ padding:"8px 20px", borderRadius:"8px", border:"1px solid #666", background:"transparent", color:"#aaa", cursor:"pointer" }}>Close</button>
-          <button onClick={() => {
-            window.open(CONFIG.mapsUrl, "_blank");
-            const o = document.getElementById("venue-vid-overlay"); if (o) o.style.display = "none";
-          }} style={{ padding:"8px 20px", borderRadius:"8px", border:"1px solid #c9a84c", background:"transparent", color:"#c9a84c", cursor:"pointer" }}>Open Map</button>
         </div>
       </div>
 
