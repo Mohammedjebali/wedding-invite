@@ -227,12 +227,42 @@ export default function Home() {
           <source src="/intro.mp4" type="video/mp4" />
         </video>
 
-        {/* light overlay — keeps colors warm without hiding the wax seal */}
+        {/* dark overlay so envelope area is visible even before video loads */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "rgba(0,0,0,0.1)",
+          background: "rgba(0,0,0,0.15)",
           pointerEvents: "none",
         }} />
+
+        {/* tap-to-open prompt — always visible before click */}
+        {!opening && (
+          <div style={{ position:"relative", zIndex:10, display:"flex", flexDirection:"column", alignItems:"center", gap:"16px" }}>
+            <div style={{ position:"relative", width:"90px", height:"90px" }}>
+              {[0, 0.4, 0.8].map((d, i) => (
+                <div key={i} style={{
+                  position:"absolute", inset:0, borderRadius:"50%",
+                  border:`${1.5 - i * 0.4}px solid rgba(255,255,255,${0.6 - i * 0.15})`,
+                  animation:`ringPulse1 2s ease-out ${d}s infinite`,
+                }} />
+              ))}
+              <div style={{
+                position:"absolute", inset:"42%", borderRadius:"50%",
+                background:"rgba(255,255,255,0.9)",
+                boxShadow:"0 0 16px rgba(255,255,255,0.8)",
+                animation:"sealBreath 2s ease-in-out infinite",
+              }} />
+            </div>
+            <div style={{
+              fontFamily:"'Rakkas',serif", fontSize:"20px",
+              color:"rgba(255,255,255,0.8)",
+              textShadow:"0 2px 16px rgba(0,0,0,0.6)",
+              direction:"rtl", letterSpacing:"0.04em",
+              animation:"fadeInOut 2s ease-in-out infinite",
+            }}>
+              اضغط لفتح الدعوة
+            </div>
+          </div>
+        )}
 
         {/* opening animation — white soft petals falling */}
         {opening && (
