@@ -205,16 +205,21 @@ export default function Home() {
     e.preventDefault();
     setRsvpSending(true);
     try {
-      await fetch("/api/rsvp", {
+      const res = await fetch("/api/rsvp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rsvp),
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert("Error: " + (err.error || res.status));
+        return;
+      }
       setRsvpSent(true);
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3500);
     } catch {
-      alert("Error submitting, please try again.");
+      alert("Network error, please try again.");
     } finally {
       setRsvpSending(false);
     }
