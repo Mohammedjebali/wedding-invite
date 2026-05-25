@@ -191,12 +191,12 @@ export default function Home() {
       vid.currentTime = 0;
       vid.play().catch(() => {});
     }
-    // After 3 seconds, show the letter
+    // After 5 seconds, show the letter
     setTimeout(() => {
       setOpening(true);
       setShowContent(true);
-    }, 3000);
-    setTimeout(() => setGone(true), 3500);
+    }, 5000);
+    setTimeout(() => setGone(true), 5500);
   }, [opening]);
 
   const handleRsvp = (e: React.FormEvent) => {
