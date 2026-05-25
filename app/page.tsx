@@ -177,15 +177,7 @@ export default function Home() {
   const pad = (n: number) => String(n).padStart(2,"0");
   useScrollReveal(showContent);
 
-  // Auto-open envelope on page load
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleOpen();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     if (opening) return;
     // Play the intro video first
     const vid = introVideoRef.current;
@@ -204,7 +196,15 @@ export default function Home() {
         setTimeout(() => setGone(true), 4200);
       };
     }
-  };
+  }, [opening]);
+
+  // Auto-open on page load (browsers require user gesture for audio, so video plays muted)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleOpen();
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRsvp = (e: React.FormEvent) => {
     e.preventDefault();
