@@ -300,7 +300,7 @@ export default function Home() {
               </div>
 
               {/* Families invitation block */}
-              <div className="reveal reveal-d2" style={{ direction:"rtl", textAlign:"center", marginTop:"22px", marginBottom:"6px", fontFamily:"'Rakkas',serif", fontSize:"1.05rem", color:"#7a5020", letterSpacing:"0.04em" }}>
+              <div className="reveal reveal-d2" style={{ direction:"rtl", textAlign:"center", marginTop:"22px", marginBottom:"6px", fontFamily:"'Rakkas',serif", fontSize:"1.05rem", color:"#5a3810", letterSpacing:"0.04em" }}>
                 يتشرّف كلّ من
               </div>
 
@@ -324,10 +324,10 @@ export default function Home() {
                 <span style={{ position:"absolute", bottom:"6px", left:"8px", color:"#c9a84c", fontSize:"0.75rem", lineHeight:1 }}>✦</span>
 
                 {/* Groom's family */}
-                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
+                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#3a1e06", lineHeight:2.1, textAlign:"center" }}>
                   {CONFIG.groomDad}
                   <br/>
-                  <span style={{ color:"#7a5020", fontSize:"0.85em" }}>و</span>{CONFIG.groomMom}
+                  <span style={{ color:"#5a3810", fontSize:"0.85em" }}>و</span>{CONFIG.groomMom}
                 </div>
 
                 {/* Ornamental divider */}
@@ -336,21 +336,21 @@ export default function Home() {
                 </div>
 
                 {/* Bride's family */}
-                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
+                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#3a1e06", lineHeight:2.1, textAlign:"center" }}>
                   {CONFIG.brideDad}
                   <br/>
-                  <span style={{ color:"#7a5020", fontSize:"0.85em" }}>و</span>{CONFIG.brideMom}
+                  <span style={{ color:"#5a3810", fontSize:"0.85em" }}>و</span>{CONFIG.brideMom}
                 </div>
               </div>
 
-              <div className="reveal reveal-d3" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.12rem", color:"#7a5020", textAlign:"center", lineHeight:2.2, marginTop:"18px", fontStyle:"italic", letterSpacing:"0.02em" }}>
+              <div className="reveal reveal-d3" style={{ direction:"rtl", fontFamily:"'Aref Ruqaa',serif", fontSize:"1.12rem", color:"#5a3810", textAlign:"center", lineHeight:2.2, marginTop:"18px", fontStyle:"italic", letterSpacing:"0.02em" }}>
                 بدعوتكم لحضور حفل زفاف ابنيهما
               </div>
 
               <div className="reveal reveal-d3" style={{ margin:"20px 0 14px" }}>
                 <div className="couple-names">
                   <TypeReveal text={`✦ ${CONFIG.groom_ar} ✦`} delay={300} />
-                  <span style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.2rem", color:"#7a5020" }}>على</span>
+                  <span style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.2rem", color:"#5a3810" }}>على</span>
                   <TypeReveal text={`✦ ${CONFIG.bride_ar} ✦`} delay={800} />
                 </div>
               </div>
@@ -438,8 +438,8 @@ export default function Home() {
               {rsvpSent ? (
                 <div className="rsvp-card reveal" style={{ textAlign:"center", padding:"40px 20px" }}>
                   <div style={{ width:"56px", height:"56px", borderRadius:"50%", border:"1px solid rgba(184,146,42,0.38)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 18px", color:"#b8922a", fontSize:"20px" }}>✦</div>
-                  <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.7rem", color:"#4a2a08", marginBottom:"10px" }}>شكراً جزيلاً</div>
-                  <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#7a5020", direction:"rtl", lineHeight:2.2 }}>
+                  <div style={{ fontFamily:"Scheherazade New,serif", fontSize:"1.7rem", color:"#3a1e06", marginBottom:"10px" }}>شكراً جزيلاً</div>
+                  <div style={{ fontFamily:"Aref Ruqaa,serif", fontSize:"1rem", color:"#5a3810", direction:"rtl", lineHeight:2.2 }}>
                     تم استلام ردّكم بنجاح<br/>يسعدنا استقبالكم في هذه المناسبة السعيدة
                   </div>
                 </div>
@@ -466,10 +466,10 @@ export default function Home() {
             {/* ── CLOSING ── */}
             <section className="section" style={{ paddingBottom:"60px", textAlign:"center" }}>
               <div className="gold-divider reveal">◆ ◆ ◆</div>
-              <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#7a5020", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+              <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
                 أحلامًا هانئة لصغاركم، وتشريفكم يسعدنا
               </div>
-              <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#7a5020", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+              <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
                 نسأل الله أن يجمعهما على خير<br/>
                 ويبارك لهما في حياتهما المشتركة
               </div>

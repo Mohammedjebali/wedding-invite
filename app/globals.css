@@ -174,7 +174,7 @@ html, body {
 /* ── PAGE BACKGROUND ── */
 .page-bg {
   position: relative; min-height: 100vh;
-  background: linear-gradient(180deg, #F1F3E0 0%, #D2DCB6 35%, #A1BC98 65%, #778873 100%);
+  background: linear-gradient(180deg, #F5F7E8 0%, #E8EDD2 30%, #D4DCB8 60%, #C2CCAA 100%);
 }
 
 .page-content {
@@ -297,7 +297,7 @@ html, body {
 .couple-names {
   font-family: 'Rakkas', serif;
   font-size: clamp(2.8rem, 12vw, 5.2rem);
-  font-weight: 400; color: #5a2e08;
+  font-weight: 400; color: #3a1e04;
   direction: rtl; line-height: 1.4;
   animation: nameGlow 4s ease-in-out infinite;
 }
@@ -319,7 +319,7 @@ html, body {
 }
 
 .date-block { margin-top: 24px; }
-.date-ar { font-family:'Scheherazade New',serif; font-size:clamp(1rem,4.5vw,1.3rem); color:#4a2a08; direction:rtl; line-height:1.8; font-weight:700; }
+.date-ar { font-family:'Scheherazade New',serif; font-size:clamp(1rem,4.5vw,1.3rem); color:#3a1e06; direction:rtl; line-height:1.8; font-weight:700; }
 .date-fr { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; letter-spacing:0.12em; color:#9a7040; margin-top:3px; }
 
 /* countdown */
