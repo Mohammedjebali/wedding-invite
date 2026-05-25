@@ -288,13 +288,15 @@ export default function Home() {
               <div className="reveal reveal-d2" style={{
                 direction:"rtl",
                 margin:"10px auto 0",
-                maxWidth:"340px",
+                maxWidth:"420px",
                 border:"1.5px solid #c9a84c",
                 borderRadius:"2px",
                 padding:"18px 22px 14px",
                 background:"linear-gradient(160deg,rgba(201,168,76,0.07) 0%,rgba(255,248,230,0.18) 100%)",
                 boxShadow:"0 2px 18px rgba(122,80,32,0.08)",
                 position:"relative",
+                display:"flex",
+                alignItems:"center",
               }}>
                 {/* Corner ornaments */}
                 <span style={{ position:"absolute", top:"6px", right:"8px", color:"#c9a84c", fontSize:"0.75rem", lineHeight:1 }}>✦</span>
@@ -303,19 +305,19 @@ export default function Home() {
                 <span style={{ position:"absolute", bottom:"6px", left:"8px", color:"#c9a84c", fontSize:"0.75rem", lineHeight:1 }}>✦</span>
 
                 {/* Groom's family */}
-                <div style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
+                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
                   {CONFIG.groomDad}
                   <br/>
                   <span style={{ color:"#7a5020", fontSize:"0.85em" }}>و</span>{CONFIG.groomMom}
                 </div>
 
                 {/* Ornamental divider */}
-                <div style={{ textAlign:"center", color:"#c9a84c", fontSize:"0.8rem", margin:"10px 0", letterSpacing:"0.3em", opacity:0.85 }}>
+                <div style={{ color:"#c9a84c", fontSize:"0.8rem", padding:"0 12px", letterSpacing:"0.3em", opacity:0.85 }}>
                   ❧ ◆ ❧
                 </div>
 
                 {/* Bride's family */}
-                <div style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
+                <div style={{ flex:1, fontFamily:"'Aref Ruqaa',serif", fontSize:"1.13rem", color:"#4a2a08", lineHeight:2.1, textAlign:"center" }}>
                   {CONFIG.brideDad}
                   <br/>
                   <span style={{ color:"#7a5020", fontSize:"0.85em" }}>و</span>{CONFIG.brideMom}
