@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put, list } from "@vercel/blob";
+import { put, list, download } from "@vercel/blob";
 
 const BLOB_PATH = "wedding-rsvps.json";
 
@@ -7,10 +7,11 @@ async function readData(): Promise<any[]> {
   try {
     const { blobs } = await list({ prefix: BLOB_PATH });
     if (!blobs.length) return [];
-    const res = await fetch(blobs[0].url);
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
+    const blob = await download(blobs[0].url);
+    const text = await blob.text();
+    return JSON.parse(text);
+  } catch (e: any) {
+    console.error("readData error:", e.message);
     return [];
   }
 }
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, total: data.length });
   } catch (e: any) {
+    console.error("POST error:", e.message);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
@@ -54,6 +56,7 @@ export async function GET() {
     const data = await readData();
     return NextResponse.json(data);
   } catch (e: any) {
+    console.error("GET error:", e.message);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
