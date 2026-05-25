@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
+import { put, head } from "@vercel/blob";
 
-const DATA_FILE = join(process.cwd(), "rsvp-data.json");
+const BLOB_KEY = "wedding-rsvps.json";
 
-function readData() {
-  if (!existsSync(DATA_FILE)) return [];
+async function readData(): Promise<any[]> {
   try {
-    return JSON.parse(readFileSync(DATA_FILE, "utf-8"));
+    const blob = await head(BLOB_KEY);
+    if (!blob) return [];
+    const res = await fetch(blob.url);
+    return await res.json();
   } catch {
     return [];
   }
 }
 
-function writeData(data: any[]) {
-  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+async function writeData(data: any[]) {
+  await put(BLOB_KEY, JSON.stringify(data), { access: "public", contentType: "application/json" });
 }
 
-// POST — submit RSVP
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { name, phone, attending, guests } = body;
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
   }
 
-  const data = readData();
+  const data = await readData();
   data.push({
     id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
     name,
@@ -35,13 +35,12 @@ export async function POST(req: NextRequest) {
     guests: guests || "1",
     createdAt: new Date().toISOString(),
   });
-  writeData(data);
+  await writeData(data);
 
   return NextResponse.json({ ok: true });
 }
 
-// GET — list all RSVPs
 export async function GET() {
-  const data = readData();
+  const data = await readData();
   return NextResponse.json(data);
 }
