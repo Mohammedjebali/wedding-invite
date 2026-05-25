@@ -214,6 +214,7 @@ export default function Home() {
           muted playsInline
           preload="auto"
           autoPlay={false}
+          poster="/poster.jpg"
           style={{
             width: "100%",
             height: "100%",
@@ -221,10 +222,6 @@ export default function Home() {
             cursor: opening ? "default" : "pointer",
           }}
           onClick={!opening ? handleOpen : undefined}
-          onLoadedData={() => {
-            const vid = introVideoRef.current;
-            if (vid) { vid.currentTime = 0; vid.pause(); }
-          }}
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
