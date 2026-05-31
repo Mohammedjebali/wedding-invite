@@ -397,10 +397,21 @@ export default function Home() {
                 <div className="venue-bottom">
                   <div className="venue-name">{CONFIG.venue_name}</div>
                   <div className="venue-region">{CONFIG.venue_region}</div>
-                  <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    عرض الخريطة · Location-Map
-                  </a>
+                  <div style={{ width:"100%", borderRadius:"8px", overflow:"hidden", marginTop:"12px", border:"1px solid rgba(184,146,42,0.25)" }}>
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1600!2d10.5066707!3d36.5278536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sar!2stn!4v1"
+                      width="100%"
+                      height="200"
+                      style={{ border:0, display:"block" }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Venue Location"
+                    />
+                    <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn" style={{ display:"block", textAlign:"center", padding:"8px", fontSize:"0.75rem", background:"rgba(184,146,42,0.08)", textDecoration:"none", color:"#b8922a" }}>
+                      فتح في خرائط جوجل · Open in Google Maps
+                    </a>
+                  </div>
                 </div>
               </div>
               {/* Venue video - autoplay on scroll */}
