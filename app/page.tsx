@@ -397,18 +397,18 @@ export default function Home() {
                 <div className="venue-bottom">
                   <div className="venue-name">{CONFIG.venue_name}</div>
                   <div className="venue-region">{CONFIG.venue_region}</div>
-                  <div style={{ width:"100%", borderRadius:"8px", overflow:"hidden", marginTop:"12px", border:"1px solid rgba(184,146,42,0.25)" }}>
+                  <div style={{ width:"100%", marginTop:"12px", textAlign:"center" }}>
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1600!2d10.5066707!3d36.5278536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sar!2stn!4v1"
-                      width="100%"
-                      height="200"
-                      style={{ border:0, display:"block" }}
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d10.5066707!3d36.5278536!2m3!1f0!2f0!3f0!3m2!1i400!2i300!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDMxJzQwLjMiTiAxMMKwMzAnMjQuMCJF!5e0!3m2!1sar!2stn!4v1&markers=36.5278536,10.5066707"
+                      width="260"
+                      height="150"
+                      style={{ border:"1px solid rgba(184,146,42,0.25)", borderRadius:"8px", display:"inline-block" }}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                       title="Venue Location"
                     />
-                    <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn" style={{ display:"block", textAlign:"center", padding:"8px", fontSize:"0.75rem", background:"rgba(184,146,42,0.08)", textDecoration:"none", color:"#b8922a" }}>
+                    <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn" style={{ display:"block", textAlign:"center", marginTop:"6px", fontSize:"0.7rem", textDecoration:"none", color:"#b8922a", opacity:0.7 }}>
                       فتح في خرائط جوجل · Open in Google Maps
                     </a>
                   </div>
