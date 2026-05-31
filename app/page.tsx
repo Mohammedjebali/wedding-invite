@@ -255,16 +255,7 @@ export default function Home() {
 
       {showContent && (
         <>
-          {/* Falling petals */}
-          <div className="petal-container">
-            {PETALS.map(p => (
-              <svg key={p.id} className="petal" viewBox="0 0 24 28"
-                style={{ left:p.left, width:p.size, height:p.size, fill:p.color, animationDelay:`${p.delay}s`, animationDuration:`${p.dur}s` }}
-              >
-                <path d={PETAL_SVG[p.path]} />
-              </svg>
-            ))}
-          </div>
+
         </>
       )}
 
@@ -272,18 +263,7 @@ export default function Home() {
         <div className="page-bg">
           <div className="page-content">
 
-            {/* falling petals */}
-            <div className="petals-overlay" aria-hidden="true">
-              <div className="petal-css p1" />
-              <div className="petal-css p2" />
-              <div className="petal-css p3" />
-              <div className="petal-css p4" />
-              <div className="petal-css p5" />
-              <div className="petal-css p6" />
-              <div className="petal-css p7" />
-              <div className="petal-css p8" />
-              <div className="petal-css p9" />
-            </div>
+
 
             {/* ── HERO ── */}
             <section className="hero">
