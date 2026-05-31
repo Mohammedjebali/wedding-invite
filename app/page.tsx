@@ -389,11 +389,6 @@ export default function Home() {
 
               <div className="gold-line-bottom reveal reveal-d4" />
 
-              <div className="scroll-hint">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <line x1="12" y1="4" x2="12" y2="20"/><polyline points="18 14 12 20 6 14"/>
-                </svg>
-              </div>
             </section>
 
             {/* ── VENUE ── */}
