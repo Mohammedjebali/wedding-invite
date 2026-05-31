@@ -255,16 +255,14 @@ export default function Home() {
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
       {/* ══ FULL-SCREEN POSTER ══ */}
-      {showPoster && !posterScrolled && (
+      {showPoster && (
         <section
           className="poster-screen"
           onTouchStart={(e) => {
             const startY = e.touches[0].clientY;
             const onMove = (ev: TouchEvent) => {
-              if (startY - ev.touches[0].clientY > 60) {
-                setPosterScrolled(true);
-                document.removeEventListener("touchmove", onMove);
-              }
+              if (startY - ev.touches[0].clientY > 60 && !posterScrolled) setPosterScrolled(true);
+              document.removeEventListener("touchmove", onMove);
             };
             const onEnd = () => {
               document.removeEventListener("touchmove", onMove);
@@ -274,7 +272,7 @@ export default function Home() {
             document.addEventListener("touchend", onEnd, { once: true });
           }}
           onWheel={(e) => {
-            if (e.deltaY > 30) setPosterScrolled(true);
+            if (e.deltaY > 30 && !posterScrolled) setPosterScrolled(true);
           }}
         >
           <div className="poster-img-wrap">
