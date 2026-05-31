@@ -166,7 +166,9 @@ const PETALS = [
 export default function Home() {
   const [opening, setOpening] = useState(false);
   const [gone, setGone] = useState(false);
+  const [showPoster, setShowPoster] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [posterScrolled, setPosterScrolled] = useState(false);
   const [rsvp, setRsvp] = useState({ name:"", phone:"", attending:"oui", guests:"1" });
   const [rsvpSent, setRsvpSent] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -191,12 +193,14 @@ export default function Home() {
       vid.currentTime = 0;
       vid.play().catch(() => {});
     }
-    // After 5 seconds, show the letter
+    // After 5 seconds, show the poster
     setTimeout(() => {
       setOpening(true);
-      setShowContent(true);
+      setShowPoster(true);
     }, 5000);
     setTimeout(() => setGone(true), 5500);
+    // After poster fades in, allow scroll to reveal invitation
+    setTimeout(() => setShowContent(true), 6500);
   }, [opening]);
 
   const [rsvpSending, setRsvpSending] = useState(false);
@@ -249,6 +253,32 @@ export default function Home() {
 
       {/* ══ INVITATION ══ */}
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
+
+      {/* ══ FULL-SCREEN POSTER ══ */}
+      {showPoster && (
+        <section
+          className={`poster-screen${posterScrolled ? " scrolled" : ""}`}
+          onWheel={(e) => {
+            if (e.deltaY > 0 && !posterScrolled) setPosterScrolled(true);
+          }}
+          onTouchStart={(e) => {
+            const startY = (e as any).touches[0].clientY;
+            const handler = (ev: any) => {
+              if (startY - ev.touches[0].clientY > 50 && !posterScrolled) setPosterScrolled(true);
+              document.removeEventListener("touchmove", handler);
+            };
+            document.addEventListener("touchmove", handler, { once: true });
+          }}
+        >
+          <div className="poster-img-wrap">
+            <img src="/wedding-poster.png" alt="Amine & Nour" />
+          </div>
+          <div className="poster-scroll-hint">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            <span>مرّر للأسفل</span>
+          </div>
+        </section>
+      )}
 
       <Sparkles active={showContent} />
       <Confetti active={showConfetti} />
