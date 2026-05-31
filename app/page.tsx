@@ -255,14 +255,26 @@ export default function Home() {
       {CONFIG.bgMusic && <audio ref={audioRef} src={CONFIG.bgMusic} loop />}
 
       {/* ══ FULL-SCREEN POSTER ══ */}
-      {showPoster && (
+      {showPoster && !posterScrolled && (
         <section
-          className={`poster-screen${posterScrolled ? " scrolled" : ""}`}
-          ref={(el) => {
-            if (!el) return;
-            el.onscroll = () => {
-              if (el.scrollTop > 50 && !posterScrolled) setPosterScrolled(true);
+          className="poster-screen"
+          onTouchStart={(e) => {
+            const startY = e.touches[0].clientY;
+            const onMove = (ev: TouchEvent) => {
+              if (startY - ev.touches[0].clientY > 60) {
+                setPosterScrolled(true);
+                document.removeEventListener("touchmove", onMove);
+              }
             };
+            const onEnd = () => {
+              document.removeEventListener("touchmove", onMove);
+              document.removeEventListener("touchend", onEnd);
+            };
+            document.addEventListener("touchmove", onMove);
+            document.addEventListener("touchend", onEnd, { once: true });
+          }}
+          onWheel={(e) => {
+            if (e.deltaY > 30) setPosterScrolled(true);
           }}
         >
           <div className="poster-img-wrap">
