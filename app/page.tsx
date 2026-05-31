@@ -397,7 +397,7 @@ export default function Home() {
             </section>
 
             {/* ── VENUE ── */}
-            <section className="section">
+            <section className="section" style={{ paddingTop: "20px" }}>
               <div className="section-heading reveal gold-sweep">تفاصيل الحفل</div>
               <div className="section-sub reveal reveal-d1">Détails de la cérémonie</div>
               <div className="venue-card reveal reveal-d2">
