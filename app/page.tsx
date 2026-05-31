@@ -364,9 +364,9 @@ export default function Home() {
 
               <div className="reveal reveal-d3" style={{ margin:"20px 0 14px" }}>
                 <div className="couple-names">
-                  <TypeReveal text={`✦ ${CONFIG.groom_ar} ✦`} delay={300} />
+                  <TypeReveal text={CONFIG.groom_ar} delay={300} />
                   <span style={{ fontFamily:"'Aref Ruqaa',serif", fontSize:"1.2rem", color:"#5a3810" }}>على</span>
-                  <TypeReveal text={`✦ ${CONFIG.bride_ar} ✦`} delay={800} />
+                  <TypeReveal text={CONFIG.bride_ar} delay={800} />
                 </div>
               </div>
 
