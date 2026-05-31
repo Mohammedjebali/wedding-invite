@@ -96,8 +96,8 @@ function Confetti({ active }: { active: boolean }) {
 }
 
 const CONFIG = {
-  groom_ar: "محمد أمين بن سالم",
-  bride_ar: "نور الهدى جلال",
+  groom_ar: "محمد امين",
+  bride_ar: "نور الهدى",
   groom_fr: "Mohamed Amine Ben Salem",
   bride_fr: "Nour El Hoda Jlel",
   date: "2026-08-08",
@@ -249,6 +249,11 @@ export default function Home() {
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
+        {!opening && !gone && (
+          <div className="envelope-tap-hint">
+            اضغط هنا · Tap to open
+          </div>
+        )}
       </div>
 
       {/* ══ INVITATION ══ */}
@@ -406,17 +411,19 @@ export default function Home() {
                 <div className="venue-bottom">
                   <div className="venue-name">{CONFIG.venue_name}</div>
                   <div className="venue-region">{CONFIG.venue_region}</div>
-                  <div style={{ width:"100%", marginTop:"12px", textAlign:"center" }}>
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d10.5066707!3d36.5278536!2m3!1f0!2f0!3f0!3m2!1i400!2i300!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDMxJzQwLjMiTiAxMMKwMzAnMjQuMCJF!5e0!3m2!1sar!2stn!4v1&markers=36.5278536,10.5066707"
-                      width="260"
-                      height="150"
-                      style={{ border:"1px solid rgba(184,146,42,0.25)", borderRadius:"8px", display:"inline-block" }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Venue Location"
-                    />
+                  <div style={{ width:"100%", marginTop:"12px", textAlign:"center", position:"relative" }}>
+                    <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" style={{ display:"block", position:"relative", textDecoration:"none" }}>
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d10.5066707!3d36.5278536!2m3!1f0!2f0!3f0!3m2!1i400!2i300!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDMxJzQwLjMiTiAxMMKwMzAnMjQuMCJF!5e0!3m2!1sar!2stn!4v1&markers=36.5278536,10.5066707"
+                        width="260"
+                        height="150"
+                        style={{ border:"1px solid rgba(184,146,42,0.25)", borderRadius:"8px", display:"inline-block" }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Venue Location"
+                      />
+                    </a>
                     <a href={CONFIG.mapsUrl} target="_blank" rel="noreferrer" className="map-btn" style={{ display:"block", textAlign:"center", marginTop:"6px", fontSize:"0.7rem", textDecoration:"none", color:"#b8922a", opacity:0.7 }}>
                       فتح في خرائط جوجل · Open in Google Maps
                     </a>
