@@ -258,16 +258,11 @@ export default function Home() {
       {showPoster && (
         <section
           className={`poster-screen${posterScrolled ? " scrolled" : ""}`}
-          onWheel={(e) => {
-            if (e.deltaY > 0 && !posterScrolled) setPosterScrolled(true);
-          }}
-          onTouchStart={(e) => {
-            const startY = (e as any).touches[0].clientY;
-            const handler = (ev: any) => {
-              if (startY - ev.touches[0].clientY > 50 && !posterScrolled) setPosterScrolled(true);
-              document.removeEventListener("touchmove", handler);
+          ref={(el) => {
+            if (!el) return;
+            el.onscroll = () => {
+              if (el.scrollTop > 50 && !posterScrolled) setPosterScrolled(true);
             };
-            document.addEventListener("touchmove", handler, { once: true });
           }}
         >
           <div className="poster-img-wrap">

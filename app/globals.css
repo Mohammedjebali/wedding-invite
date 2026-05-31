@@ -27,24 +27,28 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   animation: posterFadeIn 1.2s ease forwards;
   transition: opacity 0.8s ease, transform 0.8s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .poster-screen.scrolled {
   opacity: 0;
-  transform: scale(1.05);
+  transform: translateY(-40px);
   pointer-events: none;
+  visibility: hidden;
 }
 .poster-img-wrap {
   width: 100%;
-  height: 100svh;
+  height: calc(100svh - 60px);
   overflow: hidden;
+  flex-shrink: 0;
 }
 .poster-img-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 .poster-scroll-hint {
