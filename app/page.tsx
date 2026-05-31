@@ -468,8 +468,21 @@ export default function Home() {
               />
             </div>
 
+            {/* ── CLOSING ── */}
+            <section className="section" style={{ paddingBottom:"0", textAlign:"center" }}>
+              <div className="gold-divider reveal">◆ ◆ ◆</div>
+              <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+                أحلامًا هنيئة لصغاركم، وتشريفكم يسعدنا
+              </div>
+              <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
+                نسأل الله أن يجمعهما على خير<br/>
+                ويبارك لهما في حياتهما المشتركة
+              </div>
+              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"24px" }}>◆ ◆ ◆</div>
+            </section>
+
             {/* ── RSVP ── */}
-            <section className="section">
+            <section className="section" style={{ paddingBottom:"60px" }}>
               <div className="section-heading reveal gold-sweep">تأكيد الحضور</div>
               <div className="section-sub reveal reveal-d1">Confirmer votre présence avant le 1er Août</div>
               {rsvpSent ? (
@@ -498,19 +511,6 @@ export default function Home() {
                   </form>
                 </div>
               )}
-            </section>
-
-            {/* ── CLOSING ── */}
-            <section className="section" style={{ paddingBottom:"60px", textAlign:"center" }}>
-              <div className="gold-divider reveal">◆ ◆ ◆</div>
-              <div className="reveal reveal-d1" style={{ marginTop:"24px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
-                أحلامًا هنيئة لصغاركم، وتشريفكم يسعدنا
-              </div>
-              <div className="reveal reveal-d1" style={{ marginTop:"16px", fontFamily:"Aref Ruqaa,serif", fontSize:"1.1rem", color:"#5a3810", direction:"rtl", lineHeight:2, opacity:0.85 }}>
-                نسأل الله أن يجمعهما على خير<br/>
-                ويبارك لهما في حياتهما المشتركة
-              </div>
-              <div className="gold-divider reveal reveal-d2" style={{ marginTop:"24px" }}>◆ ◆ ◆</div>
             </section>
 
 
